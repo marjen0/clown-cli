@@ -7,44 +7,8 @@ const { description, version } = require('../package.json');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
 
-/*const parseArgumentsIntoOptions = (rawArgs) => {
-  const args = arg(
-    {
-      '--text': String,
-      '--color': String,
-      '--fontSize': Number,
-      '--source': String,
-      '--output': String,
-      // Aliases
-      '-t': '--text',
-      '-c': '--color',
-      '-f': '--fontSize',
-      '-s': '--source',
-      '-o': '--output',
-    },
-    { argv: rawArgs.slice(2) }
-  );
-  return {
-    text: args['--text'] || undefined,
-    textColor: args['--color'] || '#FFF',
-    fontSize: args['--fontSize'] || 16,
-    source: args['--source'] || undefined,
-    output: args['--output'] || undefined,
-    command: args._[0],
-  };
-};*/
-
 const promptForMissingOptions = async (options) => {
   const questions = [];
-  /*if (!options.command) {
-    questions.push({
-      type: 'list',
-      name: 'command',
-      message: 'Please choose which command to run',
-      choices: ['splash', 'launch'],
-      default: 'splash',
-    });
-  }*/
   if (!options.source) {
     questions.push({
       type: 'path',
@@ -71,9 +35,6 @@ const promptForMissingOptions = async (options) => {
 };
 
 const cli = async (args) => {
-  // let options = parseArgumentsIntoOptions(args);
-  // options = await promptForMissingOptions(options);
-  // await generate(options);
   program.version(version).description(description);
 
   program
@@ -94,7 +55,6 @@ const cli = async (args) => {
     .option('-t, --text <text>', 'Text to add on image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
-      console.log(promptedOptions);
       await addText(promptedOptions);
     });
 
