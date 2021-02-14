@@ -2,29 +2,37 @@
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+const { parseDimensions } = require('./utils');
+const { splashscreens } = require('./splashscreens');
 
-const resizeImage = async (options) => {
-  console.log('generation', chalk.green('STARTED'));
-  let image = sharp(options.source);
-  //let image = await Jimp.read(options.source);
-  const jimpImage = await Jimp.read(options.source);
+const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(1, 1);
-  const color = Jimp.intToRGBA(hex);
-
-  /*await image.contain(1170, 2532);
-  await image.background(hex);
-  console.log(image);
-  await image.writeAsync(`${options.output}/output.png`);*/
-
-  image = image.resize(1170, 2532, {
+  const { r, g, b } = Jimp.intToRGBA(hex);
+  return { r, g, b };
+};
+const resize = (sharpImage, jimpImage, width, height) => {
+  const { r, g, b } = extractCornerColor(jimpImage);
+  sharpImage.resize(width, height, {
     fit: 'contain',
-    background: { r: color.r, g: color.g, b: color.b },
+    background: { r, g, b },
   });
-
-  image.toFile(`${options.output}/output.png`, (err) => {
+};
+const writeToFile = (image, outputDir, filename) => {
+  image.toFile(`${outputDir}/${filename}.png`, (err) => {
     if (err) {
       console.log(err, chalk.red(err));
     }
+  });
+};
+const resizeSplash = async (options) => {
+  console.log('generation', chalk.green('STARTED'));
+
+  const image = sharp(options.source);
+  const jimpImage = await Jimp.read(options.source);
+  splashscreens.ios.forEach((splash) => {
+    const { width, height } = parseDimensions(splash.dimensions);
+    resize(image, jimpImage, width, height);
+    writeToFile(image, options.output, splash.name);
   });
 
   console.log('generation', chalk.green.bold('DONE!'));
@@ -52,10 +60,5 @@ const addText = (options) => {
   console.log('add text', chalk.green.bold('DONE!'));
 };
 
-const generate = async (options) => {
-  await resizeImage(options);
-};
-
-exports.resizeImage = resizeImage;
+exports.resizeSplash = resizeSplash;
 exports.addText = addText;
-exports.generate = generate;
