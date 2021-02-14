@@ -1,12 +1,15 @@
 /* eslint-disable no-console */
+const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 const { parseDimensions } = require('./utils');
 const { splashscreens } = require('./splashscreens');
+const { FONT_SANS_10_BLACK } = require('jimp');
 
 const extractCornerColor = (jimpImage) => {
-  const hex = jimpImage.getPixelColor(1, 1);
+  const hex = jimpImage.getPixelColor(0, 0);
   const { r, g, b } = Jimp.intToRGBA(hex);
   return { r, g, b };
 };
@@ -25,17 +28,24 @@ const writeToFile = (image, outputDir, filename) => {
   });
 };
 const resizeSplash = async (options) => {
-  console.log('generation', chalk.green('STARTED'));
+  console.log(chalk.green('GENERATION STARTED'));
 
   const image = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
+
+  const iosOutputDir = path.resolve(options.output, 'ios');
+  if (!fs.existsSync(iosOutputDir)) {
+    fs.mkdirSync(iosOutputDir);
+  }
+
   splashscreens.ios.forEach((splash) => {
     const { width, height } = parseDimensions(splash.dimensions);
     resize(image, jimpImage, width, height);
-    writeToFile(image, options.output, splash.name);
+    writeToFile(image, iosOutputDir, splash.name);
+    console.log(chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.device}.`));
   });
 
-  console.log('generation', chalk.green.bold('DONE!'));
+  console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
 const addText = (options) => {
