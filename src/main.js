@@ -1,36 +1,26 @@
 /* eslint-disable no-console */
 const chalk = require('chalk');
 const sharp = require('sharp');
-const colorthief = require('colorthief');
-const path = require('path');
+const Jimp = require('jimp');
 
 const resizeImage = async (options) => {
   console.log('generation', chalk.green('STARTED'));
   let image = sharp(options.source);
-  let extractImage = sharp(options.source);
+  //let image = await Jimp.read(options.source);
+  const jimpImage = await Jimp.read(options.source);
+  const hex = jimpImage.getPixelColor(1, 1);
+  const color = Jimp.intToRGBA(hex);
 
-  const extractedPart = extractImage.extract({
-    left: 0,
-    top: 0,
-    width: 10,
-    height: 10,
-  });
+  /*await image.contain(1170, 2532);
+  await image.background(hex);
+  console.log(image);
+  await image.writeAsync(`${options.output}/output.png`);*/
 
-  extractedPart.toFile(`${options.output}/output-cropped.png`, (err) => {
-    if (err) {
-      console.log(err, chalk.red(err));
-    }
-  });
-  const croppedStats = await extractedPart.stats();
-
-  const stats = await image.stats();
-
-  console.log(croppedStats.dominant);
-  console.log(stats.dominant);
   image = image.resize(1170, 2532, {
     fit: 'contain',
-    background: { r: 0, g: 0, b: 0 },
+    background: { r: color.r, g: color.g, b: color.b },
   });
+
   image.toFile(`${options.output}/output.png`, (err) => {
     if (err) {
       console.log(err, chalk.red(err));

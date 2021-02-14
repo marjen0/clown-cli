@@ -22,6 +22,7 @@
     "inquirer": "^7.3.3",
     "inquirer-path": "^1.0.0-beta5",
     "jimp": "^0.16.1",
+    "png-js": "^1.0.0",
     "sharp": "^0.27.1"
   },
   "devDependencies": {
