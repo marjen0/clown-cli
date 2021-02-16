@@ -32,7 +32,9 @@ const writeToFile = (image, outputDir, filename) => {
 
 const createOutputDirs = (outputDir, platform, assetsType) => {
   console.log(platform, assetsType);
+  // resolves to output/LaunchScreen
   const assetTypeOutputDir = path.resolve(outputDir, assetsType);
+  // resolves to output/LaunchScreen/ios
   const platformOutputDir = path.resolve(
     outputDir,
     assetTypeOutputDir,
@@ -77,13 +79,39 @@ const resizeSplashScreens = (image, jimpImage, output, data) => {
   });
 };
 
-const resizeLaunchIcons = (sharpImage, jimpImage, output, platform, data) => {
-  const outputDir = createOutputDirs(output, platform, 'LaunchIcons');
+const resizeIosLaunchIcons = (sharpImage, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.IOS, 'LaunchIcons');
   data.forEach((icon) => {
     const { width, height } = parseDimensions(icon.dimensions);
     resize(sharpImage, jimpImage, width, height);
     writeToFile(sharpImage, outputDir, icon.name);
     console.log(chalk.magenta(`GENERATED LAUNCH ICON FOR ${icon.device}.`));
+  });
+};
+
+const resizeAndroidLaunchIcons = (sharpImage, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.ANDROID, 'LaunchIcons');
+  console.log(outputDir);
+  data.forEach((icon) => {
+    const mipmapDir = path.resolve(outputDir, icon.dirName);
+    if (!fs.existsSync(mipmapDir)) {
+      fs.mkdirSync(mipmapDir);
+      console.log('doesnt exists');
+    } else {
+      console.log('mipmap exists');
+      fs.rmSync(mipmapDir, { recursive: true, force: true });
+      fs.mkdirSync(mipmapDir);
+    }
+    const { width, height } = parseDimensions(icon.dimensions);
+    resize(sharpImage, jimpImage, width, height);
+    writeToFile(sharpImage, mipmapDir, icon.name);
+    console.log(
+      chalk.magenta(
+        `GENERATED ${icon.shape.toUpperCase()} LAUNCH ICON FOR DENSITY ${
+          icon.density
+        }.`
+      )
+    );
   });
 };
 
@@ -99,15 +127,14 @@ const generateSplashScreens = async (options) => {
 
 const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
-  const { IOS, ANDROID } = platforms;
+
   const sharpImage = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
-  resizeLaunchIcons(sharpImage, jimpImage, options.output, IOS, iosLaunchIcons);
-  resizeLaunchIcons(
+  resizeIosLaunchIcons(sharpImage, jimpImage, options.output, iosLaunchIcons);
+  resizeAndroidLaunchIcons(
     sharpImage,
     jimpImage,
     options.output,
-    ANDROID,
     androidLaunchIcons
   );
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));

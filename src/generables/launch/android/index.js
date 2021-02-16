@@ -6,40 +6,40 @@ const { ANDROID } = platforms;
 
 const launchIcons = [
   {
-    name: 'appicon.png',
-    folderName: 'mipmap-ldpi',
+    name: 'appicon',
+    dirName: 'mipmap-ldpi',
     dimensions: '36x36',
     density: 'ldpi',
     shape: SQUARE,
     platform: ANDROID,
   },
   {
-    name: 'appicon.png',
-    folderName: 'mipmap-ldpi',
+    name: 'appicon',
+    dirName: 'mipmap-ldpi',
     dimensions: '36x36',
     density: 'ldpi',
     shape: ROUND,
     platform: ANDROID,
   },
   {
-    name: 'appicon.png',
-    folderName: 'mippam-mdpi',
+    name: 'appicon',
+    dirName: 'mippam-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
     shape: SQUARE,
     platform: ANDROID,
   },
   {
-    name: 'appicon.png',
-    folderName: 'mippam-mdpi',
+    name: 'appicon',
+    dirName: 'mippam-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
     shape: ROUND,
     platform: ANDROID,
   },
   {
-    name: 'appicon.png',
-    folderName: 'mipmap-hdpi',
+    name: 'appicon',
+    dirName: 'mipmap-hdpi',
     dimensions: '72x72',
     density: 'hdpi',
     shape: SQUARE,
@@ -47,7 +47,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-hdpi',
+    dirName: 'mipmap-hdpi',
     dimensions: '72x72',
     density: 'hdpi',
     shape: ROUND,
@@ -55,7 +55,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-xhdpi',
+    dirName: 'mipmap-xhdpi',
     dimensions: '96x96',
     density: 'xhdpi',
     shape: SQUARE,
@@ -63,7 +63,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-xhdpi',
+    dirName: 'mipmap-xhdpi',
     dimensions: '96x96',
     density: 'xhdpi',
     shape: ROUND,
@@ -71,7 +71,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-xxhdpi',
+    dirName: 'mipmap-xxhdpi',
     dimensions: '144x144',
     density: 'xxhdpi',
     shape: SQUARE,
@@ -79,7 +79,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-xxhdpi',
+    dirName: 'mipmap-xxhdpi',
     dimensions: '144x144',
     density: 'xxhdpi',
     shape: ROUND,
@@ -87,7 +87,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-xxxhdpi',
+    dirName: 'mipmap-xxxhdpi',
     dimensions: '512x512',
     density: 'xxxhdpi',
     shape: SQUARE,
@@ -95,7 +95,7 @@ const launchIcons = [
   },
   {
     name: 'appicon',
-    folderName: 'mipmap-xxxhdpi',
+    dirName: 'mipmap-xxxhdpi',
     dimensions: '512x512',
     density: 'xxxhdpi',
     shape: ROUND,
