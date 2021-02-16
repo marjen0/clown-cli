@@ -7,6 +7,7 @@ const Jimp = require('jimp');
 const { Buffer } = require('buffer');
 const { parseDimensions } = require('./utils');
 const iosSplashScreens = require('./generables/splash/ios');
+const tvosSplashScreens = require('./generables/splash/tvos');
 const androidSplashScreens = require('./generables/splash/android');
 const iosLaunchIcons = require('./generables/launch/ios');
 const androidLaunchIcons = require('./generables/launch/android');
@@ -80,7 +81,21 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   }
   return platformOutputDir;
 };
+// may be redundant, probably could reuse resizeIosSplashScreens
+const resizeTvosSplashScreens = (image, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.TVOS, 'SplashScreens');
 
+  data.forEach((splash) => {
+    const { width, height } = parseDimensions(splash.dimensions);
+    resize(image, jimpImage, width, height);
+    writeToFile(image, outputDir, splash.name);
+    console.log(
+      chalk.magenta(
+        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
+      )
+    );
+  });
+};
 const resizeIosSplashScreens = (image, jimpImage, output, data) => {
   const outputDir = createOutputDirs(output, platforms.IOS, 'SplashScreens');
 
@@ -88,7 +103,11 @@ const resizeIosSplashScreens = (image, jimpImage, output, data) => {
     const { width, height } = parseDimensions(splash.dimensions);
     resize(image, jimpImage, width, height);
     writeToFile(image, outputDir, splash.name);
-    console.log(chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.device}.`));
+    console.log(
+      chalk.magenta(
+        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
+      )
+    );
   });
 };
 
@@ -153,6 +172,7 @@ const generateSplashScreens = async (options) => {
 
   const jimpImage = await Jimp.read(options.source);
   resizeIosSplashScreens(image, jimpImage, options.output, iosSplashScreens);
+  resizeTvosSplashScreens(image, jimpImage, options.output, tvosSplashScreens);
   resizeAndroidSplashScreen(
     image,
     jimpImage,
