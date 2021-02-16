@@ -11,6 +11,7 @@ const tvosSplashScreens = require('./generables/splash/tvos');
 const androidSplashScreens = require('./generables/splash/android');
 const iosLaunchIcons = require('./generables/launch/ios');
 const androidLaunchIcons = require('./generables/launch/android');
+const tvosLaunchIcons = require('./generables/launch/tvos');
 const { platforms, shapes } = require('./constants');
 const { create } = require('jimp');
 
@@ -117,7 +118,25 @@ const resizeIosLaunchIcons = (sharpImage, jimpImage, output, data) => {
     const { width, height } = parseDimensions(icon.dimensions);
     resize(sharpImage, jimpImage, width, height);
     writeToFile(sharpImage, outputDir, icon.name);
-    console.log(chalk.magenta(`GENERATED LAUNCH ICON FOR ${icon.device}.`));
+    console.log(
+      chalk.magenta(
+        `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
+      )
+    );
+  });
+};
+// may be redundant, probably could reuse resizeIosLaunchIcons
+const resizeTvosLaunchIcons = (sharpImage, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.TVOS, 'LaunchIcons');
+  data.forEach((icon) => {
+    const { width, height } = parseDimensions(icon.dimensions);
+    resize(sharpImage, jimpImage, width, height);
+    writeToFile(sharpImage, outputDir, icon.name);
+    console.log(
+      chalk.magenta(
+        `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
+      )
+    );
   });
 };
 
@@ -188,6 +207,7 @@ const generateLaunchIcons = async (options) => {
   const sharpImage = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
   resizeIosLaunchIcons(sharpImage, jimpImage, options.output, iosLaunchIcons);
+  resizeTvosLaunchIcons(sharpImage, jimpImage, options.output, tvosLaunchIcons);
   resizeAndroidLaunchIcons(
     sharpImage,
     jimpImage,

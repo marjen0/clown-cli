@@ -64,4 +64,4 @@ const cli = async (args) => {
   program.parse(args);
 };
 
-exports.cli = cli;
+module.exports = cli;
