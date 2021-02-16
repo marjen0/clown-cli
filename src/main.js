@@ -4,28 +4,40 @@ const path = require('path');
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+const { Buffer } = require('buffer');
 const { parseDimensions } = require('./utils');
 const iosSplashScreens = require('./generables/splash/ios');
+const androidSplashScreens = require('./generables/splash/android');
 const iosLaunchIcons = require('./generables/launch/ios');
 const androidLaunchIcons = require('./generables/launch/android');
-const { platforms } = require('./constants');
+const { platforms, shapes } = require('./constants');
+const { create } = require('jimp');
 
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);
   const { r, g, b } = Jimp.intToRGBA(hex);
   return { r, g, b };
 };
-const resize = (sharpImage, jimpImage, width, height) => {
+const resize = (sharpImage, jimpImage, width, height, round = false) => {
   const { r, g, b } = extractCornerColor(jimpImage);
   sharpImage.resize(width, height, {
     fit: 'contain',
     background: { r, g, b },
   });
+  if (round) {
+    const rect = Buffer.from(
+      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${
+        width / 2
+      }" ry="${height / 2}"/></svg>`
+    );
+    sharpImage.composite([{ input: rect, blend: 'dest-in' }]);
+  }
 };
+
 const writeToFile = (image, outputDir, filename) => {
   image.toFile(`${outputDir}/${filename}.png`, (err) => {
     if (err) {
-      console.log(err, chalk.red(err));
+      console.log(chalk.red(err));
     }
   });
 };
@@ -69,8 +81,9 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const resizeSplashScreens = (image, jimpImage, output, data) => {
+const resizeIosSplashScreens = (image, jimpImage, output, data) => {
   const outputDir = createOutputDirs(output, platforms.IOS, 'SplashScreens');
+
   data.forEach((splash) => {
     const { width, height } = parseDimensions(splash.dimensions);
     resize(image, jimpImage, width, height);
@@ -89,27 +102,44 @@ const resizeIosLaunchIcons = (sharpImage, jimpImage, output, data) => {
   });
 };
 
+// may be redundant, probably could reuse resizeAndroidLaunchIcons
+const resizeAndroidSplashScreen = (sharpImage, jimpImage, output, data) => {
+  console.log('resizing android splash screens');
+  const outputDir = createOutputDirs(
+    output,
+    platforms.ANDROID,
+    'SplashScreens'
+  );
+  data.forEach((splash) => {
+    const drawableDir = path.resolve(outputDir, splash.dirName);
+    if (!fs.existsSync(drawableDir)) {
+      fs.mkdirSync(drawableDir);
+    }
+    const { width, height } = parseDimensions(splash.dimensions);
+    resize(sharpImage, jimpImage, width, height);
+    writeToFile(sharpImage, drawableDir, splash.name);
+    console.log(
+      chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.density} DENSITY.`)
+    );
+  });
+};
 const resizeAndroidLaunchIcons = (sharpImage, jimpImage, output, data) => {
   const outputDir = createOutputDirs(output, platforms.ANDROID, 'LaunchIcons');
-  console.log(outputDir);
   data.forEach((icon) => {
+    const isRound = icon.shape === shapes.ROUND;
+
     const mipmapDir = path.resolve(outputDir, icon.dirName);
     if (!fs.existsSync(mipmapDir)) {
       fs.mkdirSync(mipmapDir);
-      console.log('doesnt exists');
-    } else {
-      console.log('mipmap exists');
-      fs.rmSync(mipmapDir, { recursive: true, force: true });
-      fs.mkdirSync(mipmapDir);
     }
     const { width, height } = parseDimensions(icon.dimensions);
-    resize(sharpImage, jimpImage, width, height);
+    resize(sharpImage, jimpImage, width, height, isRound);
     writeToFile(sharpImage, mipmapDir, icon.name);
     console.log(
       chalk.magenta(
-        `GENERATED ${icon.shape.toUpperCase()} LAUNCH ICON FOR DENSITY ${
+        `GENERATED ${icon.shape.toUpperCase()} LAUNCH ICON FOR ${
           icon.density
-        }.`
+        } DENSITY.`
       )
     );
   });
@@ -120,8 +150,15 @@ const resizeAndroidLaunchIcons = (sharpImage, jimpImage, output, data) => {
 const generateSplashScreens = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
   const image = sharp(options.source);
+
   const jimpImage = await Jimp.read(options.source);
-  resizeSplashScreens(image, jimpImage, options.output, iosSplashScreens);
+  resizeIosSplashScreens(image, jimpImage, options.output, iosSplashScreens);
+  resizeAndroidSplashScreen(
+    image,
+    jimpImage,
+    options.output,
+    androidSplashScreens
+  );
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 

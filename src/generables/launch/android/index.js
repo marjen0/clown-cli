@@ -6,7 +6,7 @@ const { ANDROID } = platforms;
 
 const launchIcons = [
   {
-    name: 'appicon',
+    name: 'appicon-square',
     dirName: 'mipmap-ldpi',
     dimensions: '36x36',
     density: 'ldpi',
@@ -14,7 +14,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-round',
     dirName: 'mipmap-ldpi',
     dimensions: '36x36',
     density: 'ldpi',
@@ -22,7 +22,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-square',
     dirName: 'mippam-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
@@ -30,7 +30,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-round',
     dirName: 'mippam-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
@@ -38,7 +38,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-square',
     dirName: 'mipmap-hdpi',
     dimensions: '72x72',
     density: 'hdpi',
@@ -46,7 +46,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-round',
     dirName: 'mipmap-hdpi',
     dimensions: '72x72',
     density: 'hdpi',
@@ -54,7 +54,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-square',
     dirName: 'mipmap-xhdpi',
     dimensions: '96x96',
     density: 'xhdpi',
@@ -62,7 +62,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-round',
     dirName: 'mipmap-xhdpi',
     dimensions: '96x96',
     density: 'xhdpi',
@@ -70,7 +70,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-square',
     dirName: 'mipmap-xxhdpi',
     dimensions: '144x144',
     density: 'xxhdpi',
@@ -78,7 +78,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-round',
     dirName: 'mipmap-xxhdpi',
     dimensions: '144x144',
     density: 'xxhdpi',
@@ -86,7 +86,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-square',
     dirName: 'mipmap-xxxhdpi',
     dimensions: '512x512',
     density: 'xxxhdpi',
@@ -94,7 +94,7 @@ const launchIcons = [
     platform: ANDROID,
   },
   {
-    name: 'appicon',
+    name: 'appicon-round',
     dirName: 'mipmap-xxxhdpi',
     dimensions: '512x512',
     density: 'xxxhdpi',

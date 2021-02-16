@@ -38,6 +38,13 @@ const launchIcons = [
     dimensions: '167x167',
     platform: IOS,
   },
+  {
+    name: 'appstore@1x',
+    device: 'iPad Pro',
+    scale: '1x',
+    dimensions: '1024x1024',
+    platform: IOS,
+  },
 ];
 
 module.exports = launchIcons;
