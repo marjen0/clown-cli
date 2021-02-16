@@ -1,8 +1,7 @@
-const arg = require('arg');
 const inquirer = require('inquirer');
 const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
-const { addText, resizeSplash } = require('./main');
+const { addText, resizeSplash, resizeLaunchIcons } = require('./main');
 const { description, version } = require('../package.json');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
@@ -50,12 +49,12 @@ const cli = async (args) => {
   program
     .command('icon')
     .description('Generate launch icons')
-    .option('-s, --source', 'Source of the icon to generate')
+    .option('-s, --source <source>', 'Source of the icon to generate')
     .option('-o, --output <output>', 'Generated files output directory')
     .option('-t, --text <text>', 'Text to add on image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
-      await addText(promptedOptions);
+      await resizeLaunchIcons(promptedOptions);
     });
 
   program.parse(args);

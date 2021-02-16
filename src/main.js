@@ -5,8 +5,9 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 const { parseDimensions } = require('./utils');
-const { splashscreens } = require('./splashscreens');
-const { FONT_SANS_10_BLACK } = require('jimp');
+const iosSplashScreens = require('./generables/splash/ios');
+const iosLaunchIcons = require('./generables/launch/ios');
+const { platforms } = require('./constants');
 
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);
@@ -27,24 +28,77 @@ const writeToFile = (image, outputDir, filename) => {
     }
   });
 };
-const resizeSplash = async (options) => {
-  console.log(chalk.green('GENERATION STARTED'));
 
-  const image = sharp(options.source);
-  const jimpImage = await Jimp.read(options.source);
-
-  const iosOutputDir = path.resolve(options.output, 'ios');
-  if (!fs.existsSync(iosOutputDir)) {
-    fs.mkdirSync(iosOutputDir);
+const createOutputDirs = (outputDir, platform, assetsType) => {
+  console.log(platform, assetsType);
+  const assetTypeOutputDir = path.resolve(outputDir, assetsType);
+  const platformOutputDir = path.resolve(
+    outputDir,
+    assetTypeOutputDir,
+    platform
+  );
+  if (!fs.existsSync(assetTypeOutputDir)) {
+    fs.mkdirSync(assetTypeOutputDir);
   }
+  if (fs.existsSync(platformOutputDir)) {
+    console.log(
+      chalk.yellow(
+        `Found output directory for ${platform} platform at ${platformOutputDir}`
+      ),
+      chalk.hex('#000').bgYellow('WILL DELETE IT.')
+    );
+    fs.rmSync(platformOutputDir, { recursive: true, force: true });
+    console.log(
+      chalk.yellow(
+        `created new output directory for ${platform} platform at ${platformOutputDir}`
+      )
+    );
+    fs.mkdirSync(platformOutputDir);
+  } else {
+    console.log(
+      chalk.yellow(
+        `could not find output directory for ${platform} platform at ${platformOutputDir}`
+      ),
+      chalk.hex('#000').bgYellow('WILL CREATE IT.')
+    );
+    fs.mkdirSync(platformOutputDir);
+  }
+  return platformOutputDir;
+};
 
-  splashscreens.ios.forEach((splash) => {
+const generateSplashScreens = (image, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.IOS, 'SplashScreens');
+  data.forEach((splash) => {
     const { width, height } = parseDimensions(splash.dimensions);
     resize(image, jimpImage, width, height);
-    writeToFile(image, iosOutputDir, splash.name);
+    writeToFile(image, outputDir, splash.name);
     console.log(chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.device}.`));
   });
+};
 
+const generateLaunchIcons = (sharpImage, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.IOS, 'LaunchIcons');
+  data.forEach((icon) => {
+    const { width, height } = parseDimensions(icon.dimensions);
+    resize(sharpImage, jimpImage, width, height);
+    writeToFile(sharpImage, outputDir, icon.name);
+    console.log(chalk.magenta(`GENERATED LAUNCH ICON SCREEN ${icon.device}.`));
+  });
+};
+
+const resizeSplash = async (options) => {
+  console.log(chalk.green('GENERATION STARTED'));
+  const image = sharp(options.source);
+  const jimpImage = await Jimp.read(options.source);
+  generateSplashScreens(image, jimpImage, options.output, iosSplashScreens);
+  console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
+};
+
+const resizeLaunchIcons = async (options) => {
+  console.log(chalk.green('GENERATION STARTED'));
+  const sharpImage = sharp(options.source);
+  const jimpImage = await Jimp.read(options.source);
+  generateLaunchIcons(sharpImage, jimpImage, options.output, iosLaunchIcons);
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
@@ -71,4 +125,5 @@ const addText = (options) => {
 };
 
 exports.resizeSplash = resizeSplash;
+exports.resizeLaunchIcons = resizeLaunchIcons;
 exports.addText = addText;
