@@ -7,6 +7,7 @@ const Jimp = require('jimp');
 const { parseDimensions } = require('./utils');
 const iosSplashScreens = require('./generables/splash/ios');
 const iosLaunchIcons = require('./generables/launch/ios');
+const androidLaunchIcons = require('./generables/launch/android');
 const { platforms } = require('./constants');
 
 const extractCornerColor = (jimpImage) => {
@@ -66,7 +67,7 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const generateSplashScreens = (image, jimpImage, output, data) => {
+const resizeSplashScreens = (image, jimpImage, output, data) => {
   const outputDir = createOutputDirs(output, platforms.IOS, 'SplashScreens');
   data.forEach((splash) => {
     const { width, height } = parseDimensions(splash.dimensions);
@@ -76,29 +77,39 @@ const generateSplashScreens = (image, jimpImage, output, data) => {
   });
 };
 
-const generateLaunchIcons = (sharpImage, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.IOS, 'LaunchIcons');
+const resizeLaunchIcons = (sharpImage, jimpImage, output, platform, data) => {
+  const outputDir = createOutputDirs(output, platform, 'LaunchIcons');
   data.forEach((icon) => {
     const { width, height } = parseDimensions(icon.dimensions);
     resize(sharpImage, jimpImage, width, height);
     writeToFile(sharpImage, outputDir, icon.name);
-    console.log(chalk.magenta(`GENERATED LAUNCH ICON SCREEN ${icon.device}.`));
+    console.log(chalk.magenta(`GENERATED LAUNCH ICON FOR ${icon.device}.`));
   });
 };
 
-const resizeSplash = async (options) => {
+// --------------------------------- CORE FUNCTIONS ----------------------------------------------
+
+const generateSplashScreens = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
   const image = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
-  generateSplashScreens(image, jimpImage, options.output, iosSplashScreens);
+  resizeSplashScreens(image, jimpImage, options.output, iosSplashScreens);
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
-const resizeLaunchIcons = async (options) => {
+const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
+  const { IOS, ANDROID } = platforms;
   const sharpImage = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
-  generateLaunchIcons(sharpImage, jimpImage, options.output, iosLaunchIcons);
+  resizeLaunchIcons(sharpImage, jimpImage, options.output, IOS, iosLaunchIcons);
+  resizeLaunchIcons(
+    sharpImage,
+    jimpImage,
+    options.output,
+    ANDROID,
+    androidLaunchIcons
+  );
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
@@ -124,6 +135,6 @@ const addText = (options) => {
   console.log('add text', chalk.green.bold('DONE!'));
 };
 
-exports.resizeSplash = resizeSplash;
-exports.resizeLaunchIcons = resizeLaunchIcons;
+exports.generateLaunchIcons = generateLaunchIcons;
+exports.generateSplashScreens = generateSplashScreens;
 exports.addText = addText;

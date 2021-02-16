@@ -1,7 +1,11 @@
 const inquirer = require('inquirer');
 const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
-const { addText, resizeSplash, resizeLaunchIcons } = require('./main');
+const {
+  addText,
+  generateSplashScreens,
+  generateLaunchIcons,
+} = require('./main');
 const { description, version } = require('../package.json');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
@@ -43,7 +47,7 @@ const cli = async (args) => {
     .option('-o, --output <output>', 'output directory')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
-      await resizeSplash(promptedOptions);
+      await generateSplashScreens(promptedOptions);
     });
 
   program
@@ -54,7 +58,7 @@ const cli = async (args) => {
     .option('-t, --text <text>', 'Text to add on image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
-      await resizeLaunchIcons(promptedOptions);
+      await generateLaunchIcons(promptedOptions);
     });
 
   program.parse(args);
