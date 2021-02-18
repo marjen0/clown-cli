@@ -9,11 +9,13 @@ const { parseDimensions } = require('../utils');
 const iosSplashScreens = require('../generables/splash/ios');
 const tvosSplashScreens = require('../generables/splash/tvos');
 const androidSplashScreens = require('../generables/splash/android');
+const androidTvSplashScreens = require('../generables/splash/androidtv');
 const webosSplashScreens = require('../generables/splash/webos');
 const webosLaunchIcons = require('../generables/launch/webos');
 const iosLaunchIcons = require('../generables/launch/ios');
 const macosLaunchIcons = require('../generables/launch/macos');
 const androidLaunchIcons = require('../generables/launch/android');
+const androidTvLaunchIcons = require('../generables/launch/androidtv');
 const tvosLaunchIcons = require('../generables/launch/tvos');
 const favicons = require('../generables/favicon');
 const { platforms, shapes } = require('../constants');
@@ -141,13 +143,15 @@ const resizeGenericLaunchIcons = (
 };
 
 // may be redundant, probably could reuse resizeAndroidLaunchIcons
-const resizeAndroidSplashScreen = (sharpImage, jimpImage, output, data) => {
+const resizeAndroidSplashScreen = (
+  sharpImage,
+  jimpImage,
+  output,
+  platform,
+  data
+) => {
   console.log('resizing android splash screens');
-  const outputDir = createOutputDirs(
-    output,
-    platforms.ANDROID,
-    'SplashScreens'
-  );
+  const outputDir = createOutputDirs(output, platform, 'SplashScreens');
   data.forEach((splash) => {
     const drawableDir = path.resolve(outputDir, splash.dirName);
     if (!fs.existsSync(drawableDir)) {
@@ -161,8 +165,14 @@ const resizeAndroidSplashScreen = (sharpImage, jimpImage, output, data) => {
     );
   });
 };
-const resizeAndroidLaunchIcons = (sharpImage, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.ANDROID, 'LaunchIcons');
+const resizeAndroidLaunchIcons = (
+  sharpImage,
+  jimpImage,
+  output,
+  platform,
+  data
+) => {
+  const outputDir = createOutputDirs(output, platform, 'LaunchIcons');
   data.forEach((icon) => {
     const isRound = icon.shape === shapes.ROUND;
 
@@ -175,7 +185,7 @@ const resizeAndroidLaunchIcons = (sharpImage, jimpImage, output, data) => {
     writeToFile(sharpImage, mipmapDir, icon.name);
     console.log(
       chalk.magenta(
-        `GENERATED ${icon.shape.toUpperCase()} LAUNCH ICON FOR ${
+        `GENERATED ${icon.shape && icon.shape.toUpperCase()} LAUNCH ICON FOR ${
           icon.density
         } DENSITY.`
       )
@@ -207,7 +217,15 @@ const generateSplashScreens = async (options) => {
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.ANDROID,
     androidSplashScreens
+  );
+  resizeAndroidSplashScreen(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    platforms.ANDROIDTV,
+    androidTvSplashScreens
   );
   resizeGenericSplashScreens(
     sharp(options.source),
@@ -240,7 +258,15 @@ const generateLaunchIcons = async (options) => {
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.ANDROID,
     androidLaunchIcons
+  );
+  resizeAndroidLaunchIcons(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    platforms.ANDROIDTV,
+    androidTvLaunchIcons
   );
   resizeGenericLaunchIcons(
     sharp(options.source),
