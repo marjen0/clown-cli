@@ -20,12 +20,19 @@ const resizeGenericSplashScreens = (
   platform,
   data
 ) => {
-  const outputDir = createOutputDirs(output, platform, 'SplashScreens');
+  let outputDir = createOutputDirs(output, platform, 'SplashScreens');
 
   data.forEach((splash) => {
+    let dir = outputDir;
+    if (splash.dirName) {
+      dir = path.resolve(outputDir, splash.dirName);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    }
     const { width, height } = parseDimensions(splash.dimensions);
     resize(image, jimpImage, width, height);
-    writeToFile(image, outputDir, splash.name);
+    writeToFile(image, dir, splash.name);
     console.log(
       chalk.magenta(
         `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
@@ -79,14 +86,14 @@ const generateSplashScreens = async (options) => {
     platforms.TVOS,
     tvosSplashScreens
   );
-  resizeAndroidSplashScreen(
+  resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
     options.output,
     platforms.ANDROID,
     androidSplashScreens
   );
-  resizeAndroidSplashScreen(
+  resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
     options.output,

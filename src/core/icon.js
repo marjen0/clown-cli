@@ -24,9 +24,17 @@ const resizeGenericLaunchIcons = (
 ) => {
   const outputDir = createOutputDirs(output, platform, 'LaunchIcons');
   data.forEach((icon) => {
+    let dir = outputDir;
+    const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
+    if (icon.dirName) {
+      dir = path.resolve(outputDir, icon.dirName);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    }
     const { width, height } = parseDimensions(icon.dimensions);
-    resize(sharpImage, jimpImage, width, height);
-    writeToFile(sharpImage, outputDir, icon.name);
+    resize(sharpImage, jimpImage, width, height, isRound);
+    writeToFile(sharpImage, dir, icon.name);
     console.log(
       chalk.magenta(
         `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
