@@ -4,6 +4,7 @@ const path = require('path');
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+const { option } = require('commander');
 const { parseDimensions } = require('../utils');
 const iosSplashScreens = require('../generables/splash/ios');
 const tvosSplashScreens = require('../generables/splash/tvos');
@@ -11,16 +12,22 @@ const androidSplashScreens = require('../generables/splash/android');
 const androidTvSplashScreens = require('../generables/splash/androidtv');
 const webosSplashScreens = require('../generables/splash/webos');
 const { platforms } = require('../constants');
-const { resize, writeToFile, createOutputDirs } = require('./shared');
+const {
+  resize,
+  writeToFile,
+  createOutputDirs,
+  tint,
+  addText,
+} = require('./shared');
 
 const resizeGenericSplashScreens = (
   image,
   jimpImage,
-  output,
+  options,
   platform,
   data
 ) => {
-  let outputDir = createOutputDirs(output, platform, 'SplashScreens');
+  const outputDir = createOutputDirs(options.output, platform, 'SplashScreens');
 
   data.forEach((splash) => {
     let dir = outputDir;
@@ -32,35 +39,22 @@ const resizeGenericSplashScreens = (
     }
     const { width, height } = parseDimensions(splash.dimensions);
     resize(image, jimpImage, width, height);
+    if (options.tint) {
+      tint(image);
+    }
+    if (options.text) {
+      const { text } = options;
+      const fontSize = options.fontSize || 48;
+      const fontColor = options.fontColor || '#FFF';
+      console.log(text, fontSize, fontColor);
+      addText(image, text, fontSize, fontColor);
+    }
+
     writeToFile(image, dir, splash.name);
     console.log(
       chalk.magenta(
         `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
       )
-    );
-  });
-};
-
-// may be redundant, probably could reuse resizeAndroidLaunchIcons
-const resizeAndroidSplashScreen = (
-  sharpImage,
-  jimpImage,
-  output,
-  platform,
-  data
-) => {
-  console.log('resizing android splash screens');
-  const outputDir = createOutputDirs(output, platform, 'SplashScreens');
-  data.forEach((splash) => {
-    const drawableDir = path.resolve(outputDir, splash.dirName);
-    if (!fs.existsSync(drawableDir)) {
-      fs.mkdirSync(drawableDir);
-    }
-    const { width, height } = parseDimensions(splash.dimensions);
-    resize(sharpImage, jimpImage, width, height);
-    writeToFile(sharpImage, drawableDir, splash.name);
-    console.log(
-      chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.density} DENSITY.`)
     );
   });
 };
@@ -71,39 +65,38 @@ const generateSplashScreens = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
 
   const jimpImage = await Jimp.read(options.source);
-
   resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
-    options.output,
+    options,
     platforms.IOS,
     iosSplashScreens
   );
   resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
-    options.output,
+    options,
     platforms.TVOS,
     tvosSplashScreens
   );
   resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
-    options.output,
+    options,
     platforms.ANDROID,
     androidSplashScreens
   );
   resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
-    options.output,
+    options,
     platforms.ANDROIDTV,
     androidTvSplashScreens
   );
   resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
-    options.output,
+    options,
     platforms.WEBOS,
     webosSplashScreens
   );

@@ -4,7 +4,6 @@ const program = require('commander');
 const { generateFavicons } = require('./core/favicon');
 const { generateSplashScreens } = require('./core/splash');
 const { generateLaunchIcons } = require('./core/icon');
-const { addText } = require('./core/text');
 const { description, version } = require('../package.json');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
@@ -45,7 +44,10 @@ const cli = async (args) => {
     .option('-s, --source <source>', 'small pizza size')
     .option('-o, --output <output>', 'output directory')
     .option('-n, --negate', 'produce the "negative" of the image')
-    .option('-t, --tint', 'tint the image')
+    .option('-tint, --tint', 'tint the image')
+    .option('-t, --text <text>', 'Text to add on image')
+    .option('-f, --fontSize <number>', 'size of text')
+    .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateSplashScreens(promptedOptions);
@@ -60,7 +62,7 @@ const cli = async (args) => {
     .option('-t, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
     .option('-f, --fontSize', 'size of text')
-    .option('-c, --color', 'text color')
+    .option('-c, --fontColor', 'text color')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateLaunchIcons(promptedOptions);

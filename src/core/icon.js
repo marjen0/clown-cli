@@ -90,14 +90,14 @@ const generateLaunchIcons = async (options) => {
     platforms.TVOS,
     tvosLaunchIcons
   );
-  resizeAndroidLaunchIcons(
+  resizeGenericLaunchIcons(
     sharp(options.source),
     jimpImage,
     options.output,
     platforms.ANDROID,
     androidLaunchIcons
   );
-  resizeAndroidLaunchIcons(
+  resizeGenericLaunchIcons(
     sharp(options.source),
     jimpImage,
     options.output,

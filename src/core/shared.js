@@ -23,6 +23,20 @@ const resize = (sharpImage, jimpImage, width, height, round = false) => {
     sharpImage.composite([{ input: rect, blend: 'dest-in' }]);
   }
 };
+const negate = (sharpImage) => {
+  sharpImage.negate();
+};
+const tint = (sharpImage) => {
+  sharpImage.tint();
+};
+const addText = (sharpImage, text, fontSize, fontColor) => {
+  const textedSVG = Buffer.from(`<svg height="${fontSize}" width="200">
+    <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
+      ${text}
+    </text>
+  </svg>`);
+  sharpImage.composite([{ input: Buffer.from(textedSVG), top: 0, left: 0 }]);
+};
 
 const writeToFile = (image, outputDir, filename) => {
   image.toFile(`${outputDir}/${filename}.png`, (err) => {
@@ -33,7 +47,6 @@ const writeToFile = (image, outputDir, filename) => {
 };
 
 const createOutputDirs = (outputDir, platform, assetsType) => {
-  console.log(platform, assetsType);
   // resolves to output/LaunchScreen
   const assetTypeOutputDir = path.resolve(outputDir, assetsType);
   // resolves to output/LaunchScreen/ios
@@ -70,7 +83,9 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   }
   return platformOutputDir;
 };
-
+exports.tint = tint;
 exports.resize = resize;
+exports.negate = negate;
+exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;
