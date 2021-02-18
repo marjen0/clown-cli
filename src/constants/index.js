@@ -6,6 +6,7 @@ const platforms = {
   ANDROIDTV: 'androidtv',
   TVOS: 'tvos',
   WEB: 'web',
+  WEBOS: 'webos',
   FIRETV: 'firetv',
 };
 

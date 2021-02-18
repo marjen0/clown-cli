@@ -9,6 +9,8 @@ const { parseDimensions } = require('./utils');
 const iosSplashScreens = require('./generables/splash/ios');
 const tvosSplashScreens = require('./generables/splash/tvos');
 const androidSplashScreens = require('./generables/splash/android');
+const webosSplashScreens = require('./generables/splash/webos');
+const webosLaunchIcons = require('./generables/launch/webos');
 const iosLaunchIcons = require('./generables/launch/ios');
 const androidLaunchIcons = require('./generables/launch/android');
 const tvosLaunchIcons = require('./generables/launch/tvos');
@@ -110,6 +112,20 @@ const resizeTvosSplashScreens = (image, jimpImage, output, data) => {
     );
   });
 };
+const resizeWebosSplashScreens = (image, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.WEBOS, 'SplashScreens');
+
+  data.forEach((splash) => {
+    const { width, height } = parseDimensions(splash.dimensions);
+    resize(image, jimpImage, width, height);
+    writeToFile(image, outputDir, splash.name);
+    console.log(
+      chalk.magenta(
+        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
+      )
+    );
+  });
+};
 const resizeIosSplashScreens = (image, jimpImage, output, data) => {
   const outputDir = createOutputDirs(output, platforms.IOS, 'SplashScreens');
 
@@ -124,7 +140,19 @@ const resizeIosSplashScreens = (image, jimpImage, output, data) => {
     );
   });
 };
-
+const resizeWebosLaunchIcons = (sharpImage, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.WEBOS, 'LaunchIcons');
+  data.forEach((icon) => {
+    const { width, height } = parseDimensions(icon.dimensions);
+    //resize(sharpImage, jimpImage, width, height);
+    writeToFile(sharpImage, outputDir, icon.name);
+    console.log(
+      chalk.magenta(
+        `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
+      )
+    );
+  });
+};
 const resizeIosLaunchIcons = (sharpImage, jimpImage, output, data) => {
   const outputDir = createOutputDirs(output, platforms.IOS, 'LaunchIcons');
   data.forEach((icon) => {
@@ -203,30 +231,61 @@ const generateSplashScreens = async (options) => {
   const image = sharp(options.source);
 
   const jimpImage = await Jimp.read(options.source);
-  resizeIosSplashScreens(image, jimpImage, options.output, iosSplashScreens);
-  resizeTvosSplashScreens(image, jimpImage, options.output, tvosSplashScreens);
+  resizeIosSplashScreens(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    iosSplashScreens
+  );
+  resizeTvosSplashScreens(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    tvosSplashScreens
+  );
   resizeAndroidSplashScreen(
-    image,
+    sharp(options.source),
     jimpImage,
     options.output,
     androidSplashScreens
+  );
+  resizeWebosSplashScreens(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    webosSplashScreens
   );
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
 const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
-
-  const sharpImage = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
-  resizeIosLaunchIcons(sharpImage, jimpImage, options.output, iosLaunchIcons);
-  resizeTvosLaunchIcons(sharpImage, jimpImage, options.output, tvosLaunchIcons);
+  resizeIosLaunchIcons(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    iosLaunchIcons
+  );
+  resizeTvosLaunchIcons(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    tvosLaunchIcons
+  );
   resizeAndroidLaunchIcons(
-    sharpImage,
+    sharp(options.source),
     jimpImage,
     options.output,
     androidLaunchIcons
   );
+  resizeWebosLaunchIcons(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    webosLaunchIcons
+  );
+
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
