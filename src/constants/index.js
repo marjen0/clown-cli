@@ -5,6 +5,8 @@ const platforms = {
   ANDROID: 'android',
   ANDROIDTV: 'androidtv',
   TVOS: 'tvos',
+  WEB: 'web',
+  FIRETV: 'firetv',
 };
 
 exports.orientations = orientations;

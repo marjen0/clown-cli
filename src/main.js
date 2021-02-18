@@ -13,7 +13,6 @@ const iosLaunchIcons = require('./generables/launch/ios');
 const androidLaunchIcons = require('./generables/launch/android');
 const tvosLaunchIcons = require('./generables/launch/tvos');
 const { platforms, shapes } = require('./constants');
-const { create } = require('jimp');
 
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);

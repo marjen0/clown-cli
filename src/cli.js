@@ -53,9 +53,11 @@ const cli = async (args) => {
   program
     .command('icon')
     .description('Generate launch icons')
-    .option('-s, --source <source>', 'Source of the icon to generate')
-    .option('-o, --output <output>', 'Generated files output directory')
+    .option('-s, --source <source>', 'source of the icon to generate')
+    .option('-o, --output <output>', 'generated files output directory')
     .option('-t, --text <text>', 'Text to add on image')
+    .option('-f, --fontSize', 'size of text')
+    .option('-c, --color', 'text color')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateLaunchIcons(promptedOptions);
