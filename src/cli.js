@@ -1,11 +1,9 @@
 const inquirer = require('inquirer');
 const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
-const {
-  generateFavicons,
-  generateSplashScreens,
-  generateLaunchIcons,
-} = require('./core/resize');
+const { generateFavicons } = require('./core/favicon');
+const { generateSplashScreens } = require('./core/splash');
+const { generateLaunchIcons } = require('./core/icon');
 const { addText } = require('./core/text');
 const { description, version } = require('../package.json');
 
@@ -46,6 +44,8 @@ const cli = async (args) => {
     .description('Generate splash screens')
     .option('-s, --source <source>', 'small pizza size')
     .option('-o, --output <output>', 'output directory')
+    .option('-n, --negate', 'produce the "negative" of the image')
+    .option('-t, --tint', 'tint the image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateSplashScreens(promptedOptions);
@@ -56,6 +56,8 @@ const cli = async (args) => {
     .description('Generate launch icons')
     .option('-s, --source <source>', 'source of the icon to generate')
     .option('-o, --output <output>', 'generated files output directory')
+    .option('-n, --negate', 'produce the "negative" of the image')
+    .option('-t, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
     .option('-f, --fontSize', 'size of text')
     .option('-c, --color', 'text color')
@@ -69,6 +71,8 @@ const cli = async (args) => {
     .description('generate favicons')
     .option('-s, --source <source>', 'path to favicon')
     .option('-o, --output <output>', 'output directory')
+    .option('-n, --negate', 'produce the "negative" of the image')
+    .option('-t, --tint', 'tint the image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateFavicons(promptedOptions);
