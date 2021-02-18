@@ -12,6 +12,7 @@ const androidSplashScreens = require('./generables/splash/android');
 const iosLaunchIcons = require('./generables/launch/ios');
 const androidLaunchIcons = require('./generables/launch/android');
 const tvosLaunchIcons = require('./generables/launch/tvos');
+const favicons = require('./generables/favicon');
 const { platforms, shapes } = require('./constants');
 
 const extractCornerColor = (jimpImage) => {
@@ -80,6 +81,19 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
     fs.mkdirSync(platformOutputDir);
   }
   return platformOutputDir;
+};
+const resizeFavicons = (image, jimpImage, output, data) => {
+  const outputDir = createOutputDirs(output, platforms.WEB, 'favicon');
+  data.forEach((favicon) => {
+    const { width, height } = parseDimensions(favicon.dimensions);
+    resize(image, jimpImage, width, height);
+    writeToFile(image, outputDir, favicon.name);
+    console.log(
+      chalk.magenta(
+        `GENERATED SPLASH SCREEN FOR ${favicon.device || favicon.platform}.`
+      )
+    );
+  });
 };
 // may be redundant, probably could reuse resizeIosSplashScreens
 const resizeTvosSplashScreens = (image, jimpImage, output, data) => {
@@ -237,7 +251,12 @@ const addText = (options) => {
   });
   console.log('add text', chalk.green.bold('DONE!'));
 };
-
+const generateFavicons = async (options) => {
+  const sharpImage = sharp(options.source);
+  const jimpImage = await Jimp.read(options.source);
+  resizeFavicons(sharpImage, jimpImage, options.output, favicons);
+};
 exports.generateLaunchIcons = generateLaunchIcons;
 exports.generateSplashScreens = generateSplashScreens;
+exports.generateFavicons = generateFavicons;
 exports.addText = addText;

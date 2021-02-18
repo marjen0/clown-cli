@@ -3,6 +3,7 @@ const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
 const {
   addText,
+  generateFavicons,
   generateSplashScreens,
   generateLaunchIcons,
 } = require('./main');
@@ -61,6 +62,16 @@ const cli = async (args) => {
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateLaunchIcons(promptedOptions);
+    });
+
+  program
+    .command('favicon')
+    .description('generate favicons')
+    .option('-s, --source <source>', 'path to favicon')
+    .option('-o, --output <output>', 'output directory')
+    .action(async (options) => {
+      const promptedOptions = await promptForMissingOptions(options);
+      await generateFavicons(promptedOptions);
     });
 
   program.parse(args);
