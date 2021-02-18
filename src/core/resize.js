@@ -5,17 +5,18 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 const { Buffer } = require('buffer');
-const { parseDimensions } = require('./utils');
-const iosSplashScreens = require('./generables/splash/ios');
-const tvosSplashScreens = require('./generables/splash/tvos');
-const androidSplashScreens = require('./generables/splash/android');
-const webosSplashScreens = require('./generables/splash/webos');
-const webosLaunchIcons = require('./generables/launch/webos');
-const iosLaunchIcons = require('./generables/launch/ios');
-const androidLaunchIcons = require('./generables/launch/android');
-const tvosLaunchIcons = require('./generables/launch/tvos');
-const favicons = require('./generables/favicon');
-const { platforms, shapes } = require('./constants');
+const { parseDimensions } = require('../utils');
+const iosSplashScreens = require('../generables/splash/ios');
+const tvosSplashScreens = require('../generables/splash/tvos');
+const androidSplashScreens = require('../generables/splash/android');
+const webosSplashScreens = require('../generables/splash/webos');
+const webosLaunchIcons = require('../generables/launch/webos');
+const iosLaunchIcons = require('../generables/launch/ios');
+const macosLaunchIcons = require('../generables/launch/macos');
+const androidLaunchIcons = require('../generables/launch/android');
+const tvosLaunchIcons = require('../generables/launch/tvos');
+const favicons = require('../generables/favicon');
+const { platforms, shapes } = require('../constants');
 
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);
@@ -97,9 +98,15 @@ const resizeFavicons = (image, jimpImage, output, data) => {
     );
   });
 };
-// may be redundant, probably could reuse resizeIosSplashScreens
-const resizeTvosSplashScreens = (image, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.TVOS, 'SplashScreens');
+
+const resizeGenericSplashScreens = (
+  image,
+  jimpImage,
+  output,
+  platform,
+  data
+) => {
+  const outputDir = createOutputDirs(output, platform, 'SplashScreens');
 
   data.forEach((splash) => {
     const { width, height } = parseDimensions(splash.dimensions);
@@ -112,63 +119,15 @@ const resizeTvosSplashScreens = (image, jimpImage, output, data) => {
     );
   });
 };
-const resizeWebosSplashScreens = (image, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.WEBOS, 'SplashScreens');
 
-  data.forEach((splash) => {
-    const { width, height } = parseDimensions(splash.dimensions);
-    resize(image, jimpImage, width, height);
-    writeToFile(image, outputDir, splash.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
-      )
-    );
-  });
-};
-const resizeIosSplashScreens = (image, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.IOS, 'SplashScreens');
-
-  data.forEach((splash) => {
-    const { width, height } = parseDimensions(splash.dimensions);
-    resize(image, jimpImage, width, height);
-    writeToFile(image, outputDir, splash.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
-      )
-    );
-  });
-};
-const resizeWebosLaunchIcons = (sharpImage, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.WEBOS, 'LaunchIcons');
-  data.forEach((icon) => {
-    const { width, height } = parseDimensions(icon.dimensions);
-    //resize(sharpImage, jimpImage, width, height);
-    writeToFile(sharpImage, outputDir, icon.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
-      )
-    );
-  });
-};
-const resizeIosLaunchIcons = (sharpImage, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.IOS, 'LaunchIcons');
-  data.forEach((icon) => {
-    const { width, height } = parseDimensions(icon.dimensions);
-    resize(sharpImage, jimpImage, width, height);
-    writeToFile(sharpImage, outputDir, icon.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
-      )
-    );
-  });
-};
-// may be redundant, probably could reuse resizeIosLaunchIcons
-const resizeTvosLaunchIcons = (sharpImage, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.TVOS, 'LaunchIcons');
+const resizeGenericLaunchIcons = (
+  sharpImage,
+  jimpImage,
+  output,
+  platform,
+  data
+) => {
+  const outputDir = createOutputDirs(output, platform, 'LaunchIcons');
   data.forEach((icon) => {
     const { width, height } = parseDimensions(icon.dimensions);
     resize(sharpImage, jimpImage, width, height);
@@ -228,19 +187,20 @@ const resizeAndroidLaunchIcons = (sharpImage, jimpImage, output, data) => {
 
 const generateSplashScreens = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
-  const image = sharp(options.source);
 
   const jimpImage = await Jimp.read(options.source);
-  resizeIosSplashScreens(
+  resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.IOS,
     iosSplashScreens
   );
-  resizeTvosSplashScreens(
+  resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.TVOS,
     tvosSplashScreens
   );
   resizeAndroidSplashScreen(
@@ -249,10 +209,11 @@ const generateSplashScreens = async (options) => {
     options.output,
     androidSplashScreens
   );
-  resizeWebosSplashScreens(
+  resizeGenericSplashScreens(
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.WEBOS,
     webosSplashScreens
   );
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
@@ -261,16 +222,18 @@ const generateSplashScreens = async (options) => {
 const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
   const jimpImage = await Jimp.read(options.source);
-  resizeIosLaunchIcons(
+  resizeGenericLaunchIcons(
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.IOS,
     iosLaunchIcons
   );
-  resizeTvosLaunchIcons(
+  resizeGenericLaunchIcons(
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.TVOS,
     tvosLaunchIcons
   );
   resizeAndroidLaunchIcons(
@@ -279,37 +242,24 @@ const generateLaunchIcons = async (options) => {
     options.output,
     androidLaunchIcons
   );
-  resizeWebosLaunchIcons(
+  resizeGenericLaunchIcons(
     sharp(options.source),
     jimpImage,
     options.output,
+    platforms.WEBOS,
     webosLaunchIcons
+  );
+  resizeGenericLaunchIcons(
+    sharp(options.source),
+    jimpImage,
+    options.output,
+    platforms.MACOS,
+    macosLaunchIcons
   );
 
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
-const addText = (options) => {
-  if (!options.text) {
-    return;
-  }
-  console.log('add text', chalk.green('STARTED'));
-  console.log(options.text, options.textColor);
-  let image = sharp(options.source);
-  const textedSVG = Buffer.from(`<svg height="50" width="200">
-    <text x="0" y="50" font-size="50" fill="${options.textColor}">
-      ${options.text}
-    </text>
-  </svg>`);
-  image = image.composite([{ input: Buffer.from(textedSVG), top: 0, left: 0 }]);
-
-  image.toFile(`${options.output}/output.png`, (err) => {
-    if (err) {
-      console.log(err, chalk.red(err));
-    }
-  });
-  console.log('add text', chalk.green.bold('DONE!'));
-};
 const generateFavicons = async (options) => {
   const sharpImage = sharp(options.source);
   const jimpImage = await Jimp.read(options.source);
@@ -318,4 +268,3 @@ const generateFavicons = async (options) => {
 exports.generateLaunchIcons = generateLaunchIcons;
 exports.generateSplashScreens = generateSplashScreens;
 exports.generateFavicons = generateFavicons;
-exports.addText = addText;

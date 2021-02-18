@@ -2,11 +2,11 @@ const inquirer = require('inquirer');
 const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
 const {
-  addText,
   generateFavicons,
   generateSplashScreens,
   generateLaunchIcons,
-} = require('./main');
+} = require('./core/resize');
+const { addText } = require('./core/text');
 const { description, version } = require('../package.json');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);

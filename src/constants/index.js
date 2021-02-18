@@ -8,6 +8,7 @@ const platforms = {
   WEB: 'web',
   WEBOS: 'webos',
   FIRETV: 'firetv',
+  MACOS: 'macos',
 };
 
 exports.orientations = orientations;
