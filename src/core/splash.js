@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
@@ -19,7 +20,6 @@ const {
   tint,
   addText,
 } = require('./shared');
-const { platform } = require('os');
 
 const resizeGenericSplashScreens = (
   image,

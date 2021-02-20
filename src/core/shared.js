@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const Jimp = require('jimp');
-const sharp = require('sharp');
 
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);
@@ -33,7 +32,8 @@ const tint = (sharpImage) => {
   sharpImage.tint();
 };
 const addText = (sharpImage, text, fontSize, fontColor, width, height) => {
-  const textedSVG = Buffer.from(`<svg height="${height}" width="${width}">
+  const textedSVG = Buffer.from(`
+    <svg height="${height}" width="${width}">
       <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
         ${text}
       </text>
