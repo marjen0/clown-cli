@@ -1,10 +1,10 @@
 {
-  "name": "@marijusjenulis/clown",
+  "name": "clown",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "bin": {
-    "generator": "bin/clown.js"
+    "clown": "bin/clown.js"
   },
   "publishConfig": {
     "access": "restricted"
