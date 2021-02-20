@@ -1,5 +1,6 @@
 const orientations = { PORTRAIT: 'portrait', LANDSCASPE: 'landscape' };
 const shapes = { ROUND: 'round', SQUARE: 'square' };
+const assetTypes = { SPLASHSCREEN: 'SplashScreen', LAUNCHICON: 'LauchIcon' };
 const platforms = {
   IOS: 'ios',
   ANDROID: 'android',
@@ -14,3 +15,4 @@ const platforms = {
 exports.orientations = orientations;
 exports.shapes = shapes;
 exports.platforms = platforms;
+exports.assetTypes = assetTypes;

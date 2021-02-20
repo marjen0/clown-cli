@@ -5,6 +5,7 @@ const { generateFavicons } = require('./core/favicon');
 const { generateSplashScreens } = require('./core/splash');
 const { generateLaunchIcons } = require('./core/icon');
 const { description, version } = require('../package.json');
+const { assetTypes, platforms } = require('./constants');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
 
@@ -34,6 +35,46 @@ const promptForMissingOptions = async (options) => {
     output: options.output || answers.output,
   };
 };
+const promptForPlatforms = async (assetType) => {
+  const { IOS, ANDROID, ANDROIDTV, FIRETV, MACOS, TVOS, WEBOS } = platforms;
+  const questions = [];
+  switch (assetType) {
+    case assetTypes.SPLASHSCREEN:
+      questions.push({
+        type: 'checkbox',
+        name: 'platforms',
+        choices: [
+          { name: IOS, checked: true },
+          { name: ANDROID, checked: true },
+          { name: TVOS, checked: true },
+          { name: ANDROIDTV, checked: true },
+          { name: WEBOS, checked: true },
+        ],
+      });
+      break;
+    case assetTypes.LAUNCHICON:
+      questions.push({
+        type: 'checkbox',
+        name: 'platforms',
+        choices: [
+          { name: IOS, checked: true },
+          { name: ANDROID, checked: true },
+          { name: MACOS, checked: true },
+          { name: TVOS, checked: true },
+          { name: ANDROIDTV, checked: true },
+          { name: FIRETV, checked: true },
+          { name: WEBOS, checked: true },
+        ],
+      });
+      break;
+    default:
+      break;
+  }
+  const answers = await inquirer.prompt(questions);
+  return {
+    platforms: answers.platforms,
+  };
+};
 
 const cli = async (args) => {
   program.version(version).description(description);
@@ -49,6 +90,7 @@ const cli = async (args) => {
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
+      await promptForPlatforms(assetTypes.SPLASHSCREEN);
       await generateSplashScreens(promptedOptions);
     });
 
@@ -63,6 +105,7 @@ const cli = async (args) => {
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
+      await promptForPlatforms(assetTypes.LAUNCHICON);
       await generateLaunchIcons(promptedOptions);
     });
 
