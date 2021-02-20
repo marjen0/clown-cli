@@ -19,6 +19,7 @@ const {
   tint,
   addText,
 } = require('./shared');
+const { platform } = require('os');
 
 const resizeGenericSplashScreens = (
   image,
@@ -63,43 +64,55 @@ const resizeGenericSplashScreens = (
 
 const generateSplashScreens = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
-
+  const { platforms: optPlatforms } = options;
+  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS } = platforms;
   const jimpImage = await Jimp.read(options.source);
-  resizeGenericSplashScreens(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.IOS,
-    iosSplashScreens
-  );
-  resizeGenericSplashScreens(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.TVOS,
-    tvosSplashScreens
-  );
-  resizeGenericSplashScreens(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.ANDROID,
-    androidSplashScreens
-  );
-  resizeGenericSplashScreens(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.ANDROIDTV,
-    androidTvSplashScreens
-  );
-  resizeGenericSplashScreens(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.WEBOS,
-    webosSplashScreens
-  );
+  if (optPlatforms.includes(IOS)) {
+    resizeGenericSplashScreens(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.IOS,
+      iosSplashScreens
+    );
+  }
+  if (optPlatforms.includes(TVOS)) {
+    resizeGenericSplashScreens(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.TVOS,
+      tvosSplashScreens
+    );
+  }
+  if (optPlatforms.includes(ANDROID)) {
+    resizeGenericSplashScreens(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.ANDROID,
+      androidSplashScreens
+    );
+  }
+  if (optPlatforms.includes(ANDROIDTV)) {
+    resizeGenericSplashScreens(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.ANDROIDTV,
+      androidTvSplashScreens
+    );
+  }
+  if (optPlatforms.includes(WEBOS)) {
+    resizeGenericSplashScreens(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.WEBOS,
+      webosSplashScreens
+    );
+  }
+
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 

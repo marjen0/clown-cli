@@ -65,49 +65,63 @@ const resizeGenericLaunchIcons = (
 
 const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
+  const { platforms: optPlatforms } = options;
+  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS } = platforms;
   const jimpImage = await Jimp.read(options.source);
-  resizeGenericLaunchIcons(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.IOS,
-    iosLaunchIcons
-  );
-  resizeGenericLaunchIcons(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.TVOS,
-    tvosLaunchIcons
-  );
-  resizeGenericLaunchIcons(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.ANDROID,
-    androidLaunchIcons
-  );
-  resizeGenericLaunchIcons(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.ANDROIDTV,
-    androidTvLaunchIcons
-  );
-  resizeGenericLaunchIcons(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.WEBOS,
-    webosLaunchIcons
-  );
-  resizeGenericLaunchIcons(
-    sharp(options.source),
-    jimpImage,
-    options,
-    platforms.MACOS,
-    macosLaunchIcons
-  );
+  if (optPlatforms.includes(IOS)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.IOS,
+      iosLaunchIcons
+    );
+  }
+  if (optPlatforms.includes(TVOS)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.TVOS,
+      tvosLaunchIcons
+    );
+  }
+  if (optPlatforms.includes(ANDROID)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.ANDROID,
+      androidLaunchIcons
+    );
+  }
+  if (optPlatforms.includes(ANDROIDTV)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.ANDROIDTV,
+      androidTvLaunchIcons
+    );
+  }
+  if (optPlatforms.includes(WEBOS)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.WEBOS,
+      webosLaunchIcons
+    );
+  }
+  if (optPlatforms.includes(MACOS)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.MACOS,
+      macosLaunchIcons
+    );
+  }
 
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };

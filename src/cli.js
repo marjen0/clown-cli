@@ -35,7 +35,7 @@ const promptForMissingOptions = async (options) => {
     output: options.output || answers.output,
   };
 };
-const promptForPlatforms = async (assetType) => {
+const promptForPlatforms = async (assetType, options) => {
   const { IOS, ANDROID, ANDROIDTV, FIRETV, MACOS, TVOS, WEBOS } = platforms;
   const questions = [];
   switch (assetType) {
@@ -72,6 +72,7 @@ const promptForPlatforms = async (assetType) => {
   }
   const answers = await inquirer.prompt(questions);
   return {
+    ...options,
     platforms: answers.platforms,
   };
 };
@@ -89,8 +90,11 @@ const cli = async (args) => {
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
-      const promptedOptions = await promptForMissingOptions(options);
-      await promptForPlatforms(assetTypes.SPLASHSCREEN);
+      let promptedOptions = await promptForMissingOptions(options);
+      promptedOptions = await promptForPlatforms(
+        assetTypes.SPLASHSCREEN,
+        promptedOptions
+      );
       await generateSplashScreens(promptedOptions);
     });
 
@@ -104,8 +108,11 @@ const cli = async (args) => {
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
-      const promptedOptions = await promptForMissingOptions(options);
-      await promptForPlatforms(assetTypes.LAUNCHICON);
+      let promptedOptions = await promptForMissingOptions(options);
+      promptedOptions = await promptForPlatforms(
+        assetTypes.LAUNCHICON,
+        promptedOptions
+      );
       await generateLaunchIcons(promptedOptions);
     });
 
