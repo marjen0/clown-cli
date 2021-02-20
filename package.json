@@ -1,13 +1,13 @@
 {
-  "name": "@marijusjenulis/generator",
+  "name": "@marijusjenulis/clown",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "bin": {
-    "generator": "bin/generator.js"
+    "generator": "bin/clown.js"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "private"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
