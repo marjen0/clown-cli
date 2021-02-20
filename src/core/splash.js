@@ -4,7 +4,7 @@ const path = require('path');
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
-const { option } = require('commander');
+
 const { parseDimensions } = require('../utils');
 const iosSplashScreens = require('../generables/splash/ios');
 const tvosSplashScreens = require('../generables/splash/tvos');
@@ -46,11 +46,11 @@ const resizeGenericSplashScreens = (
       const { text } = options;
       const fontSize = options.fontSize || 48;
       const fontColor = options.fontColor || '#FFF';
-      console.log(text, fontSize, fontColor);
-      addText(image, text, fontSize, fontColor);
+      addText(image, text, fontSize, fontColor, width, height);
     }
 
     writeToFile(image, dir, splash.name);
+
     console.log(
       chalk.magenta(
         `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`

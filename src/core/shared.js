@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const Jimp = require('jimp');
+const sharp = require('sharp');
 
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);
@@ -10,7 +11,8 @@ const extractCornerColor = (jimpImage) => {
 };
 const resize = (sharpImage, jimpImage, width, height, round = false) => {
   const { r, g, b } = extractCornerColor(jimpImage);
-  sharpImage.resize(width, height, {
+  let img;
+  img = sharpImage.resize(width, height, {
     fit: 'contain',
     background: { r, g, b },
   });
@@ -20,8 +22,9 @@ const resize = (sharpImage, jimpImage, width, height, round = false) => {
         width / 2
       }" ry="${height / 2}"/></svg>`
     );
-    sharpImage.composite([{ input: rect, blend: 'dest-in' }]);
+    img = sharpImage.composite([{ input: rect, blend: 'dest-in' }]);
   }
+  return img;
 };
 const negate = (sharpImage) => {
   sharpImage.negate();
@@ -29,12 +32,12 @@ const negate = (sharpImage) => {
 const tint = (sharpImage) => {
   sharpImage.tint();
 };
-const addText = (sharpImage, text, fontSize, fontColor) => {
-  const textedSVG = Buffer.from(`<svg height="${fontSize}" width="200">
-    <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
-      ${text}
-    </text>
-  </svg>`);
+const addText = (sharpImage, text, fontSize, fontColor, width, height) => {
+  const textedSVG = Buffer.from(`<svg height="${height}" width="${width}">
+      <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
+        ${text}
+      </text>
+    </svg>`);
   sharpImage.composite([{ input: Buffer.from(textedSVG), top: 0, left: 0 }]);
 };
 

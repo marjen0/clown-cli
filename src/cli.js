@@ -43,7 +43,6 @@ const cli = async (args) => {
     .description('Generate splash screens')
     .option('-s, --source <source>', 'small pizza size')
     .option('-o, --output <output>', 'output directory')
-    .option('-n, --negate', 'produce the "negative" of the image')
     .option('-tint, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
@@ -58,11 +57,10 @@ const cli = async (args) => {
     .description('Generate launch icons')
     .option('-s, --source <source>', 'source of the icon to generate')
     .option('-o, --output <output>', 'generated files output directory')
-    .option('-n, --negate', 'produce the "negative" of the image')
-    .option('-t, --tint', 'tint the image')
+    .option('-tint, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
-    .option('-f, --fontSize', 'size of text')
-    .option('-c, --fontColor', 'text color')
+    .option('-f, --fontSize <number>', 'size of text')
+    .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateLaunchIcons(promptedOptions);
@@ -73,7 +71,6 @@ const cli = async (args) => {
     .description('generate favicons')
     .option('-s, --source <source>', 'path to favicon')
     .option('-o, --output <output>', 'output directory')
-    .option('-n, --negate', 'produce the "negative" of the image')
     .option('-t, --tint', 'tint the image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
