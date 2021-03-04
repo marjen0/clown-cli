@@ -1,8 +1,8 @@
-const { shapes } = require('../../../constants');
-const { platforms } = require('../../../constants');
+const { platforms, shapes, assetTypes } = require('../../../constants');
 
 const { ROUND, SQUARE } = shapes;
 const { ANDROID } = platforms;
+const { LAUNCHICON } = assetTypes;
 
 const launchIcons = [
   {
@@ -12,6 +12,7 @@ const launchIcons = [
     density: 'ldpi',
     shape: SQUARE,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-round',
@@ -20,6 +21,7 @@ const launchIcons = [
     density: 'ldpi',
     shape: ROUND,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-square',
@@ -28,6 +30,7 @@ const launchIcons = [
     density: 'mdpi',
     shape: SQUARE,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-round',
@@ -36,6 +39,7 @@ const launchIcons = [
     density: 'mdpi',
     shape: ROUND,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-square',
@@ -44,6 +48,7 @@ const launchIcons = [
     density: 'hdpi',
     shape: SQUARE,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-round',
@@ -52,6 +57,7 @@ const launchIcons = [
     density: 'hdpi',
     shape: ROUND,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-square',
@@ -60,6 +66,7 @@ const launchIcons = [
     density: 'xhdpi',
     shape: SQUARE,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-round',
@@ -68,6 +75,7 @@ const launchIcons = [
     density: 'xhdpi',
     shape: ROUND,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-square',
@@ -76,6 +84,7 @@ const launchIcons = [
     density: 'xxhdpi',
     shape: SQUARE,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-round',
@@ -84,6 +93,7 @@ const launchIcons = [
     density: 'xxhdpi',
     shape: ROUND,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-square',
@@ -92,6 +102,7 @@ const launchIcons = [
     density: 'xxxhdpi',
     shape: SQUARE,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
   {
     name: 'appicon-round',
@@ -100,6 +111,7 @@ const launchIcons = [
     density: 'xxxhdpi',
     shape: ROUND,
     platform: ANDROID,
+    type: LAUNCHICON,
   },
 ];
 

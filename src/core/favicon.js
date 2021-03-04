@@ -4,11 +4,15 @@ const sharp = require('sharp');
 const Jimp = require('jimp');
 const { parseDimensions } = require('../utils');
 const favicons = require('../generables/favicon');
-const { platforms } = require('../constants');
+const { platforms, assetTypes } = require('../constants');
 const { createOutputDirs, writeToFile, resize } = require('./shared');
 
 const resizeFavicons = (image, jimpImage, output, data) => {
-  const outputDir = createOutputDirs(output, platforms.WEB, 'favicon');
+  const outputDir = createOutputDirs(
+    output,
+    platforms.WEB.name,
+    assetTypes.FAVICON.name
+  );
   data.forEach((favicon) => {
     const { width, height } = parseDimensions(favicon.dimensions);
     resize(image, jimpImage, width, height);

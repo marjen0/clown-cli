@@ -7,6 +7,7 @@ const path = require('path');
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+
 const { parseDimensions } = require('../utils');
 const webosLaunchIcons = require('../generables/launch/webos');
 const iosLaunchIcons = require('../generables/launch/ios');
@@ -15,7 +16,7 @@ const androidLaunchIcons = require('../generables/launch/android');
 const androidTvLaunchIcons = require('../generables/launch/androidtv');
 const tvosLaunchIcons = require('../generables/launch/tvos');
 
-const { platforms, shapes } = require('../constants');
+const { platforms, shapes, assetTypes } = require('../constants');
 const {
   writeToFile,
   resize,
@@ -31,7 +32,11 @@ const resizeGenericLaunchIcons = (
   platform,
   data
 ) => {
-  const outputDir = createOutputDirs(options.output, platform, 'LaunchIcons');
+  const outputDir = createOutputDirs(
+    options.output,
+    platform,
+    assetTypes.LAUNCHICON.name
+  );
   data.forEach((icon) => {
     let dir = outputDir;
     const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
@@ -73,7 +78,7 @@ const generateLaunchIcons = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.IOS,
+      platforms.IOS.name,
       iosLaunchIcons
     );
   }
@@ -82,7 +87,7 @@ const generateLaunchIcons = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.TVOS,
+      platforms.TVOS.name,
       tvosLaunchIcons
     );
   }
@@ -91,7 +96,7 @@ const generateLaunchIcons = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.ANDROID,
+      platforms.ANDROID.name,
       androidLaunchIcons
     );
   }
@@ -100,7 +105,7 @@ const generateLaunchIcons = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.ANDROIDTV,
+      platforms.ANDROIDTV.name,
       androidTvLaunchIcons
     );
   }
@@ -109,7 +114,7 @@ const generateLaunchIcons = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.WEBOS,
+      platforms.WEBOS.name,
       webosLaunchIcons
     );
   }
@@ -118,7 +123,7 @@ const generateLaunchIcons = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.MACOS,
+      platforms.MACOS.name,
       macosLaunchIcons
     );
   }

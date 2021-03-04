@@ -39,31 +39,31 @@ const promptForPlatforms = async (assetType, options) => {
   const { IOS, ANDROID, ANDROIDTV, FIRETV, MACOS, TVOS, WEBOS } = platforms;
   const questions = [];
   switch (assetType) {
-    case assetTypes.SPLASHSCREEN:
+    case assetTypes.SPLASHSCREEN.name:
       questions.push({
         type: 'checkbox',
         name: 'platforms',
         choices: [
-          { name: IOS, checked: true },
-          { name: ANDROID, checked: true },
-          { name: TVOS, checked: true },
-          { name: ANDROIDTV, checked: true },
-          { name: WEBOS, checked: true },
+          { name: IOS.name, checked: true },
+          { name: ANDROID.name, checked: true },
+          { name: TVOS.name, checked: true },
+          { name: ANDROIDTV.name, checked: true },
+          { name: WEBOS.name, checked: true },
         ],
       });
       break;
-    case assetTypes.LAUNCHICON:
+    case assetTypes.LAUNCHICON.name:
       questions.push({
         type: 'checkbox',
         name: 'platforms',
         choices: [
-          { name: IOS, checked: true },
-          { name: ANDROID, checked: true },
-          { name: MACOS, checked: true },
-          { name: TVOS, checked: true },
-          { name: ANDROIDTV, checked: true },
-          { name: FIRETV, checked: true },
-          { name: WEBOS, checked: true },
+          { name: IOS.name, checked: true },
+          { name: ANDROID.name, checked: true },
+          { name: MACOS.name, checked: true },
+          { name: TVOS.name, checked: true },
+          { name: ANDROIDTV.name, checked: true },
+          { name: FIRETV.name, checked: true },
+          { name: WEBOS.name, checked: true },
         ],
       });
       break;
@@ -92,7 +92,7 @@ const cli = async (args) => {
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
       promptedOptions = await promptForPlatforms(
-        assetTypes.SPLASHSCREEN,
+        assetTypes.SPLASHSCREEN.name,
         promptedOptions
       );
       await generateSplashScreens(promptedOptions);
@@ -110,7 +110,7 @@ const cli = async (args) => {
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
       promptedOptions = await promptForPlatforms(
-        assetTypes.LAUNCHICON,
+        assetTypes.LAUNCHICON.name,
         promptedOptions
       );
       await generateLaunchIcons(promptedOptions);

@@ -12,7 +12,7 @@ const tvosSplashScreens = require('../generables/splash/tvos');
 const androidSplashScreens = require('../generables/splash/android');
 const androidTvSplashScreens = require('../generables/splash/androidtv');
 const webosSplashScreens = require('../generables/splash/webos');
-const { platforms } = require('../constants');
+const { platforms, assetTypes } = require('../constants');
 const {
   resize,
   writeToFile,
@@ -28,7 +28,11 @@ const resizeGenericSplashScreens = (
   platform,
   data
 ) => {
-  const outputDir = createOutputDirs(options.output, platform, 'SplashScreens');
+  const outputDir = createOutputDirs(
+    options.output,
+    platform,
+    assetTypes.SPLASHSCREEN.name
+  );
 
   data.forEach((splash) => {
     let dir = outputDir;
@@ -72,7 +76,7 @@ const generateSplashScreens = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.IOS,
+      platforms.IOS.name,
       iosSplashScreens
     );
   }
@@ -81,7 +85,7 @@ const generateSplashScreens = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.TVOS,
+      platforms.TVOS.name,
       tvosSplashScreens
     );
   }
@@ -90,7 +94,7 @@ const generateSplashScreens = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.ANDROID,
+      platforms.ANDROID.name,
       androidSplashScreens
     );
   }
@@ -99,7 +103,7 @@ const generateSplashScreens = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.ANDROIDTV,
+      platforms.ANDROIDTV.name,
       androidTvSplashScreens
     );
   }
@@ -108,7 +112,7 @@ const generateSplashScreens = async (options) => {
       sharp(options.source),
       jimpImage,
       options,
-      platforms.WEBOS,
+      platforms.WEBOS.name,
       webosSplashScreens
     );
   }
