@@ -73,6 +73,7 @@ const generateLaunchIcons = async (options) => {
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS } = platforms;
   const jimpImage = await Jimp.read(options.source);
+  console.log('cli options', options);
   if (optPlatforms.includes(IOS)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
