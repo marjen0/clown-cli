@@ -72,7 +72,7 @@ const generateSplashScreens = async (options) => {
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS } = platforms;
   const jimpImage = await Jimp.read(options.source);
   console.log('cli options', options);
-  if (optPlatforms.includes(IOS)) {
+  if (optPlatforms.some((p) => p.name === IOS.name)) {
     resizeGenericSplashScreens(
       sharp(options.source),
       jimpImage,
@@ -81,7 +81,7 @@ const generateSplashScreens = async (options) => {
       iosSplashScreens
     );
   }
-  if (optPlatforms.includes(TVOS)) {
+  if (optPlatforms.some((p) => p.name === TVOS.name)) {
     resizeGenericSplashScreens(
       sharp(options.source),
       jimpImage,
@@ -90,7 +90,7 @@ const generateSplashScreens = async (options) => {
       tvosSplashScreens
     );
   }
-  if (optPlatforms.includes(ANDROID)) {
+  if (optPlatforms.some((p) => p.name === ANDROID.name)) {
     resizeGenericSplashScreens(
       sharp(options.source),
       jimpImage,
@@ -99,7 +99,7 @@ const generateSplashScreens = async (options) => {
       androidSplashScreens
     );
   }
-  if (optPlatforms.includes(ANDROIDTV)) {
+  if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
     resizeGenericSplashScreens(
       sharp(options.source),
       jimpImage,
@@ -108,7 +108,7 @@ const generateSplashScreens = async (options) => {
       androidTvSplashScreens
     );
   }
-  if (optPlatforms.includes(WEBOS)) {
+  if (optPlatforms.some((p) => p.name === WEBOS.name)) {
     resizeGenericSplashScreens(
       sharp(options.source),
       jimpImage,

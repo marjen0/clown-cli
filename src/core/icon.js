@@ -74,7 +74,7 @@ const generateLaunchIcons = async (options) => {
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS } = platforms;
   const jimpImage = await Jimp.read(options.source);
   console.log('cli options', options);
-  if (optPlatforms.includes(IOS)) {
+  if (optPlatforms.some((p) => p.name === IOS.name)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
       jimpImage,
@@ -83,7 +83,7 @@ const generateLaunchIcons = async (options) => {
       iosLaunchIcons
     );
   }
-  if (optPlatforms.includes(TVOS)) {
+  if (optPlatforms.some((p) => p.name === TVOS.name)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
       jimpImage,
@@ -92,7 +92,7 @@ const generateLaunchIcons = async (options) => {
       tvosLaunchIcons
     );
   }
-  if (optPlatforms.includes(ANDROID)) {
+  if (optPlatforms.some((p) => p.name === ANDROID.name)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
       jimpImage,
@@ -101,7 +101,7 @@ const generateLaunchIcons = async (options) => {
       androidLaunchIcons
     );
   }
-  if (optPlatforms.includes(ANDROIDTV)) {
+  if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
       jimpImage,
@@ -110,7 +110,7 @@ const generateLaunchIcons = async (options) => {
       androidTvLaunchIcons
     );
   }
-  if (optPlatforms.includes(WEBOS)) {
+  if (optPlatforms.some((p) => p.name === WEBOS.name)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
       jimpImage,
@@ -119,7 +119,7 @@ const generateLaunchIcons = async (options) => {
       webosLaunchIcons
     );
   }
-  if (optPlatforms.includes(MACOS)) {
+  if (optPlatforms.some((p) => p.name === MACOS.name)) {
     resizeGenericLaunchIcons(
       sharp(options.source),
       jimpImage,
