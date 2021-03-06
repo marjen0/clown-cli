@@ -71,6 +71,7 @@ const generateSplashScreens = async (options) => {
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS } = platforms;
   const jimpImage = await Jimp.read(options.source);
+  console.log('cli options', options);
   if (optPlatforms.includes(IOS)) {
     resizeGenericSplashScreens(
       sharp(options.source),
