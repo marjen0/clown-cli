@@ -1,6 +1,6 @@
 const splashScreens = require('../../src/generables/splash/androidtv');
 
-describe('androidtv splash screens', () => {
+describe('AndroidTV splash screens', () => {
   it('should have 6 different sizes', () => {
     // Arange
     const expectedCount = 6;

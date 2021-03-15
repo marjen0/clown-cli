@@ -1,6 +1,6 @@
 const splashScreens = require('../../src/generables/splash/ios');
 
-describe('ios splash screens', () => {
+describe('iOS splash screens', () => {
   it('should have 27 different sizes', () => {
     // Arange
     const expectedCount = 27;

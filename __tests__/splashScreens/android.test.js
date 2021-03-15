@@ -1,6 +1,6 @@
 const splashScreens = require('../../src/generables/splash/android');
 
-describe('android splash screens', () => {
+describe('Android splash screens', () => {
   it('should have 12 different sizes', () => {
     // Arange
     const expectedCount = 12;
