@@ -3,7 +3,7 @@ const { platforms, assetTypes } = require('../../constants');
 const { WEB } = platforms;
 const { FAVICON } = assetTypes;
 
-const launchIcons = [
+const favicons = [
   {
     name: 'favicon-32',
     dimensions: '32x32',
@@ -55,4 +55,4 @@ const launchIcons = [
   },
 ];
 
-module.exports = launchIcons;
+module.exports = favicons;
