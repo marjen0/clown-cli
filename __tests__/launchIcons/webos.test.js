@@ -9,4 +9,10 @@ describe('webos launch icons', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
+  it('should be unique', () => {
+    // Arange
+    // Act
+    // Assert
+    expect(launchIcons).toBeDistinct();
+  });
 });

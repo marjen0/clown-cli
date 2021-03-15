@@ -9,4 +9,10 @@ describe('android launch icons', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
+  it('should be unique', () => {
+    // Arange
+    // Act
+    // Assert
+    expect(launchIcons).toBeDistinct();
+  });
 });
