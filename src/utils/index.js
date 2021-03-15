@@ -1,5 +1,3 @@
-const { parse } = require('commander');
-
 const parseDimensions = (dimensions) => {
   let dim = dimensions.trim();
   dim = dim.split('x');
