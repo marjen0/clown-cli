@@ -75,7 +75,7 @@ const splashScreens = [
   },
   {
     name: 'splash-portrait',
-    dirName: 'xxx-hdpi',
+    dirName: 'drawable-xxxhdpi',
     dimensions: '1280x1920',
     density: 'xxxhdpi',
     orientation: PORTRAIT,

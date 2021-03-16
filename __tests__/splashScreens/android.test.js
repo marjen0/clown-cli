@@ -9,10 +9,11 @@ describe('Android splash screens', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
+
+  it('dimensions should be unique', () => {
     // Arange
     // Act
     // Assert
-    expect(splashScreens).toBeDistinct();
+    expect(splashScreens).toHaveDistinctPropertyValue('dimensions');
   });
 });

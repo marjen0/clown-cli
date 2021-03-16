@@ -1,6 +1,6 @@
 const launchIcons = require('../../src/generables/launch/webos');
 
-describe('webos launch icons', () => {
+describe('webOS launch icons', () => {
   it('should have 2 different sizes', () => {
     // Arange
     const expectedCount = 2;
@@ -9,10 +9,17 @@ describe('webos launch icons', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
+  it('name should be unique', () => {
     // Arange
     // Act
     // Assert
-    expect(launchIcons).toBeDistinct();
+    expect(launchIcons).toHaveDistinctPropertyValue('name');
+  });
+
+  it('dimensions should be unique', () => {
+    // Arange
+    // Act
+    // Assert
+    expect(launchIcons).toHaveDistinctPropertyValue('dimensions');
   });
 });

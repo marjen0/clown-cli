@@ -1,6 +1,6 @@
 const launchIcons = require('../../src/generables/launch/tvos');
 
-describe('tvos launch icons', () => {
+describe('tvOS launch icons', () => {
   it('should have 6 different sizes', () => {
     // Arange
     const expectedCount = 6;
@@ -9,10 +9,17 @@ describe('tvos launch icons', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
+  it('name should be unique', () => {
     // Arange
     // Act
     // Assert
-    expect(launchIcons).toBeDistinct();
+    expect(launchIcons).toHaveDistinctPropertyValue('name');
+  });
+
+  it('dimensions should be unique', () => {
+    // Arange
+    // Act
+    // Assert
+    expect(launchIcons).toHaveDistinctPropertyValue('dimensions');
   });
 });

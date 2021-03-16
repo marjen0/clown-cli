@@ -9,10 +9,10 @@ describe('macOS launch icons', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
+  it('name should be unique', () => {
     // Arange
     // Act
     // Assert
-    expect(launchIcons).toBeDistinct();
+    expect(launchIcons).toHaveDistinctPropertyValue('name');
   });
 });

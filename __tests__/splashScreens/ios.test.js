@@ -9,10 +9,4 @@ describe('iOS splash screens', () => {
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
-    // Arange
-    // Act
-    // Assert
-    expect(splashScreens).toBeDistinct();
-  });
 });

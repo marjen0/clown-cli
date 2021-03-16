@@ -1,6 +1,6 @@
 const launchIcons = require('../../src/generables/launch/android');
 
-describe('android launch icons', () => {
+describe('Android launch icons', () => {
   it('should have 12 different sizes', () => {
     // Arange
     const expectedCount = 12;
@@ -8,11 +8,5 @@ describe('android launch icons', () => {
     const actual = launchIcons.length;
     // Assert
     expect(actual).toEqual(expectedCount);
-  });
-  it('should be unique', () => {
-    // Arange
-    // Act
-    // Assert
-    expect(launchIcons).toBeDistinct();
   });
 });

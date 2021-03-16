@@ -23,7 +23,7 @@ const splashScreens = [
   },
   {
     name: 'Default-667h@2x',
-    device: 'iPhone 6 iPhone 7',
+    device: 'iPhone 6 and 7',
     scale: '2x',
     dimensions: '750x1334',
     orientation: PORTRAIT,
@@ -174,7 +174,7 @@ const splashScreens = [
     platform: IOS,
   },
   {
-    name: 'Default-Landscape@2x',
+    name: 'Default-Landscape@2x.',
     device: 'iPad retina landscape',
     scale: '2x',
     dimensions: '2048x1536',

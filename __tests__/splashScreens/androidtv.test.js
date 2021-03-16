@@ -1,18 +1,26 @@
 const splashScreens = require('../../src/generables/splash/androidtv');
 
 describe('AndroidTV splash screens', () => {
-  it('should have 6 different sizes', () => {
+  it('should have 3 different sizes', () => {
     // Arange
-    const expectedCount = 6;
+    const expectedCount = 3;
     // Act
     const actual = splashScreens.length;
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
+
+  it('dimensions should be unique', () => {
     // Arange
     // Act
     // Assert
-    expect(splashScreens).toBeDistinct();
+    expect(splashScreens).toHaveDistinctPropertyValue('dimensions');
+  });
+
+  it('directory name should be unique', () => {
+    // Arange
+    // Act
+    // Assert
+    expect(splashScreens).toHaveDistinctPropertyValue('dirName');
   });
 });

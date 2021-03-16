@@ -1,18 +1,26 @@
 const launchIcons = require('../../src/generables/launch/androidtv');
 
-describe('androidtv', () => {
-  it('should have 6 different sizes', () => {
+describe('AndroidTV launch icons', () => {
+  it('should have 2 different sizes', () => {
     // Arange
-    const expectedCount = 4;
+    const expectedCount = 2;
     // Act
     const actual = launchIcons.length;
     // Assert
     expect(actual).toEqual(expectedCount);
   });
-  it('should be unique', () => {
+
+  it('dimensions should be unique', () => {
     // Arange
     // Act
     // Assert
-    expect(launchIcons).toBeDistinct();
+    expect(launchIcons).toHaveDistinctPropertyValue('dimensions');
+  });
+
+  it('directory name should be unique', () => {
+    // Arange
+    // Act
+    // Assert
+    expect(launchIcons).toHaveDistinctPropertyValue('dirName');
   });
 });
