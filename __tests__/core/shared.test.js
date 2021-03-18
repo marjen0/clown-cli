@@ -12,11 +12,7 @@ const {
 } = require('../../src/core/shared');
 
 jest.mock('sharp');
-
-jest.mock('jimp', () => ({
-  intToRGBA: jest.fn(),
-  read: jest.fn(() => Promise.resolve({ getPixelColor: jest.fn() })),
-}));
+jest.mock('jimp');
 
 describe('resize', () => {
   let width;
