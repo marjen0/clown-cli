@@ -111,4 +111,23 @@ describe('addText', () => {
       { input: Buffer.from(textedSVG), top: 0, left: 0 },
     ]);
   });
+
+  describe('writeToFile', () => {
+    const outputDir = './directory/to/write/file';
+    const filename = 'test';
+    const sharpImage = sharp(Buffer.from('a buffer'));
+
+    it('should call toFile method', () => {
+      writeToFile(sharpImage, outputDir, filename);
+      expect(sharp().toFile).toBeCalled();
+    });
+
+    it('should call toFile method with correct arguments', () => {
+      writeToFile(sharpImage, outputDir, filename);
+      expect(sharp().toFile).toBeCalledWith(
+        `${outputDir}/${filename}.png`,
+        expect.any(Function)
+      );
+    });
+  });
 });
