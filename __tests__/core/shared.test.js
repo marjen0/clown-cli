@@ -63,17 +63,16 @@ describe('resize', () => {
   });
 });
 
-/* describe('extract corner color', () => {
-  it('should return object with r,g,b values', () => {
-    const expected = { r: 255, g: 255, b: 255 };
-
-    Jimp.getPixelColor.mockReturnValueOnce(7357183);
-    Jimp.intToRGBA.mockReturnValueOnce(expected);
-    const result = extractCornerColor('./paths');
-    console.log(result);
-    expect(result).toStrictEqual(expected);
+describe('extract corner color', () => {
+  it('should return object with r,g,b values', async () => {
+    const color = { r: 255, g: 255, b: 255 };
+    const jimpImage = await Jimp.read('path');
+    Jimp.intToRGBA.mockReturnValue(color);
+    jimpImage.getPixelColor.mockReturnValue(() => 4254);
+    const res = extractCornerColor(jimpImage);
+    expect(res).toEqual(color);
   });
-}); */
+});
 
 describe('addText', () => {
   it('should call composite svg with given text, fontSize, fontColor, width and height', () => {
