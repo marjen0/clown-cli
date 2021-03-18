@@ -2,7 +2,7 @@
 const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
-const { parseDimensions } = require('../utils');
+const { parseDimensions } = require('../helpers');
 const favicons = require('../generables/favicon');
 const { platforms, assetTypes } = require('../constants');
 const { createOutputDirs, writeToFile, resize } = require('./shared');

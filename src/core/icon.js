@@ -8,7 +8,7 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 
-const { parseDimensions } = require('../utils');
+const { parseDimensions } = require('../helpers');
 const webosLaunchIcons = require('../generables/launch/webos');
 const iosLaunchIcons = require('../generables/launch/ios');
 const macosLaunchIcons = require('../generables/launch/macos');

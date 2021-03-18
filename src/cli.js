@@ -44,11 +44,11 @@ const promptForPlatforms = async (assetType, options) => {
         type: 'checkbox',
         name: 'platforms',
         choices: [
-          { name: IOS.name, checked: true },
-          { name: ANDROID.name, checked: true },
-          { name: TVOS.name, checked: true },
-          { name: ANDROIDTV.name, checked: true },
-          { name: WEBOS.name, checked: true },
+          { name: IOS.name, checked: true, value: IOS },
+          { name: ANDROID.name, checked: true, value: ANDROID },
+          { name: TVOS.name, checked: true, value: TVOS },
+          { name: ANDROIDTV.name, checked: true, value: ANDROIDTV },
+          { name: WEBOS.name, checked: true, value: WEBOS },
         ],
       });
       break;
@@ -57,13 +57,13 @@ const promptForPlatforms = async (assetType, options) => {
         type: 'checkbox',
         name: 'platforms',
         choices: [
-          { name: IOS.name, checked: true },
-          { name: ANDROID.name, checked: true },
-          { name: MACOS.name, checked: true },
-          { name: TVOS.name, checked: true },
-          { name: ANDROIDTV.name, checked: true },
-          { name: FIRETV.name, checked: true },
-          { name: WEBOS.name, checked: true },
+          { name: IOS.name, checked: true, value: IOS },
+          { name: ANDROID.name, checked: true, value: ANDROID },
+          { name: MACOS.name, checked: true, value: MACOS },
+          { name: TVOS.name, checked: true, value: TVOS },
+          { name: ANDROIDTV.name, checked: true, value: ANDROIDTV },
+          { name: FIRETV.name, checked: true, value: FIRETV },
+          { name: WEBOS.name, checked: true, value: WEBOS },
         ],
       });
       break;
@@ -95,6 +95,7 @@ const cli = async (args) => {
         assetTypes.SPLASHSCREEN.name,
         promptedOptions
       );
+      console.log('prompted', promptedOptions);
       await generateSplashScreens(promptedOptions);
     });
 

@@ -92,3 +92,4 @@ exports.negate = negate;
 exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;
+exports.extractCornerColor = extractCornerColor;

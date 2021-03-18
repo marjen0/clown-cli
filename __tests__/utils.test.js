@@ -1,4 +1,4 @@
-const { parseDimensions } = require('../src/utils');
+const { parseDimensions } = require('../src/helpers');
 
 describe('dimension parser', () => {
   it('should return corectly parsed values', () => {
