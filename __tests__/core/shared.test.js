@@ -22,7 +22,7 @@ describe('resize', () => {
   let sharpImage;
   let jimpImage;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     jimpImage = await Jimp.read('path');
     width = 200;
     height = 600;
@@ -60,6 +60,22 @@ describe('resize', () => {
     expect(sharp().composite).toBeCalledWith([
       { input: rect, blend: 'dest-in' },
     ]);
+  });
+});
+
+describe('tint', () => {
+  it('should call tint method', () => {
+    const sharpImage = sharp(Buffer.from('a buffer'));
+    tint(sharpImage);
+    expect(sharp().tint).toBeCalled();
+  });
+});
+
+describe('negate', () => {
+  it('should call negate method', () => {
+    const sharpImage = sharp(Buffer.from('a buffer'));
+    negate(sharpImage);
+    expect(sharp().negate).toBeCalled();
   });
 });
 

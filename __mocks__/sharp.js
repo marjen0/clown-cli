@@ -3,6 +3,8 @@ const result = {
   composite: jest.fn().mockReturnThis(),
   toFile: jest.fn().mockReturnThis(),
   jpeg: jest.fn().mockReturnThis(),
+  tint: jest.fn().mockReturnThis(),
+  negate: jest.fn().mockReturnThis(),
   toBuffer: jest.fn().mockReturnThis(),
 };
 
