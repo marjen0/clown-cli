@@ -14,10 +14,58 @@ const {
 jest.mock('sharp');
 
 jest.mock('jimp', () => ({
-  getPixelColor: jest.fn(),
   intToRGBA: jest.fn(),
-  read: jest.fn(),
+  read: jest.fn(() => Promise.resolve({ getPixelColor: jest.fn() })),
 }));
+
+describe('resize', () => {
+  let width;
+  let height;
+  let round;
+  let background;
+  let sharpImage;
+  let jimpImage;
+
+  beforeAll(async () => {
+    jimpImage = await Jimp.read('path');
+    width = 200;
+    height = 600;
+    round = true;
+    background = {
+      r: 255,
+      g: 255,
+      b: 255,
+    };
+    sharpImage = sharp(Buffer.from('buffer'));
+    Jimp.intToRGBA.mockReturnValue(background);
+    jimpImage.getPixelColor.mockReturnValue(() => 4254);
+  });
+
+  it('should should call resize with correct width and height arguments', async () => {
+    resize(sharpImage, jimpImage, width, height);
+    expect(sharp().resize).toBeCalledWith(width, height, {
+      fit: 'contain',
+      background,
+    });
+  });
+
+  it('should not call composite if round is not passed', async () => {
+    resize(sharpImage, jimpImage, width, height, false);
+    expect(sharp().composite).not.toBeCalled();
+  });
+
+  it('should call composite if round is true', async () => {
+    const rect = Buffer.from(
+      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${
+        width / 2
+      }" ry="${height / 2}"/></svg>`
+    );
+    resize(sharpImage, jimpImage, width, height, round);
+    expect(sharp().composite).toBeCalledWith([
+      { input: rect, blend: 'dest-in' },
+    ]);
+  });
+});
 
 /* describe('extract corner color', () => {
   it('should return object with r,g,b values', () => {
