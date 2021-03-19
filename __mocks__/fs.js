@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
+
 const path = require('path');
 
 const fs = jest.createMockFromModule('fs');
@@ -27,8 +28,18 @@ const __setMockFiles = (newMockFiles) => {
 // A custom version of `readdirSync` that reads from the special mocked out
 // file list set via __setMockFiles
 const readdirSync = (directoryPath) => mockFiles[directoryPath] || [];
+const existsSync = (directoryPath) => directoryPath in mockFiles;
+const rmSync = (directoryPath) => delete mockFiles[directoryPath];
+const mkdirSync = (directoryPath) => {
+  if (!mockFiles[directoryPath]) {
+    mockFiles[directoryPath] = [];
+  }
+};
 
 fs.__setMockFiles = __setMockFiles;
 fs.readdirSync = readdirSync;
+fs.existsSync = existsSync;
+fs.rmSync = rmSync;
+fs.mkdirSync = mkdirSync;
 
 module.exports = fs;
