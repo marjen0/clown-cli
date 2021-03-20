@@ -35,19 +35,6 @@ const splashScreens = [
     dimensions: '2048x1496',
     density: 'xxxhdpi',
   },
-  // old
-  /*{
-    name: 'launch_screen',
-    dirName: 'drawable-xhdpi',
-    dimensions: '1792x828',
-    density: '',
-  },
-  {
-    name: 'launch_screen',
-    dirName: 'drawable-xxxhdpi',
-    dimensions: '2048x1496',
-    density: '',
-  },*/
 ];
 
 module.exports = splashScreens;
