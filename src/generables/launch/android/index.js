@@ -43,15 +43,6 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: '',
-    dirName: '',
-    dimensions: '',
-    density: '',
-    shape: SQUARE,
-    platform: ANDROID,
-    type: LAUNCHICON,
-  },
-  {
     name: 'ic_stat_ic_notification',
     dirName: 'drawable-xxxhdpi',
     dimensions: '192x192',
