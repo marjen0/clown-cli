@@ -14,6 +14,7 @@ const iosLaunchIcons = require('../generables/launch/ios');
 const macosLaunchIcons = require('../generables/launch/macos');
 const androidLaunchIcons = require('../generables/launch/android');
 const androidTvLaunchIcons = require('../generables/launch/androidtv');
+const fireTvLaunchIcons = require('../generables/launch/firetv');
 const tvosLaunchIcons = require('../generables/launch/tvos');
 
 const { platforms, shapes, assetTypes } = require('../constants');
@@ -71,7 +72,7 @@ const resizeGenericLaunchIcons = (
 const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
   const { platforms: optPlatforms } = options;
-  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS } = platforms;
+  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
   const jimpImage = await Jimp.read(options.source);
   console.log('cli options', options);
   if (optPlatforms.some((p) => p.name === IOS.name)) {
@@ -126,6 +127,15 @@ const generateLaunchIcons = async (options) => {
       options,
       platforms.MACOS.name,
       macosLaunchIcons
+    );
+  }
+  if (optPlatforms.some((p) => p.name === FIRETV.name)) {
+    resizeGenericLaunchIcons(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.FIRETV.name,
+      fireTvLaunchIcons
     );
   }
 

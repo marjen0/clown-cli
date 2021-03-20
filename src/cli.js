@@ -49,6 +49,7 @@ const promptForPlatforms = async (assetType, options) => {
           { name: TVOS.name, checked: true, value: TVOS },
           { name: ANDROIDTV.name, checked: true, value: ANDROIDTV },
           { name: WEBOS.name, checked: true, value: WEBOS },
+          { name: FIRETV.name, checked: true, value: FIRETV },
         ],
       });
       break;

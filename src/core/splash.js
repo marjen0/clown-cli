@@ -11,6 +11,7 @@ const iosSplashScreens = require('../generables/splash/ios');
 const tvosSplashScreens = require('../generables/splash/tvos');
 const androidSplashScreens = require('../generables/splash/android');
 const androidTvSplashScreens = require('../generables/splash/androidtv');
+const fireTvSplashScreens = require('../generables/splash/firetv');
 const webosSplashScreens = require('../generables/splash/webos');
 const { platforms, assetTypes } = require('../constants');
 const {
@@ -69,7 +70,7 @@ const resizeGenericSplashScreens = (
 const generateSplashScreens = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
   const { platforms: optPlatforms } = options;
-  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS } = platforms;
+  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV } = platforms;
   const jimpImage = await Jimp.read(options.source);
   console.log('cli options', options);
   if (optPlatforms.some((p) => p.name === IOS.name)) {
@@ -115,6 +116,15 @@ const generateSplashScreens = async (options) => {
       options,
       platforms.WEBOS.name,
       webosSplashScreens
+    );
+  }
+  if (optPlatforms.some((p) => p.name === FIRETV.name)) {
+    resizeGenericSplashScreens(
+      sharp(options.source),
+      jimpImage,
+      options,
+      platforms.FIRETV.name,
+      fireTvSplashScreens
     );
   }
 

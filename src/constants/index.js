@@ -15,7 +15,7 @@ const assetTypes = {
   SPLASHSCREEN: {
     name: 'SplashScreen',
     displayName: 'Splash screen',
-    platforms: [ANDROID, ANDROIDTV, IOS, TVOS, WEBOS],
+    platforms: [ANDROID, ANDROIDTV, IOS, TVOS, WEBOS, FIRETV],
   },
   LAUNCHICON: {
     name: 'LaunchIcon',
@@ -26,6 +26,11 @@ const assetTypes = {
     name: 'Favicon',
     displayName: 'Favicon',
     platforms: [WEB],
+  },
+  NOTIFICATIONICON: {
+    name: 'NotificationIcon',
+    displayName: 'Notification Icons',
+    platforms: [ANDROID, ANDROIDTV],
   },
 };
 

@@ -14,7 +14,7 @@ const splashScreens = [
   {
     name: 'launch_screen',
     dirName: 'drawable-mdpi',
-    dimensions: '1024 × 768',
+    dimensions: '1024x768',
     density: 'mdpi',
   },
   {
@@ -35,13 +35,6 @@ const splashScreens = [
     dimensions: '2048x1496',
     density: 'xxxhdpi',
   },
-  {
-    name: '',
-    dirName: '',
-    dimensions: '',
-    density: '',
-  },
-
   // old
   /*{
     name: 'launch_screen',
