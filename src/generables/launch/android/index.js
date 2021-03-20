@@ -5,6 +5,62 @@ const { ANDROID } = platforms;
 const { LAUNCHICON } = assetTypes;
 
 const launchIcons = [
+  // notification icons?
+  {
+    name: 'ic_stat_ic_notification',
+    dirName: 'drawable-hdpi',
+    dimensions: '72x72',
+    density: 'hdpi',
+    shape: SQUARE,
+    platform: ANDROID,
+    type: LAUNCHICON,
+  },
+  {
+    name: 'ic_stat_ic_notification',
+    dirName: 'drawable-mdpi',
+    dimensions: '48x48',
+    density: 'mdpi',
+    shape: SQUARE,
+    platform: ANDROID,
+    type: LAUNCHICON,
+  },
+  {
+    name: 'ic_stat_ic_notification',
+    dirName: 'drawable-xhdpi',
+    dimensions: '96x96',
+    density: 'xhdpi',
+    shape: SQUARE,
+    platform: ANDROID,
+    type: LAUNCHICON,
+  },
+  {
+    name: 'ic_stat_ic_notification',
+    dirName: 'drawable-xxhdpi',
+    dimensions: '144x144',
+    density: 'xxhdpi',
+    shape: SQUARE,
+    platform: ANDROID,
+    type: LAUNCHICON,
+  },
+  {
+    name: '',
+    dirName: '',
+    dimensions: '',
+    density: '',
+    shape: SQUARE,
+    platform: ANDROID,
+    type: LAUNCHICON,
+  },
+  {
+    name: 'ic_stat_ic_notification',
+    dirName: 'drawable-xxxhdpi',
+    dimensions: '192x192',
+    density: 'xxxhdpi',
+    shape: SQUARE,
+    platform: ANDROID,
+    type: LAUNCHICON,
+  },
+  // launch icons
   {
     name: 'appicon-square',
     dirName: 'mipmap-ldpi',
@@ -98,7 +154,7 @@ const launchIcons = [
   {
     name: 'appicon-square',
     dirName: 'mipmap-xxxhdpi',
-    dimensions: '512x512',
+    dimensions: '192x192',
     density: 'xxxhdpi',
     shape: SQUARE,
     platform: ANDROID,
@@ -107,7 +163,7 @@ const launchIcons = [
   {
     name: 'appicon-round',
     dirName: 'mipmap-xxxhdpi',
-    dimensions: '512x512',
+    dimensions: '192x192',
     density: 'xxxhdpi',
     shape: ROUND,
     platform: ANDROID,
