@@ -64,6 +64,25 @@ const resizeGenericSplashScreens = (
       )
     );
   });
+
+  // generate contents JSON
+  if (platform === platforms.IOS.name) {
+    const contentsPath = path.resolve(outputDir, 'Contents.json');
+    if (fs.existsSync(contentsPath)) {
+      fs.unlinkSync(contentsPath);
+    }
+    const contentsData = data.map((item) => ({
+      idiom: 'iphone',
+      size: item.dimensions,
+      scale: item.scale,
+      filename: `${item.name}.png`, // TODO better solution should exist
+    }));
+    console.log(contentsData);
+    fs.writeFileSync(
+      contentsPath,
+      JSON.stringify({ images: contentsData }, null, 2)
+    );
+  }
 };
 
 // --------------------------------- CORE FUNCTIONS ----------------------------------------------

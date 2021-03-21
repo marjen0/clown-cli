@@ -1,5 +1,6 @@
 const orientations = { PORTRAIT: 'portrait', LANDSCASPE: 'landscape' };
 const shapes = { ROUND: 'round', SQUARE: 'square' };
+const idioms = { IPAD: 'ipad', IPHONE: 'iphone' };
 const platforms = {
   IOS: { name: 'ios', displayName: 'iOS' },
   ANDROID: { name: 'android', displayName: 'Android' },
@@ -36,5 +37,6 @@ const assetTypes = {
 
 exports.orientations = orientations;
 exports.shapes = shapes;
+exports.idioms = idioms;
 exports.platforms = platforms;
 exports.assetTypes = assetTypes;

@@ -8,6 +8,7 @@ const extractCornerColor = (jimpImage) => {
   const { r, g, b } = Jimp.intToRGBA(hex);
   return { r, g, b };
 };
+
 const resize = (sharpImage, jimpImage, width, height, round = false) => {
   const { r, g, b } = extractCornerColor(jimpImage);
   let img;
@@ -25,12 +26,15 @@ const resize = (sharpImage, jimpImage, width, height, round = false) => {
   }
   return img;
 };
+
 const negate = (sharpImage) => {
   sharpImage.negate();
 };
+
 const tint = (sharpImage) => {
   sharpImage.tint();
 };
+
 const addText = (sharpImage, text, fontSize, fontColor, width, height) => {
   const textedSVG = Buffer.from(`
     <svg height="${height}" width="${width}">
@@ -86,6 +90,9 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   }
   return platformOutputDir;
 };
+
+const generateContentsJson = (generables) => {};
+
 exports.tint = tint;
 exports.resize = resize;
 exports.negate = negate;
@@ -93,3 +100,4 @@ exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;
 exports.extractCornerColor = extractCornerColor;
+exports.generateContentsJson = generateContentsJson;
