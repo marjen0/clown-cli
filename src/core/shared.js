@@ -91,7 +91,7 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const generateContentsJson = (generables, contentsPath) => {
+const writeContentsJson = (generables, contentsPath) => {
   if (fs.existsSync(contentsPath)) {
     fs.unlinkSync(contentsPath);
   }
@@ -119,4 +119,4 @@ exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;
 exports.extractCornerColor = extractCornerColor;
-exports.generateContentsJson = generateContentsJson;
+exports.writeContentsJson = writeContentsJson;

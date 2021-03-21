@@ -20,7 +20,7 @@ const {
   createOutputDirs,
   tint,
   addText,
-  generateContentsJson,
+  writeContentsJson,
 } = require('./shared');
 
 const resizeGenericSplashScreens = (
@@ -69,7 +69,7 @@ const resizeGenericSplashScreens = (
   // generate contents JSON
   if (platform === platforms.IOS.name) {
     const contentsPath = path.resolve(outputDir, 'Contents.json');
-    generateContentsJson(data, contentsPath);
+    writeContentsJson(data, contentsPath);
   }
 };
 

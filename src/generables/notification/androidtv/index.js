@@ -1,6 +1,7 @@
-const { platforms } = require('../../../constants');
+const { platforms, assetTypes } = require('../../../constants');
 
 const { ANDROIDTV } = platforms;
+const { NOTIFICATIONICON } = assetTypes;
 
 const notificationIcons = [
   {
@@ -9,6 +10,7 @@ const notificationIcons = [
     dimensions: '72x72',
     density: 'hdpi',
     platform: ANDROIDTV,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification.png',
@@ -16,6 +18,7 @@ const notificationIcons = [
     dimensions: '48x48',
     density: 'mdpi',
     platform: ANDROIDTV,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
@@ -23,6 +26,7 @@ const notificationIcons = [
     dimensions: '96x96',
     density: 'xdpi',
     platform: ANDROIDTV,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
@@ -30,6 +34,7 @@ const notificationIcons = [
     dimensions: '144x144',
     density: 'xxhdpi',
     platform: ANDROIDTV,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
@@ -37,6 +42,7 @@ const notificationIcons = [
     dimensions: '192x192',
     density: 'xxxhdpi',
     platform: ANDROIDTV,
+    type: NOTIFICATIONICON,
   },
 ];
 

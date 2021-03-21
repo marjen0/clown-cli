@@ -1,7 +1,7 @@
 const { platforms, assetTypes } = require('../../../constants');
 
 const { ANDROID } = platforms;
-const {} = assetTypes;
+const { NOTIFICATIONICON } = assetTypes;
 
 const notificationIcons = [
   {
@@ -10,16 +10,15 @@ const notificationIcons = [
     dimensions: '72x72',
     density: 'hdpi',
     platform: ANDROID,
-    type: LAUNCHICON,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
     dirName: 'drawable-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
-
     platform: ANDROID,
-    type: LAUNCHICON,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
@@ -27,7 +26,7 @@ const notificationIcons = [
     dimensions: '96x96',
     density: 'xhdpi',
     platform: ANDROID,
-    type: LAUNCHICON,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
@@ -35,7 +34,7 @@ const notificationIcons = [
     dimensions: '144x144',
     density: 'xxhdpi',
     platform: ANDROID,
-    type: LAUNCHICON,
+    type: NOTIFICATIONICON,
   },
   {
     name: 'ic_stat_ic_notification',
@@ -43,7 +42,7 @@ const notificationIcons = [
     dimensions: '192x192',
     density: 'xxxhdpi',
     platform: ANDROID,
-    type: LAUNCHICON,
+    type: NOTIFICATIONICON,
   },
 ];
 

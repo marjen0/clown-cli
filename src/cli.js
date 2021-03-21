@@ -4,6 +4,7 @@ const program = require('commander');
 const { generateFavicons } = require('./core/favicon');
 const { generateSplashScreens } = require('./core/splash');
 const { generateLaunchIcons } = require('./core/icon');
+const { generateNotificationIcon } = require('./core/notification');
 const { description, version } = require('../package.json');
 const { assetTypes, platforms } = require('./constants');
 
@@ -68,6 +69,16 @@ const promptForPlatforms = async (assetType, options) => {
         ],
       });
       break;
+    case assetTypes.NOTIFICATIONICON.name:
+      questions.push({
+        type: 'checkbox',
+        name: 'platforms',
+        choices: [
+          { name: ANDROID.name, checked: true, value: ANDROID },
+          { name: ANDROIDTV.name, checked: true, value: ANDROIDTV },
+        ],
+      });
+      break;
     default:
       break;
   }
@@ -116,6 +127,24 @@ const cli = async (args) => {
         promptedOptions
       );
       await generateLaunchIcons(promptedOptions);
+    });
+
+  program
+    .command('notification')
+    .description('generate notification icons')
+    .option('-s, --source <source>', 'source of the icon to generate')
+    .option('-o, --output <output>', 'generated files output directory')
+    .option('-tint, --tint', 'tint the image')
+    .option('-t, --text <text>', 'Text to add on image')
+    .option('-f, --fontSize <number>', 'size of text')
+    .option('-c, --fontColor <color hex>', 'text color')
+    .action(async (options) => {
+      let promptedOptions = await promptForMissingOptions(options);
+      promptedOptions = await promptForPlatforms(
+        assetTypes.NOTIFICATIONICON.name,
+        promptedOptions
+      );
+      await generateNotificationIcon(promptedOptions);
     });
 
   program

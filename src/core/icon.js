@@ -24,7 +24,7 @@ const {
   createOutputDirs,
   addText,
   tint,
-  generateContentsJson,
+  writeContentsJson,
 } = require('./shared');
 
 const resizeGenericLaunchIcons = (
@@ -74,7 +74,7 @@ const resizeGenericLaunchIcons = (
   // generate contents JSON
   if (platform === platforms.IOS.name) {
     const contentsPath = path.resolve(outputDir, 'Contents.json');
-    generateContentsJson(data, contentsPath);
+    writeContentsJson(data, contentsPath);
   }
 };
 
