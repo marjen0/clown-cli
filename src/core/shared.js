@@ -91,7 +91,26 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const generateContentsJson = (generables) => {};
+const generateContentsJson = (generables, contentsPath) => {
+  if (fs.existsSync(contentsPath)) {
+    fs.unlinkSync(contentsPath);
+  }
+  const contentsData = generables.map((item) => ({
+    idiom: item.idiom,
+    size: item.dimensions,
+    scale: item.scale,
+    filename: `${item.name}.png`, // TODO better solution should exist
+  }));
+
+  fs.writeFileSync(
+    contentsPath,
+    JSON.stringify(
+      { images: contentsData, info: { version: 1, author: 'clown' } },
+      null,
+      2
+    )
+  );
+};
 
 exports.tint = tint;
 exports.resize = resize;

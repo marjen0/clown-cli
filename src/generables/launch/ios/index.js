@@ -1,6 +1,7 @@
-const { platforms } = require('../../../constants');
+const { platforms, idioms } = require('../../../constants');
 
 const { IOS } = platforms;
+const { IPAD, IPHONE, IOSMARKETING } = idioms;
 
 const launchIcons = [
   {
@@ -9,6 +10,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '20x20',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-20x20@2x',
@@ -16,6 +18,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '40x40',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-20x20@3x',
@@ -23,6 +26,7 @@ const launchIcons = [
     scale: '3x',
     dimensions: '60x60',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-29x29@1x',
@@ -30,6 +34,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '29x29',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-29x29@2x',
@@ -37,6 +42,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '58x58',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-29x29@3x',
@@ -44,6 +50,7 @@ const launchIcons = [
     scale: '3x',
     dimensions: '87x87',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-40x40@1x',
@@ -51,6 +58,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '40x40',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-40x40@2x',
@@ -58,6 +66,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '80x80',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-40x40@3x',
@@ -65,6 +74,7 @@ const launchIcons = [
     scale: '3x',
     dimensions: '120x120',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-50x50@1x',
@@ -72,6 +82,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '50x50',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-50x50@2x',
@@ -79,6 +90,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '100x100',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-57x57@1x',
@@ -86,6 +98,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '57x57',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-57x57@2x',
@@ -93,6 +106,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '114x114',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-60x60@1x',
@@ -100,6 +114,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '60x60',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-60x60@2x',
@@ -107,6 +122,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '120x120',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-60x60@3x',
@@ -114,6 +130,7 @@ const launchIcons = [
     scale: '3x',
     dimensions: '180x180',
     platform: IOS,
+    idiom: IPHONE,
   },
   {
     name: 'Icon-App-72x72@1x',
@@ -121,6 +138,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '72x72',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-72x72@2x',
@@ -128,6 +146,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '144x144',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-76x76@1x',
@@ -135,6 +154,7 @@ const launchIcons = [
     scale: '1x',
     dimensions: '76x76',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-76x76@2x',
@@ -142,6 +162,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '152x152',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-76x76@3x',
@@ -149,6 +170,7 @@ const launchIcons = [
     scale: '3x',
     dimensions: '228x228',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'Icon-App-83.5x83.5@2x',
@@ -156,6 +178,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '167x167',
     platform: IOS,
+    idiom: IPAD,
   },
   {
     name: 'ItunesArtwork@2x.png',
@@ -163,6 +186,7 @@ const launchIcons = [
     scale: '2x',
     dimensions: '1024x1024',
     platform: IOS,
+    idiom: IOSMARKETING,
   },
 ];
 

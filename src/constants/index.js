@@ -1,6 +1,10 @@
 const orientations = { PORTRAIT: 'portrait', LANDSCASPE: 'landscape' };
 const shapes = { ROUND: 'round', SQUARE: 'square' };
-const idioms = { IPAD: 'ipad', IPHONE: 'iphone' };
+const idioms = {
+  IPAD: 'ipad',
+  IPHONE: 'iphone',
+  IOSMARKETING: 'ios-marketing',
+};
 const platforms = {
   IOS: { name: 'ios', displayName: 'iOS' },
   ANDROID: { name: 'android', displayName: 'Android' },
