@@ -21,6 +21,7 @@ const {
   tint,
   addText,
   writeContentsJson,
+  writeLaunchScreenXML,
 } = require('./shared');
 
 const resizeGenericSplashScreens = (
@@ -70,6 +71,20 @@ const resizeGenericSplashScreens = (
   if (platform === platforms.IOS.name) {
     const contentsPath = path.resolve(outputDir, 'Contents.json');
     writeContentsJson(data, contentsPath);
+  }
+  // generate layout/launch_screen.xml
+  if (
+    platform === platforms.ANDROID.name ||
+    platform === platforms.ANDROIDTV.name ||
+    platform === platforms.FIRETV.name
+  ) {
+    const layoutPath = path.resolve(outputDir, 'layout');
+    if (fs.existsSync(layoutPath)) {
+      fs.rmdirSync(layoutPath);
+    }
+    fs.mkdirSync(layoutPath);
+    const filePath = path.resolve(layoutPath, 'launch_screen.xml');
+    writeLaunchScreenXML(filePath);
   }
 };
 

@@ -91,9 +91,9 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const writeContentsJson = (generables, contentsPath) => {
-  if (fs.existsSync(contentsPath)) {
-    fs.unlinkSync(contentsPath);
+const writeContentsJson = (generables, path) => {
+  if (fs.existsSync(path)) {
+    fs.unlinkSync(path);
   }
   const contentsData = generables.map((item) => ({
     idiom: item.idiom,
@@ -103,7 +103,7 @@ const writeContentsJson = (generables, contentsPath) => {
   }));
 
   fs.writeFileSync(
-    contentsPath,
+    path,
     JSON.stringify(
       { images: contentsData, info: { version: 1, author: 'clown' } },
       null,
@@ -112,11 +112,25 @@ const writeContentsJson = (generables, contentsPath) => {
   );
 };
 
-exports.tint = tint;
+const writeLaunchScreenXML = (path) => {
+  if (fs.existsSync(path)) {
+    fs.unlinkSync(path);
+  }
+  const content = `<?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:orientation="vertical" android:layout_width="match_parent"
+      android:layout_height="match_parent">
+      <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/launch_screen" android:scaleType="centerCrop" />
+  </RelativeLayout>
+  `;
+  fs.writeFileSync(path, content);
+};
+
 exports.resize = resize;
 exports.negate = negate;
 exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;
-exports.extractCornerColor = extractCornerColor;
 exports.writeContentsJson = writeContentsJson;
+exports.extractCornerColor = extractCornerColor;
+exports.writeLaunchScreenXML = writeLaunchScreenXML;
