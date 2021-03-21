@@ -23,12 +23,13 @@ const {
 } = require('./shared');
 
 const resizeGenericSplashScreens = (
-  image,
+  imageSource,
   jimpImage,
   options,
   platform,
   data
 ) => {
+  const sharpImage = sharp(imageSource);
   const outputDir = createOutputDirs(
     options.output,
     platform,
@@ -44,18 +45,18 @@ const resizeGenericSplashScreens = (
       }
     }
     const { width, height } = parseDimensions(splash.dimensions);
-    resize(image, jimpImage, width, height);
+    resize(sharpImage, jimpImage, width, height);
     if (options.tint) {
-      tint(image);
+      tint(sharpImage);
     }
     if (options.text) {
       const { text } = options;
       const fontSize = options.fontSize || 48;
       const fontColor = options.fontColor || '#FFF';
-      addText(image, text, fontSize, fontColor, width, height);
+      addText(sharpImage, text, fontSize, fontColor, width, height);
     }
 
-    writeToFile(image, dir, splash.name);
+    writeToFile(sharpImage, dir, splash.name);
 
     console.log(
       chalk.magenta(
@@ -75,7 +76,7 @@ const generateSplashScreens = async (options) => {
   console.log('cli options', options);
   if (optPlatforms.some((p) => p.name === IOS.name)) {
     resizeGenericSplashScreens(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.IOS.name,
@@ -84,7 +85,7 @@ const generateSplashScreens = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === TVOS.name)) {
     resizeGenericSplashScreens(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.TVOS.name,
@@ -93,7 +94,7 @@ const generateSplashScreens = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === ANDROID.name)) {
     resizeGenericSplashScreens(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.ANDROID.name,
@@ -102,7 +103,7 @@ const generateSplashScreens = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
     resizeGenericSplashScreens(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.ANDROIDTV.name,
@@ -111,7 +112,7 @@ const generateSplashScreens = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === WEBOS.name)) {
     resizeGenericSplashScreens(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.WEBOS.name,
@@ -120,7 +121,7 @@ const generateSplashScreens = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === FIRETV.name)) {
     resizeGenericSplashScreens(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.FIRETV.name,

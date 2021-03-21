@@ -27,7 +27,7 @@ const {
 } = require('./shared');
 
 const resizeGenericLaunchIcons = (
-  sharpImage,
+  imageSource,
   jimpImage,
   options,
   platform,
@@ -39,6 +39,7 @@ const resizeGenericLaunchIcons = (
     assetTypes.LAUNCHICON.name
   );
   data.forEach((icon) => {
+    const sharpImage = sharp(imageSource);
     let dir = outputDir;
     const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
     if (icon.dirName) {
@@ -48,16 +49,20 @@ const resizeGenericLaunchIcons = (
       }
     }
     const { width, height } = parseDimensions(icon.dimensions);
+
     resize(sharpImage, jimpImage, width, height, isRound);
+
     if (options.tint) {
       tint(sharpImage);
     }
+
     if (options.text) {
       const { text } = options;
       const fontSize = options.fontSize || 48;
       const fontColor = options.fontColor || '#FFF';
       addText(sharpImage, text, fontSize, fontColor, width, height);
     }
+
     writeToFile(sharpImage, dir, icon.name);
     console.log(
       chalk.magenta(
@@ -77,7 +82,7 @@ const generateLaunchIcons = async (options) => {
   console.log('cli options', options);
   if (optPlatforms.some((p) => p.name === IOS.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.IOS.name,
@@ -86,7 +91,7 @@ const generateLaunchIcons = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === TVOS.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.TVOS.name,
@@ -95,7 +100,7 @@ const generateLaunchIcons = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === ANDROID.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.ANDROID.name,
@@ -104,7 +109,7 @@ const generateLaunchIcons = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.ANDROIDTV.name,
@@ -113,7 +118,7 @@ const generateLaunchIcons = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === WEBOS.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.WEBOS.name,
@@ -122,7 +127,7 @@ const generateLaunchIcons = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === MACOS.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.MACOS.name,
@@ -131,7 +136,7 @@ const generateLaunchIcons = async (options) => {
   }
   if (optPlatforms.some((p) => p.name === FIRETV.name)) {
     resizeGenericLaunchIcons(
-      sharp(options.source),
+      options.source,
       jimpImage,
       options,
       platforms.FIRETV.name,
