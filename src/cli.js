@@ -1,12 +1,15 @@
 const inquirer = require('inquirer');
 const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
+const Jimp = require('jimp');
+const sharp = require('sharp');
 const { generateFavicons } = require('./core/favicon');
 const { generateSplashScreens } = require('./core/splash');
 const { generateLaunchIcons } = require('./core/icon');
 const { generateNotificationIcon } = require('./core/notification');
 const { description, version } = require('../package.json');
 const { assetTypes, platforms } = require('./constants');
+const { resize, writeToFile } = require('./core/shared');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
 
@@ -156,6 +159,20 @@ const cli = async (args) => {
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);
       await generateFavicons(promptedOptions);
+    });
+
+  program
+    .command('resize')
+    .description('resize single image to given dimensions')
+    .option('-s, --source <source>', 'path to favicon')
+    .option('-o, --output <output>', 'output directory')
+    .option('-w, --width <width>', 'width to resize')
+    .option('-h, --height <height>', 'height to resize')
+    .action(async (options) => {
+      const jimpImage = await Jimp.read(options.source);
+      const sharpImage = sharp(options.source);
+      resize(sharpImage, jimpImage, +options.width, +options.height);
+      writeToFile(sharpImage, options.output, 'resized');
     });
 
   program.parse(args);
