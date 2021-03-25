@@ -25,7 +25,7 @@ const launchIcons = [
   },
   {
     name: 'appicon-square',
-    dirName: 'mippam-mdpi',
+    dirName: 'mipmap-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
     shape: SQUARE,
@@ -34,7 +34,7 @@ const launchIcons = [
   },
   {
     name: 'appicon-round',
-    dirName: 'mippam-mdpi',
+    dirName: 'mipmap-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
     shape: ROUND,

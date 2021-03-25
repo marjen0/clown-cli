@@ -7,12 +7,14 @@ const sharp = require('sharp');
 const Jimp = require('jimp');
 
 const { parseDimensions } = require('../helpers');
-const iosSplashScreens = require('../generables/splash/ios');
-const tvosSplashScreens = require('../generables/splash/tvos');
-const androidSplashScreens = require('../generables/splash/android');
-const androidTvSplashScreens = require('../generables/splash/androidtv');
-const fireTvSplashScreens = require('../generables/splash/firetv');
-const webosSplashScreens = require('../generables/splash/webos');
+const {
+  iosSplashScreens,
+  tvosSplashScreens,
+  webosSplashScreens,
+  fireTvSplashScreens,
+  androidSplashScreens,
+  androidTvSplashScreens,
+} = require('../generables');
 const { platforms, assetTypes } = require('../constants');
 const {
   resize,

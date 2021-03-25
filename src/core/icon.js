@@ -9,13 +9,15 @@ const sharp = require('sharp');
 const Jimp = require('jimp');
 
 const { parseDimensions } = require('../helpers');
-const webosLaunchIcons = require('../generables/launch/webos');
-const iosLaunchIcons = require('../generables/launch/ios');
-const macosLaunchIcons = require('../generables/launch/macos');
-const androidLaunchIcons = require('../generables/launch/android');
-const androidTvLaunchIcons = require('../generables/launch/androidtv');
-const fireTvLaunchIcons = require('../generables/launch/firetv');
-const tvosLaunchIcons = require('../generables/launch/tvos');
+const {
+  iosLaunchIcons,
+  tvosLaunchIcons,
+  macosLaunchIcons,
+  webosLaunchIcons,
+  fireTvLaunchIcons,
+  androidLaunchIcons,
+  androidTvLaunchIcons,
+} = require('../generables');
 
 const { platforms, shapes, assetTypes } = require('../constants');
 const {

@@ -5,8 +5,10 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 const { parseDimensions } = require('../helpers');
-const androidIcons = require('../generables/notification/android');
-const androidtvIcons = require('../generables/notification/androidtv');
+const {
+  androidNotificationIcons,
+  androidTvNotificationIcons,
+} = require('../generables');
 const { platforms, assetTypes, shapes } = require('../constants');
 const {
   createOutputDirs,
@@ -74,7 +76,7 @@ const generateNotificationIcon = async (options) => {
       jimpImage,
       options,
       platforms.ANDROID.name,
-      androidIcons
+      androidNotificationIcons
     );
   }
   if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
@@ -83,7 +85,7 @@ const generateNotificationIcon = async (options) => {
       jimpImage,
       options,
       platforms.ANDROIDTV.name,
-      androidtvIcons
+      androidTvNotificationIcons
     );
   }
 };
