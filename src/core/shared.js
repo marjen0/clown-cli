@@ -91,10 +91,8 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const writeContentsJson = (generables, path) => {
-  if (fs.existsSync(path)) {
-    fs.unlinkSync(path);
-  }
+const writeContentsJson = (generables, directory) => {
+  const contentsPath = path.resolve(directory, 'Contents.json');
   const contentsData = generables.map((item) => ({
     idiom: item.idiom,
     size: item.dimensions,
@@ -103,7 +101,7 @@ const writeContentsJson = (generables, path) => {
   }));
 
   fs.writeFileSync(
-    path,
+    contentsPath,
     JSON.stringify(
       { images: contentsData, info: { version: 1, author: 'clown' } },
       null,
@@ -112,10 +110,10 @@ const writeContentsJson = (generables, path) => {
   );
 };
 
-const writeLaunchScreenXML = (path) => {
-  if (fs.existsSync(path)) {
-    fs.unlinkSync(path);
-  }
+const writeLaunchScreenXML = (directory) => {
+  const layoutPath = path.resolve(directory, 'layout');
+  fs.mkdirSync(layoutPath);
+  const filePath = path.resolve(layoutPath, 'launch_screen.xml');
   const content = `<?xml version="1.0" encoding="utf-8"?>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       android:orientation="vertical" android:layout_width="match_parent"
@@ -123,11 +121,12 @@ const writeLaunchScreenXML = (path) => {
       <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/launch_screen" android:scaleType="centerCrop" />
   </RelativeLayout>
   `;
-  fs.writeFileSync(path, content);
+  fs.writeFileSync(filePath, content);
 };
 
 exports.resize = resize;
 exports.negate = negate;
+exports.tint = tint;
 exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;

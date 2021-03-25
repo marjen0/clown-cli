@@ -28,12 +28,30 @@ const __setMockFiles = (newMockFiles) => {
 // A custom version of `readdirSync` that reads from the special mocked out
 // file list set via __setMockFiles
 const readdirSync = (directoryPath) => mockFiles[directoryPath] || [];
-const existsSync = (directoryPath) => directoryPath in mockFiles;
+const existsSync = (directoryPath) => {
+  if (directoryPath in mockFiles) {
+    return true;
+  }
+  if (mockFiles[path.dirname(directoryPath)]) {
+    return mockFiles[path.dirname(directoryPath)].includes(
+      path.basename(directoryPath)
+    );
+  }
+  return false;
+};
 const rmSync = (directoryPath) => delete mockFiles[directoryPath];
 const mkdirSync = (directoryPath) => {
   if (!mockFiles[directoryPath]) {
     mockFiles[directoryPath] = [];
   }
+};
+const writeFileSync = (filePath, data) => {
+  const dir = path.dirname(filePath);
+  const file = path.basename(filePath);
+  if (!mockFiles[dir]) {
+    mockFiles[dir] = [];
+  }
+  mockFiles[dir].push(file);
 };
 
 fs.__setMockFiles = __setMockFiles;
@@ -41,5 +59,6 @@ fs.readdirSync = readdirSync;
 fs.existsSync = existsSync;
 fs.rmSync = rmSync;
 fs.mkdirSync = mkdirSync;
+fs.writeFileSync = writeFileSync;
 
 module.exports = fs;

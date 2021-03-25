@@ -3,6 +3,7 @@ const Jimp = require('jimp');
 const sharp = require('sharp');
 const fs = require('fs');
 const { platforms, assetTypes } = require('../../src/constants');
+const iosSplashScreens = require('../../src/generables/splash/ios');
 
 const {
   tint,
@@ -12,6 +13,8 @@ const {
   writeToFile,
   createOutputDirs,
   extractCornerColor,
+  writeLaunchScreenXML,
+  writeContentsJson,
 } = require('../../src/core/shared');
 
 jest.mock('sharp');
@@ -164,5 +167,34 @@ describe('createOutputDirs', () => {
     );
     expect(fs.existsSync('/files/LaunchIcon/android')).toBeTruthy();
     expect(fs.readdirSync().length).toEqual(0);
+  });
+});
+
+describe('writeContentsJson', () => {
+  beforeEach(() => {
+    fs.__setMockFiles({});
+  });
+  it('should create a file', () => {
+    writeContentsJson(iosSplashScreens, '/files');
+    expect(fs.readdirSync('/files').length).toEqual(1);
+  });
+
+  it('created file name should be Contents.json', () => {
+    writeContentsJson(iosSplashScreens, '/files');
+    expect(fs.existsSync('/files/Contents.json')).toBeTruthy();
+  });
+});
+describe('writeLaunchScreenXML', () => {
+  beforeEach(() => {
+    fs.__setMockFiles({});
+  });
+  it('should create a file', () => {
+    writeLaunchScreenXML('/files');
+    expect(fs.readdirSync('/files/layout').length).toEqual(1);
+  });
+
+  it('created file name should be launch_screen.xml', () => {
+    writeLaunchScreenXML('/files');
+    expect(fs.existsSync('/files/layout/launch_screen.xml')).toBeTruthy();
   });
 });

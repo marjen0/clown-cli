@@ -69,8 +69,7 @@ const resizeGenericSplashScreens = (
 
   // generate contents JSON
   if (platform === platforms.IOS.name) {
-    const contentsPath = path.resolve(outputDir, 'Contents.json');
-    writeContentsJson(data, contentsPath);
+    writeContentsJson(data, outputDir);
   }
   // generate layout/launch_screen.xml
   if (
@@ -78,13 +77,7 @@ const resizeGenericSplashScreens = (
     platform === platforms.ANDROIDTV.name ||
     platform === platforms.FIRETV.name
   ) {
-    const layoutPath = path.resolve(outputDir, 'layout');
-    if (fs.existsSync(layoutPath)) {
-      fs.rmdirSync(layoutPath);
-    }
-    fs.mkdirSync(layoutPath);
-    const filePath = path.resolve(layoutPath, 'launch_screen.xml');
-    writeLaunchScreenXML(filePath);
+    writeLaunchScreenXML(outputDir);
   }
 };
 

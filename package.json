@@ -7,7 +7,7 @@
     "clown": "bin/clown.js"
   },
   "scripts": {
-    "test": "jest --coverage --verbose --silent"
+    "test": "jest --verbose --coverage --silent"
   },
   "files": [
     "index.js"

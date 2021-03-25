@@ -73,8 +73,7 @@ const resizeGenericLaunchIcons = (
   });
   // generate contents JSON
   if (platform === platforms.IOS.name) {
-    const contentsPath = path.resolve(outputDir, 'Contents.json');
-    writeContentsJson(data, contentsPath);
+    writeContentsJson(data, outputDir);
   }
 };
 
