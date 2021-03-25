@@ -34,13 +34,14 @@ const resizeGenericLaunchIcons = (
   jimpImage,
   options,
   platform,
+  outputDir,
   data
 ) => {
-  const outputDir = createOutputDirs(
+  /*const outputDir = createOutputDirs(
     options.output,
     platform,
     assetTypes.LAUNCHICON.name
-  );
+  );*/
   data.forEach((icon) => {
     const sharpImage = sharp(imageSource);
     let dir = outputDir;
@@ -88,65 +89,107 @@ const generateLaunchIcons = async (options) => {
   const jimpImage = await Jimp.read(options.source);
   console.log('cli options', options);
   if (optPlatforms.some((p) => p.name === IOS.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.IOS.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.IOS.name,
+      outputDir,
       iosLaunchIcons
     );
   }
   if (optPlatforms.some((p) => p.name === TVOS.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.TVOS.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.TVOS.name,
+      outputDir,
       tvosLaunchIcons
     );
   }
   if (optPlatforms.some((p) => p.name === ANDROID.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.ANDROID.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.ANDROID.name,
+      outputDir,
       androidLaunchIcons
     );
   }
   if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.ANDROIDTV.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.ANDROIDTV.name,
+      outputDir,
       androidTvLaunchIcons
     );
   }
   if (optPlatforms.some((p) => p.name === WEBOS.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.WEBOS.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.WEBOS.name,
+      outputDir,
       webosLaunchIcons
     );
   }
   if (optPlatforms.some((p) => p.name === MACOS.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.MACOS.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.MACOS.name,
+      outputDir,
       macosLaunchIcons
     );
   }
   if (optPlatforms.some((p) => p.name === FIRETV.name)) {
+    const outputDir = createOutputDirs(
+      options.output,
+      platforms.FIRETV.name,
+      assetTypes.LAUNCHICON.name
+    );
     resizeGenericLaunchIcons(
       options.source,
       jimpImage,
       options,
       platforms.FIRETV.name,
+      outputDir,
       fireTvLaunchIcons
     );
   }

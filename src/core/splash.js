@@ -31,15 +31,10 @@ const resizeGenericSplashScreens = (
   jimpImage,
   options,
   platform,
+  outputDir,
   data
 ) => {
   const sharpImage = sharp(imageSource);
-
-  const outputDir = createOutputDirs(
-    options.output,
-    platform,
-    assetTypes.SPLASHSCREEN.name
-  );
 
   data.forEach((splash) => {
     let dir = outputDir;
@@ -91,58 +86,94 @@ const generateSplashScreens = async (options) => {
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV } = platforms;
   const jimpImage = await Jimp.read(options.source);
-  console.log('cli options', options);
+
   if (optPlatforms.some((p) => p.name === IOS.name)) {
+    const iosOutputDir = createOutputDirs(
+      options.output,
+      platforms.IOS.name,
+      assetTypes.SPLASHSCREEN.name
+    );
     resizeGenericSplashScreens(
       options.source,
       jimpImage,
       options,
       platforms.IOS.name,
+      iosOutputDir,
       iosSplashScreens
     );
   }
   if (optPlatforms.some((p) => p.name === TVOS.name)) {
+    const tvosOutputDir = createOutputDirs(
+      options.output,
+      platforms.TVOS.name,
+      assetTypes.SPLASHSCREEN.name
+    );
     resizeGenericSplashScreens(
       options.source,
       jimpImage,
       options,
       platforms.TVOS.name,
+      tvosOutputDir,
       tvosSplashScreens
     );
   }
   if (optPlatforms.some((p) => p.name === ANDROID.name)) {
+    const androidOutputDir = createOutputDirs(
+      options.output,
+      platforms.ANDROID.name,
+      assetTypes.SPLASHSCREEN.name
+    );
     resizeGenericSplashScreens(
       options.source,
       jimpImage,
       options,
       platforms.ANDROID.name,
+      androidOutputDir,
       androidSplashScreens
     );
   }
   if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
+    const androidtvOutputDir = createOutputDirs(
+      options.output,
+      platforms.ANDROIDTV.name,
+      assetTypes.SPLASHSCREEN.name
+    );
     resizeGenericSplashScreens(
       options.source,
       jimpImage,
       options,
       platforms.ANDROIDTV.name,
+      androidtvOutputDir,
       androidTvSplashScreens
     );
   }
   if (optPlatforms.some((p) => p.name === WEBOS.name)) {
+    const webosOutputDir = createOutputDirs(
+      options.output,
+      platforms.WEBOS.name,
+      assetTypes.SPLASHSCREEN.name
+    );
     resizeGenericSplashScreens(
       options.source,
       jimpImage,
       options,
       platforms.WEBOS.name,
+      webosOutputDir,
       webosSplashScreens
     );
   }
   if (optPlatforms.some((p) => p.name === FIRETV.name)) {
+    const firetvOutputDir = createOutputDirs(
+      options.output,
+      platforms.FIRETV.name,
+      assetTypes.SPLASHSCREEN.name
+    );
     resizeGenericSplashScreens(
       options.source,
       jimpImage,
       options,
       platforms.FIRETV.name,
+      firetvOutputDir,
       fireTvSplashScreens
     );
   }
@@ -150,4 +181,5 @@ const generateSplashScreens = async (options) => {
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
+exports.resizeGenericSplashScreens = resizeGenericSplashScreens;
 exports.generateSplashScreens = generateSplashScreens;
