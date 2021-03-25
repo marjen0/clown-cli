@@ -34,6 +34,7 @@ const resizeGenericSplashScreens = (
   data
 ) => {
   const sharpImage = sharp(imageSource);
+
   const outputDir = createOutputDirs(
     options.output,
     platform,
