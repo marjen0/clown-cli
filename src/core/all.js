@@ -7,8 +7,11 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 
+const { platform } = require('os');
 const { parseDimensions } = require('../helpers');
-const { generateSplashScreens } = require('./splash');
+const { resizeGenericSplashScreens } = require('./splash');
+const { resizeGenericLaunchIcons } = require('./icon');
+const { resizeFavicons } = require('./favicon');
 const { platforms, assetTypes } = require('../constants');
 const {
   resize,
@@ -17,7 +20,9 @@ const {
   tint,
   addText,
   writeContentsJson,
+  writeContentsJsonWithData,
   writeLaunchScreenXML,
+  writeWebosAppinfoJson,
 } = require('./shared');
 const {
   tvosData,
@@ -27,7 +32,55 @@ const {
   fireTvData,
   macosData,
   webData,
+  iosLaunchIcons,
+  iosSplashScreens,
+  androidLaunchIcons,
+  androidSplashScreens,
+  androidTvLaunchIcons,
+  androidTvSplashScreens,
+  fireTvLaunchIcons,
+  fireTvSplashScreens,
+  favicons,
+  tvosLaunchIcons,
+  tvosSplashScreens,
+  topShelfWideImages,
+  topShelfImages,
+  androidNotificationIcons,
+  androidTvNotificationIcons,
+  appIconAppStoreImageStackLayer,
+  appIconAppStoreLogoImageStackLayer,
+  appIconImageStackLayer,
+  appIconLogoImageStackLayer,
+  webosLaunchIcons,
+  webosSplashScreens,
 } = require('../generables');
+
+const appIconTopShelfImageBrandassetsData = [
+  {
+    idiom: 'tv',
+    name: 'App Icon - App Store.imagestack',
+    role: 'primary-app-icon',
+    dimensions: '1280x768',
+  },
+  {
+    idiom: 'tv',
+    dimensions: '400x240',
+    role: 'primary-app-icon',
+    name: 'App Icon.imagestack',
+  },
+  {
+    dimensions: '2320x720',
+    idiom: 'tv',
+    name: 'Top Shelf Image Wide.imageset',
+    role: 'top-shelf-image-wide',
+  },
+  {
+    dimensions: '1920x720',
+    idiom: 'tv',
+    name: 'Top Shelf Image.imageset',
+    role: 'top-shelf-image',
+  },
+];
 
 const createResDir = (basePath, platform) => {
   const androidDir = path.join(basePath, platform);
@@ -49,15 +102,24 @@ const createIosDir = (basePath) => {
   fs.mkdirSync(appIconDir);
   fs.mkdirSync(launchImageDir);
 
-  return { iosDir, iosXcassetsDir, appIconDir, launchImageDir };
+  return {
+    iosDir,
+    iosXcassetsDir,
+    appIconDir,
+    launchImageDir,
+  };
 };
 
 const createWebDir = (basePath) => {
   const webDir = path.join(basePath, 'web');
-
   fs.mkdirSync(webDir);
-
   return { webDir };
+};
+
+const createWebosDir = (basePath) => {
+  const webosDir = path.join(basePath, 'webos');
+  fs.mkdirSync(webosDir);
+  return { webosDir };
 };
 
 const createTvosDir = (basePath) => {
@@ -71,27 +133,12 @@ const createTvosDir = (basePath) => {
     appIconTopShelfImageBrandassets,
     'App Icon - App Store.imagestack'
   );
-  const clownImagestacklayer = path.join(
-    appIconAppStoreImagestack,
-    'clown.imagestacklayer'
-  );
-  const clownImagestacklayer_contentImageset = path.join(
-    clownImagestacklayer,
-    'Content.imageset'
-  );
-  const logoImagestacklayer = path.join(
-    appIconAppStoreImagestack,
-    'logo.imagestacklayer'
-  );
-  const logoImagestacklayer_contentImageset = path.join(
-    logoImagestacklayer,
-    'Content.imageset'
-  );
+  const clownImagestacklayer = path.join(appIconAppStoreImagestack, 'clown.imagestacklayer');
+  const clownImagestacklayer_contentImageset = path.join(clownImagestacklayer, 'Content.imageset');
+  const logoImagestacklayer = path.join(appIconAppStoreImagestack, 'logo.imagestacklayer');
+  const logoImagestacklayer_contentImageset = path.join(logoImagestacklayer, 'Content.imageset');
 
-  const appIconImagestack = path.join(
-    appIconTopShelfImageBrandassets,
-    'App Icon.imagestack'
-  );
+  const appIconImagestack = path.join(appIconTopShelfImageBrandassets, 'App Icon.imagestack');
   const appIconImagestack_clownImagestacklayer = path.join(
     appIconImagestack,
     'clown.imagestacklayer'
@@ -108,9 +155,14 @@ const createTvosDir = (basePath) => {
     appIconImagestack_logoImagestacklayer,
     'Content.imageset'
   );
-  const launchImageLaunchimage = path.join(
-    tvosXcassets,
-    'Launch Image.launchimage'
+  const launchImageLaunchimage = path.join(tvosXcassets, 'Launch Image.launchimage');
+  const appIconTopShelfImageBrandassets_TopShelfImageWideImageset = path.join(
+    appIconTopShelfImageBrandassets,
+    'Top Shelf Image Wide.imageset'
+  );
+  const appIconTopShelfImageBrandassets_TopShelfImageImageset = path.join(
+    appIconTopShelfImageBrandassets,
+    'Top Shelf Image.imageset'
   );
 
   fs.mkdirSync(tvosDir);
@@ -127,6 +179,8 @@ const createTvosDir = (basePath) => {
   fs.mkdirSync(appIconImagestack_clownImagestacklayer_ContentImageset);
   fs.mkdirSync(appIconImagestack_logoImagestacklayer_ContentImageset);
   fs.mkdirSync(launchImageLaunchimage);
+  fs.mkdirSync(appIconTopShelfImageBrandassets_TopShelfImageWideImageset);
+  fs.mkdirSync(appIconTopShelfImageBrandassets_TopShelfImageImageset);
 
   return {
     tvosDir,
@@ -143,6 +197,8 @@ const createTvosDir = (basePath) => {
     appIconImagestack_clownImagestacklayer_ContentImageset,
     appIconImagestack_logoImagestacklayer_ContentImageset,
     launchImageLaunchimage,
+    appIconTopShelfImageBrandassets_TopShelfImageWideImageset,
+    appIconTopShelfImageBrandassets_TopShelfImageImageset,
   };
 };
 
@@ -160,13 +216,13 @@ const generateAllAssets = async (options) => {
 
   const { webDir } = createWebDir(assetsDir);
 
+  const { webosDir } = createWebosDir(assetsDir);
+
   const { firetvDir } = createResDir(assetsDir, 'firetv');
   const { androidDir } = createResDir(assetsDir, 'android');
   const { androidtvDir } = createResDir(assetsDir, 'androidtv');
 
-  const { appIconDir, iosDir, launchImageDir, iosXcassetsDir } = createIosDir(
-    assetsDir
-  );
+  const { appIconDir, iosDir, launchImageDir, iosXcassetsDir } = createIosDir(assetsDir);
 
   const {
     tvosDir,
@@ -183,36 +239,267 @@ const generateAllAssets = async (options) => {
     appIconImagestack_clownImagestacklayer,
     appIconImagestack_logoImagestacklayer_ContentImageset,
     appIconImagestack_clownImagestacklayer_ContentImageset,
+    appIconTopShelfImageBrandassets_TopShelfImageImageset,
+    appIconTopShelfImageBrandassets_TopShelfImageWideImageset,
   } = createTvosDir(assetsDir);
 
-  data.forEach((splash) => {
-    let dir = outputDir;
-    if (splash.dirName) {
-      dir = path.resolve(outputDir, splash.dirName);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-    }
-    const { width, height } = parseDimensions(splash.dimensions);
-    resize(sharpImage, jimpImage, width, height);
-    if (options.tint) {
-      tint(sharpImage);
-    }
-    if (options.text) {
-      const { text } = options;
-      const fontSize = options.fontSize || 48;
-      const fontColor = options.fontColor || '#FFF';
-      addText(sharpImage, text, fontSize, fontColor, width, height);
-    }
-
-    writeToFile(sharpImage, dir, splash.name);
-
-    console.log(
-      chalk.magenta(
-        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
-      )
-    );
+  const jimpImage = await Jimp.read(options.source);
+  // ----------------------------- IOS ---------------------------------
+  resizeGenericLaunchIcons(
+    options.source,
+    jimpImage,
+    options,
+    platforms.IOS.name,
+    appIconDir,
+    iosLaunchIcons
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.IOS.name,
+    launchImageDir,
+    iosSplashScreens
+  );
+  writeContentsJson(null, iosXcassetsDir, 'xcode', null);
+  // ***************************** IOS *********************************
+  // ----------------------------- Android ---------------------------------
+  resizeGenericLaunchIcons(
+    options.source,
+    jimpImage,
+    options,
+    platforms.ANDROID.name,
+    androidDir,
+    androidLaunchIcons
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.ANDROID.name,
+    androidDir,
+    androidSplashScreens
+  );
+  // ***************************** Android *********************************
+  // ----------------------------- AndroidTV ---------------------------------
+  resizeGenericLaunchIcons(
+    options.source,
+    jimpImage,
+    options,
+    platforms.ANDROIDTV.name,
+    androidtvDir,
+    androidTvLaunchIcons
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.ANDROIDTV.name,
+    androidtvDir,
+    androidTvSplashScreens
+  );
+  // ***************************** AndroidTV *********************************
+  // ----------------------------- tvOS ---------------------------------
+  /* resizeGenericLaunchIcons(
+    options.source,
+    jimpImage,
+    options,
+    platforms.TVOS.name,
+    tvosXcassets,
+    tvosLaunchIcons
+  ); */
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.TVOS.name,
+    launchImageLaunchimage,
+    tvosSplashScreens
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.TVOS.name,
+    appIconTopShelfImageBrandassets_TopShelfImageWideImageset,
+    topShelfWideImages
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.TVOS.name,
+    appIconTopShelfImageBrandassets_TopShelfImageImageset,
+    topShelfImages
+  );
+  resizeGenericSplashScreens(
+    path.join(__dirname, '../../files/input/black.png'),
+    jimpImage,
+    options,
+    platforms.TVOS.name,
+    clownImagestacklayer_contentImageset,
+    appIconAppStoreImageStackLayer
+  );
+  resizeGenericSplashScreens(
+    path.join(__dirname, '../../files/input/black.png'),
+    jimpImage,
+    options,
+    platforms.TVOS.name,
+    appIconImagestack_clownImagestacklayer_ContentImageset,
+    appIconImageStackLayer
+  );
+  writeContentsJson(null, tvosXcassets, 'xcode', null);
+  writeContentsJson(
+    appIconTopShelfImageBrandassetsData,
+    appIconTopShelfImageBrandassets,
+    'xcode',
+    'assets'
+  );
+  writeContentsJsonWithData(appIconAppStoreImagestack, {
+    info: {
+      version: 1,
+      author: 'xcode',
+    },
+    properties: {
+      canvasSize: {
+        width: 1280,
+        height: 768,
+      },
+    },
+    layers: [
+      {
+        filename: 'logo.imagestacklayer',
+      },
+      {
+        filename: 'clown.imagestacklayer',
+      },
+    ],
   });
+  writeContentsJsonWithData(logoImagestacklayer, {
+    properties: {
+      'frame-size': {
+        height: 768,
+        width: 1280,
+      },
+      'frame-center': {
+        x: 640,
+        y: 384,
+      },
+    },
+    info: {
+      version: 1,
+      author: 'xcode',
+    },
+  });
+  writeContentsJsonWithData(clownImagestacklayer, {
+    properties: {
+      'frame-size': {
+        height: 768,
+        width: 1280,
+      },
+      'frame-center': {
+        x: 640,
+        y: 384,
+      },
+    },
+    info: {
+      version: 1,
+      author: 'xcode',
+    },
+  });
+  writeContentsJsonWithData(appIconImagestack, {
+    properties: {
+      canvasSize: {
+        width: 400,
+        height: 240,
+      },
+    },
+    info: {
+      version: 1,
+      author: 'xcode',
+    },
+    layers: [
+      {
+        filename: 'logo (1).imagestacklayer',
+      },
+      {
+        filename: 'krimi.imagestacklayer',
+      },
+    ],
+  });
+  writeContentsJsonWithData(appIconImagestack_clownImagestacklayer, {
+    properties: {
+      'frame-center': {
+        x: 200,
+        y: 120,
+      },
+      'frame-size': {
+        height: 240,
+        width: 400,
+      },
+    },
+    info: {
+      version: 1,
+      author: 'xcode',
+    },
+  });
+  writeContentsJsonWithData(appIconImagestack_logoImagestacklayer, {
+    info: {
+      version: 1,
+      author: 'xcode',
+    },
+    properties: {
+      'frame-size': {
+        height: 82,
+        width: 159.5,
+      },
+      'frame-center': {
+        x: 200,
+        y: 120,
+      },
+    },
+  });
+  // ***************************** tvOS *********************************
+  // ----------------------------- FireTV ---------------------------------
+  resizeGenericLaunchIcons(
+    options.source,
+    jimpImage,
+    options,
+    platforms.ANDROIDTV.name,
+    firetvDir,
+    fireTvLaunchIcons
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.ANDROIDTV.name,
+    firetvDir,
+    fireTvSplashScreens
+  );
+  // ***************************** FireTV *********************************
+  // ----------------------------- Web ---------------------------------
+  resizeFavicons(options.source, jimpImage, webDir, favicons);
+  // ***************************** Web *********************************
+  // ----------------------------- webOS ---------------------------------
+  resizeGenericLaunchIcons(
+    options.source,
+    jimpImage,
+    options,
+    platforms.WEBOS.name,
+    webosDir,
+    webosLaunchIcons
+  );
+  resizeGenericSplashScreens(
+    options.source,
+    jimpImage,
+    options,
+    platforms.WEBOS.name,
+    webosDir,
+    webosSplashScreens
+  );
+  writeWebosAppinfoJson(webosDir);
+  // ***************************** webOs *********************************
 };
 
 exports.generateAllAssets = generateAllAssets;

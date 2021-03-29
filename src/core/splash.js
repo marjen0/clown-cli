@@ -34,7 +34,7 @@ const resizeGenericSplashScreens = (
   outputDir,
   data
 ) => {
-  const sharpImage = sharp(imageSource);
+  const sharpImage = sharp(imageSource).toFormat('png');
 
   data.forEach((splash) => {
     let dir = outputDir;
@@ -46,6 +46,7 @@ const resizeGenericSplashScreens = (
     }
     const { width, height } = parseDimensions(splash.dimensions);
     resize(sharpImage, jimpImage, width, height);
+
     if (options.tint) {
       tint(sharpImage);
     }
@@ -66,8 +67,8 @@ const resizeGenericSplashScreens = (
   });
 
   // generate contents JSON
-  if (platform === platforms.IOS.name) {
-    writeContentsJson(data, outputDir);
+  if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
+    writeContentsJson(data, outputDir, 'clown', 'images');
   }
   // generate layout/launch_screen.xml
   if (
@@ -75,6 +76,7 @@ const resizeGenericSplashScreens = (
     platform === platforms.ANDROIDTV.name ||
     platform === platforms.FIRETV.name
   ) {
+    console.log('output dir', outputDir);
     writeLaunchScreenXML(outputDir);
   }
 };

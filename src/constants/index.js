@@ -4,6 +4,8 @@ const idioms = {
   IPAD: 'ipad',
   IPHONE: 'iphone',
   IOSMARKETING: 'ios-marketing',
+  TV: 'tv',
+  TVMARKETNG: 'tv-marketing',
 };
 const platforms = {
   IOS: { name: 'ios', displayName: 'iOS' },

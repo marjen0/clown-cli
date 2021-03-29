@@ -18,6 +18,18 @@ const androidTvNotificationIcons = require('./notification/androidtv');
 
 const favicons = require('./favicon/index');
 
+const { topShelfImages, topShelfWideImages } = require('./topShelf');
+
+const {
+  appIconImageStackLayer,
+  appIconLogoImageStackLayer,
+} = require('./appIcon');
+
+const {
+  appIconAppStoreImageStackLayer,
+  appIconAppStoreLogoImageStackLayer,
+} = require('./appIconAppStore');
+
 exports.iosSplashScreens = iosSplashScreens;
 exports.tvosSplashScreens = tvosSplashScreens;
 exports.androidSplashScreens = androidSplashScreens;
@@ -37,6 +49,15 @@ exports.androidNotificationIcons = androidNotificationIcons;
 exports.androidTvNotificationIcons = androidTvNotificationIcons;
 
 exports.favicons = favicons;
+
+exports.topShelfWideImages = topShelfWideImages;
+exports.topShelfImages = topShelfImages;
+
+exports.appIconImageStackLayer = appIconImageStackLayer;
+exports.appIconLogoImageStackLayer = appIconLogoImageStackLayer;
+
+exports.appIconAppStoreImageStackLayer = appIconAppStoreImageStackLayer;
+exports.appIconAppStoreLogoImageStackLayer = appIconAppStoreLogoImageStackLayer;
 
 exports.iosData = [...iosSplashScreens, ...iosLaunchIcons];
 exports.tvosData = [...tvosSplashScreens, ...tvosLaunchIcons];

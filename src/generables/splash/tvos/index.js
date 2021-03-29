@@ -6,14 +6,14 @@ const { TVOS } = platforms;
 
 const splashScreens = [
   {
-    name: 'Default@1x',
+    name: 'Launch Image@1x',
     scale: '1x',
     dimensions: '1920x1080',
     orientation: LANDSCASPE,
     platform: TVOS.name,
   },
   {
-    name: 'Default@2x',
+    name: 'Launch Image@2x',
     scale: '2x',
     dimensions: '3840x2160',
     orientation: LANDSCASPE,

@@ -18,9 +18,9 @@ const resize = (sharpImage, jimpImage, width, height, round = false) => {
   });
   if (round) {
     const rect = Buffer.from(
-      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${
-        width / 2
-      }" ry="${height / 2}"/></svg>`
+      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${width / 2}" ry="${
+        height / 2
+      }"/></svg>`
     );
     img = sharpImage.composite([{ input: rect, blend: 'dest-in' }]);
   }
@@ -57,26 +57,18 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   // resolves to output/LaunchScreen
   const assetTypeOutputDir = path.resolve(outputDir, assetsType);
   // resolves to output/LaunchScreen/ios
-  const platformOutputDir = path.resolve(
-    outputDir,
-    assetTypeOutputDir,
-    platform
-  );
+  const platformOutputDir = path.resolve(outputDir, assetTypeOutputDir, platform);
   if (!fs.existsSync(assetTypeOutputDir)) {
     fs.mkdirSync(assetTypeOutputDir);
   }
   if (fs.existsSync(platformOutputDir)) {
     console.log(
-      chalk.yellow(
-        `Found output directory for ${platform} platform at ${platformOutputDir}`
-      ),
+      chalk.yellow(`Found output directory for ${platform} platform at ${platformOutputDir}`),
       chalk.hex('#000').bgYellow('WILL DELETE IT.')
     );
     fs.rmSync(platformOutputDir, { recursive: true, force: true });
     console.log(
-      chalk.yellow(
-        `created new output directory for ${platform} platform at ${platformOutputDir}`
-      )
+      chalk.yellow(`created new output directory for ${platform} platform at ${platformOutputDir}`)
     );
     fs.mkdirSync(platformOutputDir);
   } else {
@@ -91,28 +83,37 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   return platformOutputDir;
 };
 
-const writeContentsJson = (generables, directory) => {
+const writeContentsJson = (generables, directory, author, type) => {
   const contentsPath = path.resolve(directory, 'Contents.json');
-  const contentsData = generables.map((item) => ({
-    idiom: item.idiom,
-    size: item.dimensions,
-    scale: item.scale,
-    filename: `${item.name}.png`, // TODO better solution should exist
-  }));
+  let contentsData = null;
+  if (generables) {
+    contentsData = generables.map((item) => ({
+      ...(item.idiom && { idiom: item.idiom }),
+      ...(item.dimensions && { size: item.dimensions }),
+      ...(item.scale && { scale: item.scale }),
+      ...(item.orientation && { orientation: item.orientation }),
+      ...(item.name && {
+        filename: type === 'images' ? `${item.name}.png` : item.name,
+      }),
+      ...(item.role && { role: item.role }),
+    }));
+  }
+  const data = contentsData
+    ? { [type]: contentsData, info: { version: 1, author } }
+    : { info: { version: 1, author } };
+  fs.writeFileSync(contentsPath, JSON.stringify(data, null, 2));
+};
 
-  fs.writeFileSync(
-    contentsPath,
-    JSON.stringify(
-      { images: contentsData, info: { version: 1, author: 'clown' } },
-      null,
-      2
-    )
-  );
+const writeContentsJsonWithData = (directory, data) => {
+  const contentsPath = path.resolve(directory, 'Contents.json');
+  fs.writeFileSync(contentsPath, JSON.stringify(data, null, 2));
 };
 
 const writeLaunchScreenXML = (directory) => {
   const layoutPath = path.resolve(directory, 'layout');
-  fs.mkdirSync(layoutPath);
+  if (!fs.existsSync(layoutPath)) {
+    fs.mkdirSync(layoutPath);
+  }
   const filePath = path.resolve(layoutPath, 'launch_screen.xml');
   const content = `<?xml version="1.0" encoding="utf-8"?>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -124,6 +125,36 @@ const writeLaunchScreenXML = (directory) => {
   fs.writeFileSync(filePath, content);
 };
 
+const writeWebosAppinfoJson = (directory) => {
+  const infoPath = path.resolve(directory, 'appinfo.json');
+  fs.writeFileSync(
+    infoPath,
+    JSON.stringify(
+      {
+        id: 'com.mycompany.app.appname',
+        title: 'AppName',
+        main: 'index.html',
+        icon: 'icon_80x80.png',
+        largeIcon: 'largeIcon_130x130.png',
+        type: 'web',
+        vendor: 'My Company',
+        version: '1.0.0',
+        appDescription: 'This is an app tagline',
+        resolution: '1920x1080',
+        bgColor: 'red',
+        iconColor: 'red',
+        splashBackground: 'Splash.png',
+        transparent: false,
+        handlesRelaunch: false,
+        disableBackHistoryAPI: false,
+        requiredMemory: 20,
+      },
+      null,
+      2
+    )
+  );
+};
+
 exports.resize = resize;
 exports.negate = negate;
 exports.tint = tint;
@@ -131,5 +162,7 @@ exports.addText = addText;
 exports.writeToFile = writeToFile;
 exports.createOutputDirs = createOutputDirs;
 exports.writeContentsJson = writeContentsJson;
+exports.writeContentsJsonWithData = writeContentsJsonWithData;
 exports.extractCornerColor = extractCornerColor;
 exports.writeLaunchScreenXML = writeLaunchScreenXML;
+exports.writeWebosAppinfoJson = writeWebosAppinfoJson;

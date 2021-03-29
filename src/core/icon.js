@@ -28,6 +28,7 @@ const {
   tint,
   writeContentsJson,
 } = require('./shared');
+const { resizeGenericSplashScreens } = require('./splash');
 
 const resizeGenericLaunchIcons = (
   imageSource,
@@ -43,7 +44,7 @@ const resizeGenericLaunchIcons = (
     assetTypes.LAUNCHICON.name
   );*/
   data.forEach((icon) => {
-    const sharpImage = sharp(imageSource);
+    const sharpImage = sharp(imageSource).toFormat('png');
     let dir = outputDir;
     const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
     if (icon.dirName) {
@@ -75,8 +76,8 @@ const resizeGenericLaunchIcons = (
     );
   });
   // generate contents JSON
-  if (platform === platforms.IOS.name) {
-    writeContentsJson(data, outputDir);
+  if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
+    writeContentsJson(data, outputDir, 'clown', 'images');
   }
 };
 
@@ -197,4 +198,5 @@ const generateLaunchIcons = async (options) => {
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
+exports.resizeGenericLaunchIcons = resizeGenericSplashScreens;
 exports.generateLaunchIcons = generateLaunchIcons;
