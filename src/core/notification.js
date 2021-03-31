@@ -10,11 +10,6 @@ const { platforms, assetTypes, shapes } = require('../constants');
 const { createOutputDirs, writeToFile, resize, addText, tint } = require('./shared');
 
 const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
-  /*const outputDir = createOutputDirs(
-    options.output,
-    platform,
-    assetTypes.NOTIFICATIONICON.name
-  );*/
   data.forEach((icon) => {
     const sharpImage = sharp(imageSource).toFormat('png');
     let dir = outputDir;
@@ -44,8 +39,6 @@ const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outp
     console.log(chalk.magenta(`GENERATED NOTIFICATION ICON FOR ${icon.device || icon.platform}.`));
   });
 };
-
-// --------------------------------- CORE FUNCTIONS ----------------------------------------------
 
 const generateNotificationIcon = async (options) => {
   const { platforms: optPlatforms } = options;

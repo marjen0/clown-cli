@@ -28,21 +28,8 @@ const {
   tint,
   writeContentsJson,
 } = require('./shared');
-const { resizeGenericSplashScreens } = require('./splash');
 
-const resizeGenericLaunchIcons = (
-  imageSource,
-  jimpImage,
-  options,
-  platform,
-  outputDir,
-  data
-) => {
-  /*const outputDir = createOutputDirs(
-    options.output,
-    platform,
-    assetTypes.LAUNCHICON.name
-  );*/
+const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
   data.forEach((icon) => {
     const sharpImage = sharp(imageSource).toFormat('png');
     let dir = outputDir;
@@ -54,7 +41,6 @@ const resizeGenericLaunchIcons = (
       }
     }
     const { width, height } = parseDimensions(icon.dimensions);
-
     resize(sharpImage, jimpImage, width, height, isRound);
 
     if (options.tint) {
@@ -69,19 +55,13 @@ const resizeGenericLaunchIcons = (
     }
 
     writeToFile(sharpImage, dir, icon.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`
-      )
-    );
+    console.log(chalk.magenta(`GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`));
   });
   // generate contents JSON
   if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
     writeContentsJson(data, outputDir, 'clown', 'images');
   }
 };
-
-// --------------------------------- CORE FUNCTIONS ----------------------------------------------
 
 const generateLaunchIcons = async (options) => {
   console.log(chalk.green('GENERATION STARTED'));
@@ -198,5 +178,5 @@ const generateLaunchIcons = async (options) => {
   console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
-exports.resizeGenericLaunchIcons = resizeGenericSplashScreens;
+exports.resizeGenericLaunchIcons = resizeGenericLaunchIcons;
 exports.generateLaunchIcons = generateLaunchIcons;

@@ -26,14 +26,7 @@ const {
   writeLaunchScreenXML,
 } = require('./shared');
 
-const resizeGenericSplashScreens = (
-  imageSource,
-  jimpImage,
-  options,
-  platform,
-  outputDir,
-  data
-) => {
+const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, outputDir, data) => {
   const sharpImage = sharp(imageSource).toFormat('png');
 
   data.forEach((splash) => {
@@ -59,11 +52,7 @@ const resizeGenericSplashScreens = (
 
     writeToFile(sharpImage, dir, splash.name);
 
-    console.log(
-      chalk.magenta(
-        `GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`
-      )
-    );
+    console.log(chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`));
   });
 
   // generate contents JSON

@@ -19,8 +19,6 @@ const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
   });
 };
 
-// --------------------------------- CORE FUNCTIONS ----------------------------------------------
-
 const generateFavicons = async (options) => {
   const jimpImage = await Jimp.read(options.source);
   const outputDir = createOutputDirs(options.output, platforms.WEB.name, assetTypes.FAVICON.name);
