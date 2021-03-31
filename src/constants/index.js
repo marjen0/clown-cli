@@ -39,6 +39,11 @@ const assetTypes = {
     displayName: 'Notification Icons',
     platforms: [ANDROID, ANDROIDTV],
   },
+  ALL: {
+    name: 'all',
+    displayName: 'All Assets',
+    platforms: [ANDROID, ANDROIDTV, IOS, TVOS, WEBOS, FIRETV, WEB],
+  },
 };
 
 exports.orientations = orientations;
