@@ -120,11 +120,7 @@ const cli = async (args) => {
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(
-        assetTypes.SPLASHSCREEN.name,
-        promptedOptions
-      );
-      console.log('prompted', promptedOptions);
+      promptedOptions = await promptForPlatforms(assetTypes.SPLASHSCREEN.name, promptedOptions);
       await generateSplashScreens(promptedOptions);
     });
 
@@ -139,10 +135,7 @@ const cli = async (args) => {
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(
-        assetTypes.LAUNCHICON.name,
-        promptedOptions
-      );
+      promptedOptions = await promptForPlatforms(assetTypes.LAUNCHICON.name, promptedOptions);
       await generateLaunchIcons(promptedOptions);
     });
 
@@ -157,10 +150,7 @@ const cli = async (args) => {
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(
-        assetTypes.NOTIFICATIONICON.name,
-        promptedOptions
-      );
+      promptedOptions = await promptForPlatforms(assetTypes.NOTIFICATIONICON.name, promptedOptions);
       await generateNotificationIcon(promptedOptions);
     });
 

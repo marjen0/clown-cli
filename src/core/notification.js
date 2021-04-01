@@ -48,7 +48,7 @@ const generateNotificationIcon = async (options) => {
     const outputDir = createOutputDirs(
       options.output,
       platforms.ANDROID.name,
-      assetTypes.LAUNCHICON.name
+      assetTypes.NOTIFICATIONICON.name
     );
     resizeNotificationIcons(
       options.source,
@@ -63,7 +63,7 @@ const generateNotificationIcon = async (options) => {
     const outputDir = createOutputDirs(
       options.output,
       platforms.ANDROIDTV.name,
-      assetTypes.LAUNCHICON.name
+      assetTypes.NOTIFICATIONICON.name
     );
     resizeNotificationIcons(
       options.source,

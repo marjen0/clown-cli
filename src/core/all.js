@@ -207,11 +207,13 @@ const generateAllAssets = async (options) => {
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV, WEB, MACOS } = platforms;
 
-  const assetsDir = path.resolve(options.output, 'assets');
+  const allDir = path.resolve(options.output, assetTypes.ALL.name);
+  const assetsDir = path.resolve(allDir, 'assets');
 
-  if (fs.existsSync(assetsDir)) {
-    fs.rmSync(assetsDir, { recursive: true });
+  if (fs.existsSync(allDir)) {
+    fs.rmSync(allDir, { recursive: true });
   }
+  fs.mkdirSync(allDir);
   fs.mkdirSync(assetsDir);
 
   const jimpImage = await Jimp.read(options.source);
