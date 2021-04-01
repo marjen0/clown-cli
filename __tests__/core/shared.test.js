@@ -15,6 +15,8 @@ const {
   extractCornerColor,
   writeLaunchScreenXML,
   writeContentsJson,
+  writeWebosAppinfoJson,
+  writeFaviconLinks,
 } = require('../../src/core/shared');
 
 jest.mock('sharp');
@@ -59,14 +61,12 @@ describe('resize', () => {
 
   it('should call composite if round is true', async () => {
     const rect = Buffer.from(
-      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${
-        width / 2
-      }" ry="${height / 2}"/></svg>`
+      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${width / 2}" ry="${
+        height / 2
+      }"/></svg>`
     );
     resize(sharpImage, jimpImage, width, height, round);
-    expect(sharp().composite).toBeCalledWith([
-      { input: rect, blend: 'dest-in' },
-    ]);
+    expect(sharp().composite).toBeCalledWith([{ input: rect, blend: 'dest-in' }]);
   });
 });
 
@@ -131,10 +131,7 @@ describe('writeToFile', () => {
 
   it('should call toFile method with correct arguments', () => {
     writeToFile(sharpImage, outputDir, filename);
-    expect(sharp().toFile).toBeCalledWith(
-      `${outputDir}/${filename}.png`,
-      expect.any(Function)
-    );
+    expect(sharp().toFile).toBeCalledWith(`${outputDir}/${filename}.png`, expect.any(Function));
   });
 });
 
@@ -145,11 +142,7 @@ describe('createOutputDirs', () => {
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
 
-    createOutputDirs(
-      '/files',
-      platforms.MACOS.name,
-      assetTypes.SPLASHSCREEN.name
-    );
+    createOutputDirs('/files', platforms.MACOS.name, assetTypes.SPLASHSCREEN.name);
     expect(fs.existsSync('/files/SplashScreen/macos')).toBeTruthy();
   });
 
@@ -160,11 +153,7 @@ describe('createOutputDirs', () => {
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
 
-    createOutputDirs(
-      '/files',
-      platforms.ANDROID.name,
-      assetTypes.LAUNCHICON.name
-    );
+    createOutputDirs('/files', platforms.ANDROID.name, assetTypes.LAUNCHICON.name);
     expect(fs.existsSync('/files/LaunchIcon/android')).toBeTruthy();
     expect(fs.readdirSync().length).toEqual(0);
   });
@@ -196,5 +185,46 @@ describe('writeLaunchScreenXML', () => {
   it('created file name should be launch_screen.xml', () => {
     writeLaunchScreenXML('/files');
     expect(fs.existsSync('/files/layout/launch_screen.xml')).toBeTruthy();
+  });
+});
+describe('writeContentsJsonWithData', () => {
+  beforeEach(() => {
+    fs.__setMockFiles({});
+  });
+  it('should create a file', () => {
+    writeContentsJson(iosSplashScreens, '/files');
+    expect(fs.readdirSync('/files').length).toEqual(1);
+  });
+
+  it('created file name should be Contents.json', () => {
+    writeContentsJson(iosSplashScreens, '/files');
+    expect(fs.existsSync('/files/Contents.json')).toBeTruthy();
+  });
+});
+
+describe('writeWebosAppinfoJson', () => {
+  beforeEach(() => {
+    fs.__setMockFiles({});
+  });
+  it('should create a file', () => {
+    writeWebosAppinfoJson('/files');
+    expect(fs.readdirSync('/files').length).toEqual(1);
+  });
+  it('created file name should be appinfo.json', () => {
+    writeWebosAppinfoJson('/files');
+    expect(fs.existsSync('/files/appinfo.json')).toBeTruthy();
+  });
+});
+describe('writeFaviconLinks', () => {
+  beforeEach(() => {
+    fs.__setMockFiles({});
+  });
+  it('should create a file', () => {
+    writeFaviconLinks('/files');
+    expect(fs.readdirSync('/files').length).toEqual(1);
+  });
+  it('created file name should be links.txt', () => {
+    writeFaviconLinks('/files');
+    expect(fs.existsSync('/files/links.txt')).toBeTruthy();
   });
 });
