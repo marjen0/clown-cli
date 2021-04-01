@@ -41,7 +41,7 @@ const promptForMissingOptions = async (options) => {
   };
 };
 const promptForPlatforms = async (assetType, options) => {
-  const { IOS, ANDROID, ANDROIDTV, FIRETV, MACOS, TVOS, WEBOS } = platforms;
+  const { IOS, ANDROID, ANDROIDTV, FIRETV, MACOS, TVOS, WEBOS, WEB } = platforms;
   const questions = [];
   switch (assetType) {
     case assetTypes.SPLASHSCREEN.name:
@@ -83,20 +83,21 @@ const promptForPlatforms = async (assetType, options) => {
         ],
       });
       break;
-    default:
+    case assetTypes.ALL.name:
       questions.push({
         type: 'checkbox',
         name: 'platforms',
         choices: [
           { name: IOS.name, checked: true, value: IOS },
           { name: ANDROID.name, checked: true, value: ANDROID },
-          { name: MACOS.name, checked: true, value: MACOS },
+          { name: WEB.name, checked: true, value: WEB },
           { name: WEBOS.name, checked: true, value: WEBOS },
           { name: TVOS.name, checked: true, value: TVOS },
           { name: ANDROIDTV.name, checked: true, value: ANDROIDTV },
           { name: FIRETV.name, checked: true, value: FIRETV },
         ],
       });
+    default:
       break;
   }
   const answers = await inquirer.prompt(questions);
@@ -186,7 +187,7 @@ const cli = async (args) => {
     .option('-o, --output <output>', 'output directory')
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(null, promptedOptions);
+      promptedOptions = await promptForPlatforms(assetTypes.ALL.name, promptedOptions);
       await generateAllAssets(promptedOptions);
     });
 

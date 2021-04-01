@@ -5,7 +5,7 @@ const Jimp = require('jimp');
 const { parseDimensions } = require('../helpers');
 const { favicons } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
-const { createOutputDirs, writeToFile, resize } = require('./shared');
+const { createOutputDirs, writeToFile, resize, writeFaviconLinks } = require('./shared');
 
 const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
   const image = sharp(imageSource).toFormat('png');
@@ -17,6 +17,7 @@ const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
       chalk.magenta(`GENERATED SPLASH SCREEN FOR ${favicon.device || favicon.platform}.`)
     );
   });
+  writeFaviconLinks(outputDir);
 };
 
 const generateFavicons = async (options) => {
