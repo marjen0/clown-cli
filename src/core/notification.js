@@ -36,7 +36,13 @@ const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outp
     }
 
     writeToFile(sharpImage, dir, icon.name);
-    console.log(chalk.magenta(`GENERATED NOTIFICATION ICON FOR ${icon.device || icon.platform}.`));
+    console.log(
+      chalk.magenta(
+        `GENERATED NOTIFICATION ICON FOR ${
+          icon.device || `${icon.platform.name} ${icon.dimensions}`
+        }.`
+      )
+    );
   });
 };
 

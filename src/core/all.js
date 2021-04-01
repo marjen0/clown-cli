@@ -7,7 +7,6 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 
-const { platform } = require('os');
 const { parseDimensions } = require('../helpers');
 const { resizeGenericSplashScreens } = require('./splash');
 const { resizeGenericLaunchIcons } = require('./icon');
@@ -55,30 +54,40 @@ const {
   webosSplashScreens,
 } = require('../generables');
 
+const { TVOS } = platforms;
+
 const appIconTopShelfImageBrandassetsData = [
   {
     idiom: 'tv',
     name: 'App Icon - App Store.imagestack',
+    device: 'Apple TV',
     role: 'primary-app-icon',
     dimensions: '1280x768',
+    platform: TVOS,
   },
   {
     idiom: 'tv',
     dimensions: '400x240',
     role: 'primary-app-icon',
     name: 'App Icon.imagestack',
+    device: 'Apple TV',
+    platform: TVOS,
   },
   {
     dimensions: '2320x720',
     idiom: 'tv',
     name: 'Top Shelf Image Wide.imageset',
     role: 'top-shelf-image-wide',
+    device: 'Apple TV',
+    platform: TVOS,
   },
   {
     dimensions: '1920x720',
     idiom: 'tv',
     name: 'Top Shelf Image.imageset',
     role: 'top-shelf-image',
+    device: 'Apple TV',
+    platform: TVOS,
   },
 ];
 
@@ -203,7 +212,6 @@ const createTvosDir = (basePath) => {
 };
 
 const generateAllAssets = async (options) => {
-  console.log(chalk.green('GENERATION STARTED'));
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV, WEB, MACOS } = platforms;
 

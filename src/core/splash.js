@@ -52,7 +52,13 @@ const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, o
 
     writeToFile(sharpImage, dir, splash.name);
 
-    console.log(chalk.magenta(`GENERATED SPLASH SCREEN FOR ${splash.device || splash.platform}.`));
+    console.log(
+      chalk.magenta(
+        `GENERATED SPLASHSCREEN FOR ${
+          splash.device || `${splash.platform.name} ${splash.dimensions}`
+        }.`
+      )
+    );
   });
 
   // generate contents JSON
@@ -73,7 +79,6 @@ const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, o
 // --------------------------------- CORE FUNCTIONS ----------------------------------------------
 
 const generateSplashScreens = async (options) => {
-  console.log(chalk.green('GENERATION STARTED'));
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV } = platforms;
   const jimpImage = await Jimp.read(options.source);
@@ -168,8 +173,6 @@ const generateSplashScreens = async (options) => {
       fireTvSplashScreens
     );
   }
-
-  console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
 exports.resizeGenericSplashScreens = resizeGenericSplashScreens;

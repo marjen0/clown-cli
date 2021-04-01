@@ -9,14 +9,14 @@ const appIconImageStackLayer = [
     name: 'image@1x',
     scale: '1x',
     dimensions: '400x240',
-    platform: TVOS.name,
+    platform: TVOS,
     idiom: TV,
   },
   {
     name: 'image@2x',
     scale: '2x',
     dimensions: '800x480',
-    platform: TVOS.name,
+    platform: TVOS,
     idiom: TV,
   },
 ];
@@ -27,14 +27,14 @@ const appIconLogoImageStackLayer = [
     scale: '1x',
     dimensions: '1920x1080',
     orientation: LANDSCASPE,
-    platform: TVOS.name,
+    platform: TVOS,
   },
   {
     name: 'Launch Image@2x',
     scale: '2x',
     dimensions: '3840x2160',
     orientation: LANDSCASPE,
-    platform: TVOS.name,
+    platform: TVOS,
   },
 ];
 

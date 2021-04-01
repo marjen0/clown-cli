@@ -55,7 +55,11 @@ const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, out
     }
 
     writeToFile(sharpImage, dir, icon.name);
-    console.log(chalk.magenta(`GENERATED LAUNCH ICON FOR ${icon.device || icon.platform}.`));
+    console.log(
+      chalk.magenta(
+        `GENERATED LAUNCH ICON FOR ${icon.device || `${icon.platform.name} ${icon.dimensions}`}.`
+      )
+    );
   });
   // generate contents JSON
   if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
@@ -64,7 +68,6 @@ const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, out
 };
 
 const generateLaunchIcons = async (options) => {
-  console.log(chalk.green('GENERATION STARTED'));
   const { platforms: optPlatforms } = options;
   const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
   const jimpImage = await Jimp.read(options.source);
@@ -174,8 +177,6 @@ const generateLaunchIcons = async (options) => {
       fireTvLaunchIcons
     );
   }
-
-  console.log(chalk.hex('#000').bgGreen.bold('GENERATION DONE!'));
 };
 
 exports.resizeGenericLaunchIcons = resizeGenericLaunchIcons;

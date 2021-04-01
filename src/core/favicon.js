@@ -14,7 +14,11 @@ const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
     resize(image, jimpImage, width, height);
     writeToFile(image, outputDir, favicon.name);
     console.log(
-      chalk.magenta(`GENERATED SPLASH SCREEN FOR ${favicon.device || favicon.platform}.`)
+      chalk.magenta(
+        `GENERATED FAVICON FOR ${
+          favicon.device || `${favicon.platform.name} ${favicon.dimensions}`
+        }.`
+      )
     );
   });
   writeFaviconLinks(outputDir);
