@@ -1,13 +1,15 @@
 /* eslint-disable no-console */
-const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+const FileUtils = require('../utils/FileUtils');
+const LogUtils = require('../utils/LogUtils');
 const { parseDimensions } = require('../helpers');
 const { androidNotificationIcons, androidTvNotificationIcons } = require('../generables');
 const { platforms, assetTypes, shapes } = require('../constants');
-const { createOutputDirs, writeToFile, resize, addText, tint } = require('./shared');
+const {
+ createOutputDirs, writeToFile, resize, addText, tint 
+} = require('./shared');
 
 const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
   data.forEach((icon) => {
@@ -16,9 +18,10 @@ const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outp
     const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
     if (icon.dirName) {
       dir = path.resolve(outputDir, icon.dirName);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
+      /*if (!fs.existsSync(dir)) {
+        FileUtils.createDir(dir);
+      }*/
+      FileUtils.createIfNotExists(dir);
     }
     const { width, height } = parseDimensions(icon.dimensions);
 
@@ -36,12 +39,10 @@ const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outp
     }
 
     writeToFile(sharpImage, dir, icon.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED NOTIFICATION ICON FOR ${
-          icon.device || `${icon.platform.name} ${icon.dimensions}`
-        }.`
-      )
+    LogUtils.info(
+      `GENERATED NOTIFICATION ICON FOR ${
+        icon.device || `${icon.platform.name} ${icon.dimensions}`
+      }.`
     );
   });
 };
@@ -55,7 +56,7 @@ const generateNotificationIcon = async (options) => {
       const outputDir = createOutputDirs(
         options.output,
         platforms.ANDROID.name,
-        assetTypes.NOTIFICATIONICON.name
+        assetTypes.NOTIFICATIONICON.name,
       );
       resizeNotificationIcons(
         options.source,
@@ -63,14 +64,14 @@ const generateNotificationIcon = async (options) => {
         options,
         platforms.ANDROID.name,
         outputDir,
-        androidNotificationIcons
+        androidNotificationIcons,
       );
     }
     if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
       const outputDir = createOutputDirs(
         options.output,
         platforms.ANDROIDTV.name,
-        assetTypes.NOTIFICATIONICON.name
+        assetTypes.NOTIFICATIONICON.name,
       );
       resizeNotificationIcons(
         options.source,
@@ -78,20 +79,18 @@ const generateNotificationIcon = async (options) => {
         options,
         platforms.ANDROIDTV.name,
         outputDir,
-        androidTvNotificationIcons
+        androidTvNotificationIcons,
       );
     }
   } catch (error) {
     switch (error.code) {
       case 'EISDIR':
-        console.log(
-          chalk.red(
-            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
-          )
+        LogUtils.error(
+          'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png',
         );
         break;
       default:
-        console.log(chalk.red('Error. Unexpected error has occurred'));
+        LogUtils.error('Unexpected error has occurred', error);
         break;
     }
   }

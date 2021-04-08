@@ -2,11 +2,11 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-console */
-const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
+const FileUtils = require('../utils/FileUtils');
+const LogUtils = require('../utils/LogUtils');
 
 const { parseDimensions } = require('../helpers');
 const {
@@ -36,9 +36,11 @@ const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, out
     const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
     if (icon.dirName) {
       dir = path.resolve(outputDir, icon.dirName);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
+
+      /*if (!fs.existsSync(dir)) {
+        FileUtils.createDir(dir);
+      }*/
+      FileUtils.createIfNotExists(dir)
     }
     const { width, height } = parseDimensions(icon.dimensions);
     resize(sharpImage, jimpImage, width, height, isRound);
@@ -55,10 +57,8 @@ const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, out
     }
 
     writeToFile(sharpImage, dir, icon.name);
-    console.log(
-      chalk.magenta(
-        `GENERATED LAUNCH ICON FOR ${icon.device || `${icon.platform.name} ${icon.dimensions}`}.`
-      )
+    LogUtils.info(
+      `GENERATED LAUNCH ICON FOR ${icon.device || `${icon.platform.name} ${icon.dimensions}`}.`
     );
   });
   // generate contents JSON
@@ -72,7 +72,6 @@ const generateLaunchIcons = async (options) => {
     const { platforms: optPlatforms } = options;
     const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
     const jimpImage = await Jimp.read(options.source);
-    console.log('cli options', options);
     if (optPlatforms.some((p) => p.name === IOS.name)) {
       const outputDir = createOutputDirs(
         options.output,
@@ -181,14 +180,12 @@ const generateLaunchIcons = async (options) => {
   } catch (error) {
     switch (error.code) {
       case 'EISDIR':
-        console.log(
-          chalk.red(
-            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
-          )
+        LogUtils.error(
+          'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
         );
         break;
       default:
-        console.log(chalk.red('Error. Unexpected error has occurred'));
+        LogUtils.error('Unexpected error has occurred', error);
         break;
     }
   }

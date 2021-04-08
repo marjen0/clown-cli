@@ -1,13 +1,11 @@
 /* eslint-disable camelcase */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-console */
-const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
-const sharp = require('sharp');
 const Jimp = require('jimp');
+const FileUtils = require('../utils/FileUtils');
+const LogUtils = require('../utils/LogUtils');
 
-const { parseDimensions } = require('../helpers');
 const { resizeGenericSplashScreens } = require('./splash');
 const { resizeGenericLaunchIcons } = require('./icon');
 const { resizeFavicons } = require('./favicon');
@@ -20,17 +18,9 @@ const {
   addText,
   writeContentsJson,
   writeContentsJsonWithData,
-  writeLaunchScreenXML,
   writeWebosAppinfoJson,
 } = require('./shared');
 const {
-  tvosData,
-  androidData,
-  androidTvData,
-  iosData,
-  fireTvData,
-  macosData,
-  webData,
   iosLaunchIcons,
   iosSplashScreens,
   androidLaunchIcons,
@@ -40,16 +30,11 @@ const {
   fireTvLaunchIcons,
   fireTvSplashScreens,
   favicons,
-  tvosLaunchIcons,
   tvosSplashScreens,
   topShelfWideImages,
   topShelfImages,
-  androidNotificationIcons,
-  androidTvNotificationIcons,
   appIconAppStoreImageStackLayer,
-  appIconAppStoreLogoImageStackLayer,
   appIconImageStackLayer,
-  appIconLogoImageStackLayer,
   webosLaunchIcons,
   webosSplashScreens,
 } = require('../generables');
@@ -95,8 +80,8 @@ const createResDir = (basePath, platform) => {
   const androidDir = path.join(basePath, platform);
   const resDir = path.join(androidDir, 'res');
 
-  fs.mkdirSync(androidDir);
-  fs.mkdirSync(resDir);
+  FileUtils.createDir(androidDir);
+  FileUtils.createDir(resDir);
 
   return { [`${platform}Dir`]: resDir };
 };
@@ -106,10 +91,10 @@ const createIosDir = (basePath) => {
   const appIconDir = path.join(iosXcassetsDir, 'AppIcon.appiconset');
   const launchImageDir = path.join(iosXcassetsDir, 'launch-image.imageset');
 
-  fs.mkdirSync(iosDir);
-  fs.mkdirSync(iosXcassetsDir);
-  fs.mkdirSync(appIconDir);
-  fs.mkdirSync(launchImageDir);
+  FileUtils.createDir(iosDir);
+  FileUtils.createDir(iosXcassetsDir);
+  FileUtils.createDir(appIconDir);
+  FileUtils.createDir(launchImageDir);
 
   return {
     iosDir,
@@ -121,13 +106,13 @@ const createIosDir = (basePath) => {
 
 const createWebDir = (basePath) => {
   const webDir = path.join(basePath, 'web');
-  fs.mkdirSync(webDir);
+  FileUtils.createDir(webDir);
   return { webDir };
 };
 
 const createWebosDir = (basePath) => {
   const webosDir = path.join(basePath, 'webos');
-  fs.mkdirSync(webosDir);
+  FileUtils.createDir(webosDir);
   return { webosDir };
 };
 
@@ -174,22 +159,22 @@ const createTvosDir = (basePath) => {
     'Top Shelf Image.imageset'
   );
 
-  fs.mkdirSync(tvosDir);
-  fs.mkdirSync(tvosXcassets);
-  fs.mkdirSync(appIconTopShelfImageBrandassets);
-  fs.mkdirSync(appIconAppStoreImagestack);
-  fs.mkdirSync(clownImagestacklayer);
-  fs.mkdirSync(clownImagestacklayer_contentImageset);
-  fs.mkdirSync(logoImagestacklayer);
-  fs.mkdirSync(logoImagestacklayer_contentImageset);
-  fs.mkdirSync(appIconImagestack);
-  fs.mkdirSync(appIconImagestack_clownImagestacklayer);
-  fs.mkdirSync(appIconImagestack_logoImagestacklayer);
-  fs.mkdirSync(appIconImagestack_clownImagestacklayer_ContentImageset);
-  fs.mkdirSync(appIconImagestack_logoImagestacklayer_ContentImageset);
-  fs.mkdirSync(launchImageLaunchimage);
-  fs.mkdirSync(appIconTopShelfImageBrandassets_TopShelfImageWideImageset);
-  fs.mkdirSync(appIconTopShelfImageBrandassets_TopShelfImageImageset);
+  FileUtils.createDir(tvosDir);
+  FileUtils.createDir(tvosXcassets);
+  FileUtils.createDir(appIconTopShelfImageBrandassets);
+  FileUtils.createDir(appIconAppStoreImagestack);
+  FileUtils.createDir(clownImagestacklayer);
+  FileUtils.createDir(clownImagestacklayer_contentImageset);
+  FileUtils.createDir(logoImagestacklayer);
+  FileUtils.createDir(logoImagestacklayer_contentImageset);
+  FileUtils.createDir(appIconImagestack);
+  FileUtils.createDir(appIconImagestack_clownImagestacklayer);
+  FileUtils.createDir(appIconImagestack_logoImagestacklayer);
+  FileUtils.createDir(appIconImagestack_clownImagestacklayer_ContentImageset);
+  FileUtils.createDir(appIconImagestack_logoImagestacklayer_ContentImageset);
+  FileUtils.createDir(launchImageLaunchimage);
+  FileUtils.createDir(appIconTopShelfImageBrandassets_TopShelfImageWideImageset);
+  FileUtils.createDir(appIconTopShelfImageBrandassets_TopShelfImageImageset);
 
   return {
     tvosDir,
@@ -219,11 +204,12 @@ const generateAllAssets = async (options) => {
     const allDir = path.resolve(options.output, assetTypes.ALL.name);
     const assetsDir = path.resolve(allDir, 'assets');
 
-    if (fs.existsSync(allDir)) {
+    /*if (fs.existsSync(allDir)) {
       fs.rmSync(allDir, { recursive: true });
-    }
-    fs.mkdirSync(allDir);
-    fs.mkdirSync(assetsDir);
+    }*/
+    FileUtils.removeIfExists(allDir);
+    FileUtils.createDir(allDir);
+    FileUtils.createDir(assetsDir);
 
     const jimpImage = await Jimp.read(options.source);
 
@@ -508,14 +494,12 @@ const generateAllAssets = async (options) => {
   } catch (error) {
     switch (error.code) {
       case 'EISDIR':
-        console.log(
-          chalk.red(
-            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
-          )
+        LogUtils.error(
+          'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
         );
         break;
       default:
-        console.log(chalk.red('Error. Unexpected error has occurred'));
+        LogUtils.error('Unexpected error has occurred', error);
         break;
     }
   }

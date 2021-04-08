@@ -58,7 +58,7 @@ fs.__setMockFiles = __setMockFiles;
 fs.readdirSync = readdirSync;
 fs.existsSync = existsSync;
 fs.rmSync = rmSync;
-fs.mkdirSync = mkdirSync;
+FileUtils.createDir = mkdirSync;
 fs.writeFileSync = writeFileSync;
 
 module.exports = fs;

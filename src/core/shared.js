@@ -3,6 +3,9 @@ const path = require('path');
 const chalk = require('chalk');
 const Jimp = require('jimp');
 
+const FileUtils = require('../utils/FileUtils');
+const LogUtils = require('../utils/LogUtils');
+
 const extractCornerColor = (jimpImage) => {
   const hex = jimpImage.getPixelColor(0, 0);
   const { r, g, b } = Jimp.intToRGBA(hex);
@@ -48,7 +51,7 @@ const addText = (sharpImage, text, fontSize, fontColor, width, height) => {
 const writeToFile = (image, outputDir, filename) => {
   image.toFile(`${outputDir}/${filename}.png`, (err) => {
     if (err) {
-      console.log(chalk.red(err));
+      LogUtils.error(err);
     }
   });
 };
@@ -59,26 +62,25 @@ const createOutputDirs = (outputDir, platform, assetsType) => {
   // resolves to output/LaunchScreen/ios
   const platformOutputDir = path.resolve(outputDir, assetTypeOutputDir, platform);
   if (!fs.existsSync(assetTypeOutputDir)) {
-    fs.mkdirSync(assetTypeOutputDir);
+    FileUtils.createDir(assetTypeOutputDir);
   }
   if (fs.existsSync(platformOutputDir)) {
-    console.log(
-      chalk.yellow(`Found output directory for ${platform} platform at ${platformOutputDir}`),
-      chalk.hex('#000').bgYellow('WILL DELETE IT.')
+    LogUtils.warn(
+      `Found output directory for ${platform} platform at ${platformOutputDir} ${chalk
+        .hex('#000')
+        .bgYellow('WILL DELETE IT.')}`,
     );
-    fs.rmSync(platformOutputDir, { recursive: true, force: true });
-    console.log(
-      chalk.yellow(`created new output directory for ${platform} platform at ${platformOutputDir}`)
-    );
-    fs.mkdirSync(platformOutputDir);
+    //fs.rmSync(platformOutputDir, { recursive: true, force: true });
+    FileUtils.remove(platformOutputDir);
+    FileUtils.createDir(platformOutputDir);
+    LogUtils.warn(`created new output directory for ${platform} platform at ${platformOutputDir}`);
   } else {
-    console.log(
-      chalk.yellow(
-        `could not find output directory for ${platform} platform at ${platformOutputDir}`
-      ),
-      chalk.hex('#000').bgYellow('WILL CREATE IT.')
+    LogUtils.warn(
+      `could not find output directory for ${platform} platform at ${platformOutputDir} ${chalk
+        .hex('#000')
+        .bgYellow('WILL CREATE IT.')}`
     );
-    fs.mkdirSync(platformOutputDir);
+    FileUtils.createDir(platformOutputDir);
   }
   return platformOutputDir;
 };
@@ -111,9 +113,10 @@ const writeContentsJsonWithData = (directory, data) => {
 
 const writeLaunchScreenXML = (directory) => {
   const layoutPath = path.resolve(directory, 'layout');
-  if (!fs.existsSync(layoutPath)) {
-    fs.mkdirSync(layoutPath);
-  }
+  /*if (!fs.existsSync(layoutPath)) {
+    FileUtils.createDir(layoutPath);
+  }*/
+  FileUtils.createIfNotExists(layoutPath);
   const filePath = path.resolve(layoutPath, 'launch_screen.xml');
   const content = `<?xml version="1.0" encoding="utf-8"?>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

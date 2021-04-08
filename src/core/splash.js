@@ -6,6 +6,9 @@ const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 
+const FileUtils = require('../utils/FileUtils');
+const LogUtils = require('../utils/LogUtils');
+
 const { parseDimensions } = require('../helpers');
 const {
   iosSplashScreens,
@@ -34,9 +37,10 @@ const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, o
       let dir = outputDir;
       if (splash.dirName) {
         dir = path.resolve(outputDir, splash.dirName);
-        if (!fs.existsSync(dir)) {
-          fs.mkdirSync(dir);
-        }
+        /* if (!fs.existsSync(dir)) {
+          FileUtils.createDir(dir);
+        } */
+        FileUtils.createIfNotExists(dir);
       }
       const { width, height } = parseDimensions(splash.dimensions);
       resize(sharpImage, jimpImage, width, height);
@@ -53,16 +57,14 @@ const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, o
 
       writeToFile(sharpImage, dir, splash.name);
 
-      console.log(
-        chalk.magenta(
-          `GENERATED SPLASHSCREEN FOR ${
-            splash.device || `${splash.platform.name} ${splash.dimensions}`
-          }.`
-        )
+      LogUtils.info(
+        `GENERATED SPLASHSCREEN FOR ${
+          splash.device || `${splash.platform.name} ${splash.dimensions}`
+        }`
       );
     });
   } catch (error) {
-    console.log('splash error', error);
+    LogUtils.error(error);
   }
 
   // generate contents JSON
@@ -71,11 +73,10 @@ const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, o
   }
   // generate layout/launch_screen.xml
   if (
-    platform === platforms.ANDROID.name ||
-    platform === platforms.ANDROIDTV.name ||
-    platform === platforms.FIRETV.name
+    platform === platforms.ANDROID.name
+    || platform === platforms.ANDROIDTV.name
+    || platform === platforms.FIRETV.name
   ) {
-    console.log('output dir', outputDir);
     writeLaunchScreenXML(outputDir);
   }
 };
@@ -85,7 +86,9 @@ const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, o
 const generateSplashScreens = async (options) => {
   try {
     const { platforms: optPlatforms } = options;
-    const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV } = platforms;
+    const {
+ IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV 
+} = platforms;
     const jimpImage = await Jimp.read(options.source);
 
     if (optPlatforms.some((p) => p.name === IOS.name)) {
@@ -181,14 +184,12 @@ const generateSplashScreens = async (options) => {
   } catch (error) {
     switch (error.code) {
       case 'EISDIR':
-        console.log(
-          chalk.red(
-            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
-          )
+        LogUtils.error(
+          'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
         );
         break;
       default:
-        console.log(chalk.red('Error. Unexpected error has occurred'));
+        LogUtils.error('Unexpected error has occurred', error);
         break;
     }
   }
