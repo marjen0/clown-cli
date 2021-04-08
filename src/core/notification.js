@@ -47,38 +47,53 @@ const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outp
 };
 
 const generateNotificationIcon = async (options) => {
-  const { platforms: optPlatforms } = options;
-  const { ANDROID, ANDROIDTV } = platforms;
-  const jimpImage = await Jimp.read(options.source);
-  if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.ANDROID.name,
-      assetTypes.NOTIFICATIONICON.name
-    );
-    resizeNotificationIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.ANDROID.name,
-      outputDir,
-      androidNotificationIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.ANDROIDTV.name,
-      assetTypes.NOTIFICATIONICON.name
-    );
-    resizeNotificationIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.ANDROIDTV.name,
-      outputDir,
-      androidTvNotificationIcons
-    );
+  try {
+    const { platforms: optPlatforms } = options;
+    const { ANDROID, ANDROIDTV } = platforms;
+    const jimpImage = await Jimp.read(options.source);
+    if (optPlatforms.some((p) => p.name === ANDROID.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.ANDROID.name,
+        assetTypes.NOTIFICATIONICON.name
+      );
+      resizeNotificationIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.ANDROID.name,
+        outputDir,
+        androidNotificationIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.ANDROIDTV.name,
+        assetTypes.NOTIFICATIONICON.name
+      );
+      resizeNotificationIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.ANDROIDTV.name,
+        outputDir,
+        androidTvNotificationIcons
+      );
+    }
+  } catch (error) {
+    switch (error.code) {
+      case 'EISDIR':
+        console.log(
+          chalk.red(
+            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
+          )
+        );
+        break;
+      default:
+        console.log(chalk.red('Error. Unexpected error has occurred'));
+        break;
+    }
   }
 };
 exports.generateNotificationIcon = generateNotificationIcon;

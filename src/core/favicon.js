@@ -25,9 +25,24 @@ const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
 };
 
 const generateFavicons = async (options) => {
-  const jimpImage = await Jimp.read(options.source);
-  const outputDir = createOutputDirs(options.output, platforms.WEB.name, assetTypes.FAVICON.name);
-  resizeFavicons(options.source, jimpImage, outputDir, favicons);
+  try {
+    const jimpImage = await Jimp.read(options.source);
+    const outputDir = createOutputDirs(options.output, platforms.WEB.name, assetTypes.FAVICON.name);
+    resizeFavicons(options.source, jimpImage, outputDir, favicons);
+  } catch (error) {
+    switch (error.code) {
+      case 'EISDIR':
+        console.log(
+          chalk.red(
+            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
+          )
+        );
+        break;
+      default:
+        console.log(chalk.red('Error. Unexpected error has occurred'));
+        break;
+    }
+  }
 };
 
 exports.generateFavicons = generateFavicons;

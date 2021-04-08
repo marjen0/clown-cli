@@ -114,7 +114,10 @@ const cli = async (args) => {
     .command('splash')
     .description('Generate splash screens')
     .option('-s, --source <source>', 'small pizza size')
-    .option('-o, --output <output>', 'output directory')
+    .option(
+      '-o, --output <output>',
+      'output directory. Will use current working directory if not provided',
+    )
     .option('-tint, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
@@ -129,7 +132,10 @@ const cli = async (args) => {
     .command('icon')
     .description('Generate launch icons')
     .option('-s, --source <source>', 'source of the icon to generate')
-    .option('-o, --output <output>', 'generated files output directory')
+    .option(
+      '-o, --output <output>',
+      'generated files output directory. Will use current working directory if not provided',
+    )
     .option('-tint, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
@@ -144,7 +150,10 @@ const cli = async (args) => {
     .command('notification')
     .description('generate notification icons')
     .option('-s, --source <source>', 'source of the icon to generate')
-    .option('-o, --output <output>', 'generated files output directory')
+    .option(
+      '-o, --output <output>',
+      'generated files output directory. Will use current working directory if not provided',
+    )
     .option('-tint, --tint', 'tint the image')
     .option('-t, --text <text>', 'Text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
@@ -159,7 +168,10 @@ const cli = async (args) => {
     .command('favicon')
     .description('generate favicons')
     .option('-s, --source <source>', 'path to favicon')
-    .option('-o, --output <output>', 'output directory')
+    .option(
+      '-o, --output <output>',
+      'output directory. Will use current working directory if not provided',
+    )
     .option('-t, --tint', 'tint the image')
     .action(async (options) => {
       const promptedOptions = await promptForMissingOptions(options);

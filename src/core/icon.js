@@ -68,114 +68,129 @@ const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, out
 };
 
 const generateLaunchIcons = async (options) => {
-  const { platforms: optPlatforms } = options;
-  const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
-  const jimpImage = await Jimp.read(options.source);
-  console.log('cli options', options);
-  if (optPlatforms.some((p) => p.name === IOS.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.IOS.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.IOS.name,
-      outputDir,
-      iosLaunchIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === TVOS.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.TVOS.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.TVOS.name,
-      outputDir,
-      tvosLaunchIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.ANDROID.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.ANDROID.name,
-      outputDir,
-      androidLaunchIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.ANDROIDTV.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.ANDROIDTV.name,
-      outputDir,
-      androidTvLaunchIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === WEBOS.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.WEBOS.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.WEBOS.name,
-      outputDir,
-      webosLaunchIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === MACOS.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.MACOS.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.MACOS.name,
-      outputDir,
-      macosLaunchIcons
-    );
-  }
-  if (optPlatforms.some((p) => p.name === FIRETV.name)) {
-    const outputDir = createOutputDirs(
-      options.output,
-      platforms.FIRETV.name,
-      assetTypes.LAUNCHICON.name
-    );
-    resizeGenericLaunchIcons(
-      options.source,
-      jimpImage,
-      options,
-      platforms.FIRETV.name,
-      outputDir,
-      fireTvLaunchIcons
-    );
+  try {
+    const { platforms: optPlatforms } = options;
+    const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
+    const jimpImage = await Jimp.read(options.source);
+    console.log('cli options', options);
+    if (optPlatforms.some((p) => p.name === IOS.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.IOS.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.IOS.name,
+        outputDir,
+        iosLaunchIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === TVOS.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.TVOS.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.TVOS.name,
+        outputDir,
+        tvosLaunchIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === ANDROID.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.ANDROID.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.ANDROID.name,
+        outputDir,
+        androidLaunchIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.ANDROIDTV.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.ANDROIDTV.name,
+        outputDir,
+        androidTvLaunchIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === WEBOS.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.WEBOS.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.WEBOS.name,
+        outputDir,
+        webosLaunchIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === MACOS.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.MACOS.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.MACOS.name,
+        outputDir,
+        macosLaunchIcons
+      );
+    }
+    if (optPlatforms.some((p) => p.name === FIRETV.name)) {
+      const outputDir = createOutputDirs(
+        options.output,
+        platforms.FIRETV.name,
+        assetTypes.LAUNCHICON.name
+      );
+      resizeGenericLaunchIcons(
+        options.source,
+        jimpImage,
+        options,
+        platforms.FIRETV.name,
+        outputDir,
+        fireTvLaunchIcons
+      );
+    }
+  } catch (error) {
+    switch (error.code) {
+      case 'EISDIR':
+        console.log(
+          chalk.red(
+            'Error. Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
+          )
+        );
+        break;
+      default:
+        console.log(chalk.red('Error. Unexpected error has occurred'));
+        break;
+    }
   }
 };
 
