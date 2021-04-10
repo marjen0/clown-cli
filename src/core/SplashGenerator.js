@@ -26,9 +26,9 @@ class SplashGenerator {
     this.options = options;
   }
 
-  resizeGenericSplashScreens(imageSource, jimpImage, platform, outputDir, data) {
+  resizeGenericSplashScreens(jimpImage, platform, outputDir, data) {
     try {
-      const sharpImage = sharp(imageSource).toFormat('png');
+      const sharpImage = sharp(this.options.source).toFormat('png');
       const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
       data.forEach((splash) => {
         let dir = outputDir;
@@ -77,7 +77,7 @@ class SplashGenerator {
 
   async generateSplashScreensAsync() {
     try {
-      const { platforms: optPlatforms, output, source } = this.options;
+      const { platforms: optPlatforms, output } = this.options;
       const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV } = platforms;
       const jimpImage = await Jimp.read(this.options.source);
 
@@ -88,7 +88,6 @@ class SplashGenerator {
           assetTypes.SPLASHSCREEN.name
         );
         this.resizeGenericSplashScreens(
-          source,
           jimpImage,
           platforms.IOS.name,
           iosOutputDir,
@@ -102,7 +101,6 @@ class SplashGenerator {
           assetTypes.SPLASHSCREEN.name
         );
         this.resizeGenericSplashScreens(
-          this.options.source,
           jimpImage,
           platforms.TVOS.name,
           tvosOutputDir,
@@ -116,7 +114,6 @@ class SplashGenerator {
           assetTypes.SPLASHSCREEN.name
         );
         this.resizeGenericSplashScreens(
-          this.options.source,
           jimpImage,
           platforms.ANDROID.name,
           androidOutputDir,
@@ -130,7 +127,6 @@ class SplashGenerator {
           assetTypes.SPLASHSCREEN.name
         );
         this.resizeGenericSplashScreens(
-          this.options.source,
           jimpImage,
           platforms.ANDROIDTV.name,
           androidtvOutputDir,
@@ -144,7 +140,6 @@ class SplashGenerator {
           assetTypes.SPLASHSCREEN.name
         );
         this.resizeGenericSplashScreens(
-          this.options.source,
           jimpImage,
           platforms.WEBOS.name,
           webosOutputDir,
@@ -158,7 +153,6 @@ class SplashGenerator {
           assetTypes.SPLASHSCREEN.name
         );
         this.resizeGenericSplashScreens(
-          this.options.source,
           jimpImage,
           platforms.FIRETV.name,
           firetvOutputDir,

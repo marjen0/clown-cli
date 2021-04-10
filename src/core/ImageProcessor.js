@@ -1,6 +1,4 @@
 const Jimp = require('jimp');
-
-const FileUtils = require('../utils/FileUtils');
 const LogUtils = require('../utils/LogUtils');
 
 class ImageProcessor {
