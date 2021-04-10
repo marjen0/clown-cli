@@ -3,7 +3,7 @@
 const path = require('path');
 const sharp = require('sharp');
 const Jimp = require('jimp');
-const FileUtils = require('../utils/FileUtils');
+const FileManager = require('./FileManager');
 const LogUtils = require('../utils/LogUtils');
 const ImageProcessor = require('./ImageProcessor');
 const { parseDimensions } = require('../helpers');
@@ -23,7 +23,7 @@ class NotificationGenerator {
       const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
       if (icon.dirName) {
         dir = path.resolve(outputDir, icon.dirName);
-        FileUtils.createIfNotExists(dir);
+        FileManager.createIfNotExists(dir);
       }
       const { width, height } = parseDimensions(icon.dimensions);
 
@@ -55,7 +55,7 @@ class NotificationGenerator {
       const { ANDROID, ANDROIDTV } = platforms;
       const jimpImage = await Jimp.read(this.options.source);
       if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-        const outputDir = FileUtils.createOutputDirs(
+        const outputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.ANDROID.name,
           assetTypes.NOTIFICATIONICON.name,
@@ -69,7 +69,7 @@ class NotificationGenerator {
         );
       }
       if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-        const outputDir = FileUtils.createOutputDirs(
+        const outputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.ANDROIDTV.name,
           assetTypes.NOTIFICATIONICON.name,

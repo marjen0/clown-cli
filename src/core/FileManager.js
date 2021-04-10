@@ -2,9 +2,9 @@
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
-const LogUtils = require('./LogUtils');
+const LogUtils = require('../utils/LogUtils');
 
-class FileUtils {
+class FileManager {
   static createDir(dir) {
     try {
       fs.mkdirSync(dir);
@@ -47,7 +47,7 @@ class FileUtils {
     // resolves to output/LaunchScreen/ios
     const platformOutputDir = path.resolve(outputDir, assetTypeOutputDir, platform);
     /* if (!fs.existsSync()) {
-      FileUtils.createDir(assetTypeOutputDir);
+      FileManager.createDir(assetTypeOutputDir);
     } */
     this.createIfNotExists(assetTypeOutputDir);
     if (fs.existsSync(platformOutputDir)) {
@@ -197,4 +197,4 @@ class FileUtils {
   }
 }
 
-module.exports = FileUtils;
+module.exports = FileManager;

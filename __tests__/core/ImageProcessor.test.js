@@ -5,19 +5,9 @@ const fs = require('fs');
 const { platforms, assetTypes } = require('../../src/constants');
 const iosSplashScreens = require('../../src/generables/splash/ios');
 
-const {
-  tint,
-  negate,
-  resize,
-  addText,
-  writeToFile,
-  FileUtils.createOutputDirs,
-  extractCornerColor,
-  ConfigWriter.writeLaunchScreenXML,
-  ConfigWriter.writeContentsJson,
-  ConfigWriter.writeWebosAppinfoJson,
-  ConfigWriter.writeFaviconLinks,
-} = require('../../src/core/ConfigWriter');
+const ImageProcessor = require('../../src/core/ImageProcessor');
+const FileManager = require('../../src/core/FileManager');
+const ConfigWriter = require('../../src/core/ConfigWriter');
 
 jest.mock('sharp');
 jest.mock('jimp');
@@ -30,6 +20,7 @@ describe('resize', () => {
   let background;
   let sharpImage;
   let jimpImage;
+  let imageProcessor;
 
   beforeEach(async () => {
     jimpImage = await Jimp.read('path');
@@ -44,10 +35,11 @@ describe('resize', () => {
     sharpImage = sharp(Buffer.from('buffer'));
     Jimp.intToRGBA.mockReturnValue(background);
     jimpImage.getPixelColor.mockReturnValue(() => 4254);
+    imageProcessor = new ImageProcessor(sharpImage, jimpImage);
   });
 
   it('should should call resize with correct width and height arguments', async () => {
-    resize(sharpImage, jimpImage, width, height);
+    imageProcessor.resize(width, height);
     expect(sharp().resize).toBeCalledWith(width, height, {
       fit: 'contain',
       background,
@@ -55,7 +47,7 @@ describe('resize', () => {
   });
 
   it('should not call composite if round is not passed', async () => {
-    resize(sharpImage, jimpImage, width, height, false);
+    imageProcessor.resize(width, height, false);
     expect(sharp().composite).not.toBeCalled();
   });
 
@@ -65,54 +57,86 @@ describe('resize', () => {
         height / 2
       }"/></svg>`
     );
-    resize(sharpImage, jimpImage, width, height, round);
+    imageProcessor.resize(width, height, round);
     expect(sharp().composite).toBeCalledWith([{ input: rect, blend: 'dest-in' }]);
   });
 });
 
 describe('tint', () => {
+  let jimpImage;
+  let sharpImage;
+  let imageProcessor;
+
+  beforeEach(async () => {
+    jimpImage = await Jimp.read('path');
+    sharpImage = sharp(Buffer.from('buffer'));
+    imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+  });
   it('should call tint method', () => {
-    const sharpImage = sharp(Buffer.from('a buffer'));
-    tint(sharpImage);
+    imageProcessor.tint();
     expect(sharp().tint).toBeCalled();
   });
 });
 
 describe('negate', () => {
+  let jimpImage;
+  let sharpImage;
+  let imageProcessor;
+
+  beforeEach(async () => {
+    jimpImage = await Jimp.read('path');
+    sharpImage = sharp(Buffer.from('buffer'));
+    imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+  });
   it('should call negate method', () => {
-    const sharpImage = sharp(Buffer.from('a buffer'));
-    negate(sharpImage);
+    imageProcessor.negate();
     expect(sharp().negate).toBeCalled();
   });
 });
 
 describe('extract corner color', () => {
+  let jimpImage;
+  let sharpImage;
+  let imageProcessor;
+
+  beforeEach(async () => {
+    jimpImage = await Jimp.read('path');
+    sharpImage = sharp(Buffer.from('buffer'));
+    imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+  });
   it('should return object with r,g,b values', async () => {
     const color = { r: 255, g: 255, b: 255 };
-    const jimpImage = await Jimp.read('path');
     Jimp.intToRGBA.mockReturnValue(color);
     jimpImage.getPixelColor.mockReturnValue(() => 4254);
-    const res = extractCornerColor(jimpImage);
+    const res = imageProcessor.extractCornerColor(jimpImage);
     expect(res).toEqual(color);
   });
 });
 
 describe('addText', () => {
+  let jimpImage;
+  let sharpImage;
+  let imageProcessor;
+
+  beforeEach(async () => {
+    jimpImage = await Jimp.read('path');
+    sharpImage = sharp(Buffer.from('buffer'));
+    imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+  });
   it('should call composite svg with given text, fontSize, fontColor, width and height', () => {
-    const buffer = Buffer.from('a buffer');
     const text = 'test text';
     const height = 200;
     const width = 200;
     const fontSize = 16;
     const fontColor = '#fff';
     const textedSVG = Buffer.from(`
-    <svg height="${height}" width="${width}">
-      <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
-        ${text}
-      </text>
-    </svg>`);
+      <svg height="${height}" width="${width}">
+        <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
+          ${text}
+        </text>
+      </svg>`);
 
-    addText(sharp(buffer), text, fontSize, fontColor, width, height);
+    imageProcessor.addText(text, fontSize, fontColor, width, height);
 
     expect(sharp().composite).toHaveBeenCalledWith([
       { input: Buffer.from(textedSVG), top: 0, left: 0 },
@@ -120,29 +144,39 @@ describe('addText', () => {
   });
 });
 describe('writeToFile', () => {
-  const outputDir = './directory/to/write/file';
-  const filename = 'test';
-  const sharpImage = sharp(Buffer.from('a buffer'));
+  let jimpImage;
+  let sharpImage;
+  let imageProcessor;
+  let outputDir;
+  let filename;
+
+  beforeEach(async () => {
+    outputDir = './directory/to/write/file';
+    filename = 'test';
+    jimpImage = await Jimp.read('path');
+    sharpImage = sharp(Buffer.from('buffer'));
+    imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+  });
 
   it('should call toFile method', () => {
-    writeToFile(sharpImage, outputDir, filename);
+    imageProcessor.writeToFile(outputDir, filename);
     expect(sharp().toFile).toBeCalled();
   });
 
   it('should call toFile method with correct arguments', () => {
-    writeToFile(sharpImage, outputDir, filename);
+    imageProcessor.writeToFile(outputDir, filename);
     expect(sharp().toFile).toBeCalledWith(`${outputDir}/${filename}.png`, expect.any(Function));
   });
 });
 
-describe('FileUtils.createOutputDirs', () => {
+describe('FileManager.createOutputDirs', () => {
   it('should create output directory based on platform and asset type if not exist', () => {
     const MOCK_FILE_INFO = {
       '/path/to/file1.txt': 'console.log("file1 contents");',
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
 
-    FileUtils.createOutputDirs('/files', platforms.MACOS.name, assetTypes.SPLASHSCREEN.name);
+    FileManager.createOutputDirs('/files', platforms.MACOS.name, assetTypes.SPLASHSCREEN.name);
     expect(fs.existsSync('/files/SplashScreen/macos')).toBeTruthy();
   });
 
@@ -153,7 +187,7 @@ describe('FileUtils.createOutputDirs', () => {
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
 
-    FileUtils.createOutputDirs('/files', platforms.ANDROID.name, assetTypes.LAUNCHICON.name);
+    FileManager.createOutputDirs('/files', platforms.ANDROID.name, assetTypes.LAUNCHICON.name);
     expect(fs.existsSync('/files/LaunchIcon/android')).toBeTruthy();
     expect(fs.readdirSync().length).toEqual(0);
   });

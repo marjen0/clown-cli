@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 const path = require('path');
 const Jimp = require('jimp');
-const FileUtils = require('../utils/FileUtils');
+const FileManager = require('./FileManager');
 const LogUtils = require('../utils/LogUtils');
 
 const SplashGenerator = require('./SplashGenerator');
@@ -81,16 +81,16 @@ class AssetsGenerator {
       const allDir = path.resolve(output, assetTypes.ALL.name);
       const assetsDir = path.resolve(allDir, 'assets');
 
-      FileUtils.removeIfExists(allDir);
-      FileUtils.createDir(allDir);
-      FileUtils.createDir(assetsDir);
+      FileManager.removeIfExists(allDir);
+      FileManager.createDir(allDir);
+      FileManager.createDir(assetsDir);
 
       const splashGenerator = new SplashGenerator(this.options);
       const iconGenerator = new IconGenerator(this.options);
       const faviconGenrator = new FaviconGenerator(this.options);
 
       if (optPlatforms.some((p) => p.name === IOS.name)) {
-        const { appIconDir, launchImageDir, iosXcassetsDir } = FileUtils.createIosDir(assetsDir);
+        const { appIconDir, launchImageDir, iosXcassetsDir } = FileManager.createIosDir(assetsDir);
         iconGenerator.resizeGenericLaunchIcons(
           jimpImage,
           platforms.IOS.name,
@@ -107,7 +107,7 @@ class AssetsGenerator {
       }
 
       if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-        const { androidDir } = FileUtils.createResDir(assetsDir, 'android');
+        const { androidDir } = FileManager.createResDir(assetsDir, 'android');
         iconGenerator.resizeGenericLaunchIcons(
           jimpImage,
           platforms.ANDROID.name,
@@ -123,7 +123,7 @@ class AssetsGenerator {
       }
 
       if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-        const { androidtvDir } = FileUtils.createResDir(assetsDir, 'androidtv');
+        const { androidtvDir } = FileManager.createResDir(assetsDir, 'androidtv');
         iconGenerator.resizeGenericLaunchIcons(
           jimpImage,
           platforms.ANDROIDTV.name,
@@ -153,7 +153,7 @@ class AssetsGenerator {
           appIconImagestack_clownImagestacklayer_ContentImageset,
           appIconTopShelfImageBrandassets_TopShelfImageImageset,
           appIconTopShelfImageBrandassets_TopShelfImageWideImageset,
-        } = FileUtils.createTvosDir(assetsDir);
+        } = FileManager.createTvosDir(assetsDir);
         splashGenerator.resizeGenericSplashScreens(
           jimpImage,
           platforms.TVOS.name,
@@ -298,7 +298,7 @@ class AssetsGenerator {
       }
 
       if (optPlatforms.some((p) => p.name === FIRETV.name)) {
-        const { firetvDir } = FileUtils.createResDir(assetsDir, 'firetv');
+        const { firetvDir } = FileManager.createResDir(assetsDir, 'firetv');
         iconGenerator.resizeGenericLaunchIcons(
           jimpImage,
           platforms.FIRETV.name,
@@ -314,12 +314,12 @@ class AssetsGenerator {
       }
 
       if (optPlatforms.some((p) => p.name === WEB.name)) {
-        const { webDir } = FileUtils.createWebDir(assetsDir);
+        const { webDir } = FileManager.createWebDir(assetsDir);
         faviconGenrator.resizeFavicons(jimpImage, webDir, favicons);
       }
 
       if (optPlatforms.some((p) => p.name === WEBOS.name)) {
-        const { webosDir } = FileUtils.createWebosDir(assetsDir);
+        const { webosDir } = FileManager.createWebosDir(assetsDir);
         iconGenerator.resizeGenericLaunchIcons(
           jimpImage,
           platforms.WEBOS.name,

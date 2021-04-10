@@ -3,7 +3,7 @@ const sharp = require('sharp');
 const Jimp = require('jimp');
 const LogUtils = require('../utils/LogUtils');
 const ImageProcessor = require('./ImageProcessor');
-const FileUtils = require('../utils/FileUtils');
+const FileManager = require('./FileManager');
 const { parseDimensions } = require('../helpers');
 const { favicons } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
@@ -33,7 +33,7 @@ class Faviconenerator {
   async generateFaviconsAsync() {
     try {
       const jimpImage = await Jimp.read(this.options.source);
-      const outputDir = FileUtils.createOutputDirs(
+      const outputDir = FileManager.createOutputDirs(
         this.options.output,
         platforms.WEB.name,
         assetTypes.FAVICON.name,

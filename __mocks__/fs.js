@@ -33,9 +33,7 @@ const existsSync = (directoryPath) => {
     return true;
   }
   if (mockFiles[path.dirname(directoryPath)]) {
-    return mockFiles[path.dirname(directoryPath)].includes(
-      path.basename(directoryPath)
-    );
+    return mockFiles[path.dirname(directoryPath)].includes(path.basename(directoryPath));
   }
   return false;
 };
@@ -58,7 +56,7 @@ fs.__setMockFiles = __setMockFiles;
 fs.readdirSync = readdirSync;
 fs.existsSync = existsSync;
 fs.rmSync = rmSync;
-FileUtils.createDir = mkdirSync;
+fs.mkdirSync = mkdirSync;
 fs.writeFileSync = writeFileSync;
 
 module.exports = fs;

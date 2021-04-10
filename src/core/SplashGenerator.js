@@ -5,7 +5,7 @@ const path = require('path');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 
-const FileUtils = require('../utils/FileUtils');
+const FileManager = require('./FileManager');
 const LogUtils = require('../utils/LogUtils');
 const ImageProcessor = require('./ImageProcessor');
 
@@ -34,7 +34,7 @@ class SplashGenerator {
         let dir = outputDir;
         if (splash.dirName) {
           dir = path.resolve(outputDir, splash.dirName);
-          FileUtils.createIfNotExists(dir);
+          FileManager.createIfNotExists(dir);
         }
         const { width, height } = parseDimensions(splash.dimensions);
         imageProcessor.resize(width, height);
@@ -82,7 +82,7 @@ class SplashGenerator {
       const jimpImage = await Jimp.read(this.options.source);
 
       if (optPlatforms.some((p) => p.name === IOS.name)) {
-        const iosOutputDir = FileUtils.createOutputDirs(
+        const iosOutputDir = FileManager.createOutputDirs(
           output,
           platforms.IOS.name,
           assetTypes.SPLASHSCREEN.name
@@ -95,7 +95,7 @@ class SplashGenerator {
         );
       }
       if (optPlatforms.some((p) => p.name === TVOS.name)) {
-        const tvosOutputDir = FileUtils.createOutputDirs(
+        const tvosOutputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.TVOS.name,
           assetTypes.SPLASHSCREEN.name
@@ -108,7 +108,7 @@ class SplashGenerator {
         );
       }
       if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-        const androidOutputDir = FileUtils.createOutputDirs(
+        const androidOutputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.ANDROID.name,
           assetTypes.SPLASHSCREEN.name
@@ -121,7 +121,7 @@ class SplashGenerator {
         );
       }
       if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-        const androidtvOutputDir = FileUtils.createOutputDirs(
+        const androidtvOutputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.ANDROIDTV.name,
           assetTypes.SPLASHSCREEN.name
@@ -134,7 +134,7 @@ class SplashGenerator {
         );
       }
       if (optPlatforms.some((p) => p.name === WEBOS.name)) {
-        const webosOutputDir = FileUtils.createOutputDirs(
+        const webosOutputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.WEBOS.name,
           assetTypes.SPLASHSCREEN.name
@@ -147,7 +147,7 @@ class SplashGenerator {
         );
       }
       if (optPlatforms.some((p) => p.name === FIRETV.name)) {
-        const firetvOutputDir = FileUtils.createOutputDirs(
+        const firetvOutputDir = FileManager.createOutputDirs(
           this.options.output,
           platforms.FIRETV.name,
           assetTypes.SPLASHSCREEN.name

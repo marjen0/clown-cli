@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const FileUtils = require('../utils/FileUtils');
+const FileManager = require('./FileManager');
 
 class ConfigWriter {
   static writeContentsJson(generables, directory, author, type) {
@@ -32,7 +32,7 @@ class ConfigWriter {
   static writeLaunchScreenXML(directory) {
     const layoutPath = path.resolve(directory, 'layout');
 
-    FileUtils.createIfNotExists(layoutPath);
+    FileManager.createIfNotExists(layoutPath);
     const filePath = path.resolve(layoutPath, 'launch_screen.xml');
     const content = `<?xml version="1.0" encoding="utf-8"?>
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
