@@ -3,7 +3,7 @@ const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
 const Jimp = require('jimp');
 const sharp = require('sharp');
-const { generateFavicons } = require('./core/FaviconGenerator');
+const FaviconGenerator = require('./core/FaviconGenerator');
 const SplashGenerator = require('./core/SplashGenerator');
 const IconGenerator = require('./core/IconGenerator');
 const NotificationGenerator = require('./core/NotificationGenerator');
@@ -11,6 +11,7 @@ const { generateAllAssets } = require('./core/AssetsGenerator');
 const { description, version } = require('../package.json');
 const { assetTypes, platforms } = require('./constants');
 const ConfigWriter = require('./core/ConfigWriter');
+const Faviconenerator = require('./core/FaviconGenerator');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
 
@@ -195,7 +196,8 @@ const cli = async (args) => {
         console.log(chalk.red('No platforms selected. Will do nothing'));
         return;
       }*/
-      await generateFavicons(promptedOptions);
+      const faviconGenerator = new Faviconenerator(options)
+      await faviconGenerator.generateFaviconsAsync(promptedOptions);
     });
 
   program

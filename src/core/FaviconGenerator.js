@@ -9,42 +9,49 @@ const { favicons } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
 const ConfigWriter = require('./ConfigWriter');
 
-const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
-  const image = sharp(imageSource).toFormat('png');
-  const imageProcessor = new ImageProcessor(image, jimpImage);
-  data.forEach((favicon) => {
-    const { width, height } = parseDimensions(favicon.dimensions);
-    imageProcessor.resize(width, height);
-    imageProcessor.writeToFile(outputDir, favicon.name);
-    LogUtils.info(
-      `GENERATED FAVICON FOR ${favicon.device || `${favicon.platform.name} ${favicon.dimensions}`}.`
-    );
-  });
-  ConfigWriter.writeFaviconLinks(outputDir);
-};
+class Faviconenerator {
+  constructor(options) {
+    this.options = options;
+  }
 
-const generateFavicons = async (options) => {
-  try {
-    const jimpImage = await Jimp.read(options.source);
-    const outputDir = FileUtils.createOutputDirs(
-      options.output,
-      platforms.WEB.name,
-      assetTypes.FAVICON.name,
-    );
-    resizeFavicons(options.source, jimpImage, outputDir, favicons);
-  } catch (error) {
-    switch (error.code) {
-      case 'EISDIR':
-        LogUtils.error(
-          'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png',
-        );
-        break;
-      default:
-        LogUtils.error('Error. Unexpected error has occurred', error);
-        break;
+  resizeFavicons(jimpImage, outputDir, data) {
+    const image = sharp(this.options.source).toFormat('png');
+    const imageProcessor = new ImageProcessor(image, jimpImage);
+    data.forEach((favicon) => {
+      const { width, height } = parseDimensions(favicon.dimensions);
+      imageProcessor.resize(width, height);
+      imageProcessor.writeToFile(outputDir, favicon.name);
+      LogUtils.info(
+        `GENERATED FAVICON FOR ${
+          favicon.device || `${favicon.platform.name} ${favicon.dimensions}`
+        }.`
+      );
+    });
+    ConfigWriter.writeFaviconLinks(outputDir);
+  }
+
+  async generateFaviconsAsync() {
+    try {
+      const jimpImage = await Jimp.read(this.options.source);
+      const outputDir = FileUtils.createOutputDirs(
+        this.options.output,
+        platforms.WEB.name,
+        assetTypes.FAVICON.name,
+      );
+      this.resizeFavicons(jimpImage, outputDir, favicons);
+    } catch (error) {
+      switch (error.code) {
+        case 'EISDIR':
+          LogUtils.error(
+            'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png',
+          );
+          break;
+        default:
+          LogUtils.error('Error. Unexpected error has occurred', error);
+          break;
+      }
     }
   }
-};
+}
 
-exports.generateFavicons = generateFavicons;
-exports.resizeFavicons = resizeFavicons;
+module.exports = Faviconenerator;
