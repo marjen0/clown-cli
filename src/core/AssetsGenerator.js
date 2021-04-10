@@ -10,7 +10,7 @@ const { resizeGenericSplashScreens } = require('./SplashGenerator');
 const { resizeGenericLaunchIcons } = require('./IconGenerator');
 const { resizeFavicons } = require('./FaviconGenerator');
 const { platforms, assetTypes } = require('../constants');
-const { writeContentsJson, writeContentsJsonWithData, writeWebosAppinfoJson } = require('./ConfigWriter');
+const ConfigWriter = require('./ConfigWriter');
 const {
   iosLaunchIcons,
   iosSplashScreens,
@@ -219,7 +219,7 @@ const generateAllAssets = async (options) => {
         launchImageDir,
         iosSplashScreens
       );
-      writeContentsJson(null, iosXcassetsDir, 'xcode', null);
+      ConfigWriter.writeContentsJson(null, iosXcassetsDir, 'xcode', null);
     }
 
     if (optPlatforms.some((p) => p.name === ANDROID.name)) {
@@ -321,14 +321,14 @@ const generateAllAssets = async (options) => {
         appIconImagestack_clownImagestacklayer_ContentImageset,
         appIconImageStackLayer
       );
-      writeContentsJson(null, tvosXcassets, 'xcode', null);
-      writeContentsJson(
+      ConfigWriter.writeContentsJson(null, tvosXcassets, 'xcode', null);
+      ConfigWriter.writeContentsJson(
         appIconTopShelfImageBrandassetsData,
         appIconTopShelfImageBrandassets,
         'xcode',
         'assets'
       );
-      writeContentsJsonWithData(appIconAppStoreImagestack, {
+      ConfigWriter.writeContentsJsonWithData(appIconAppStoreImagestack, {
         info: {
           version: 1,
           author: 'xcode',
@@ -348,7 +348,7 @@ const generateAllAssets = async (options) => {
           },
         ],
       });
-      writeContentsJsonWithData(logoImagestacklayer, {
+      ConfigWriter.writeContentsJsonWithData(logoImagestacklayer, {
         properties: {
           'frame-size': {
             height: 768,
@@ -364,7 +364,7 @@ const generateAllAssets = async (options) => {
           author: 'xcode',
         },
       });
-      writeContentsJsonWithData(clownImagestacklayer, {
+      ConfigWriter.writeContentsJsonWithData(clownImagestacklayer, {
         properties: {
           'frame-size': {
             height: 768,
@@ -380,7 +380,7 @@ const generateAllAssets = async (options) => {
           author: 'xcode',
         },
       });
-      writeContentsJsonWithData(appIconImagestack, {
+      ConfigWriter.writeContentsJsonWithData(appIconImagestack, {
         properties: {
           canvasSize: {
             width: 400,
@@ -400,7 +400,7 @@ const generateAllAssets = async (options) => {
           },
         ],
       });
-      writeContentsJsonWithData(appIconImagestack_clownImagestacklayer, {
+      ConfigWriter.writeContentsJsonWithData(appIconImagestack_clownImagestacklayer, {
         properties: {
           'frame-center': {
             x: 200,
@@ -416,7 +416,7 @@ const generateAllAssets = async (options) => {
           author: 'xcode',
         },
       });
-      writeContentsJsonWithData(appIconImagestack_logoImagestacklayer, {
+      ConfigWriter.writeContentsJsonWithData(appIconImagestack_logoImagestacklayer, {
         info: {
           version: 1,
           author: 'xcode',
@@ -477,7 +477,7 @@ const generateAllAssets = async (options) => {
         webosDir,
         webosSplashScreens
       );
-      writeWebosAppinfoJson(webosDir);
+      ConfigWriter.writeWebosAppinfoJson(webosDir);
     }
   } catch (error) {
     switch (error.code) {

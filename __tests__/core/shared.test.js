@@ -13,10 +13,10 @@ const {
   writeToFile,
   FileUtils.createOutputDirs,
   extractCornerColor,
-  writeLaunchScreenXML,
-  writeContentsJson,
-  writeWebosAppinfoJson,
-  writeFaviconLinks,
+  ConfigWriter.writeLaunchScreenXML,
+  ConfigWriter.writeContentsJson,
+  ConfigWriter.writeWebosAppinfoJson,
+  ConfigWriter.writeFaviconLinks,
 } = require('../../src/core/ConfigWriter');
 
 jest.mock('sharp');
@@ -159,72 +159,72 @@ describe('FileUtils.createOutputDirs', () => {
   });
 });
 
-describe('writeContentsJson', () => {
+describe('ConfigWriter.writeContentsJson', () => {
   beforeEach(() => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
     expect(fs.readdirSync('/files').length).toEqual(1);
   });
 
   it('created file name should be Contents.json', () => {
-    writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
     expect(fs.existsSync('/files/Contents.json')).toBeTruthy();
   });
 });
-describe('writeLaunchScreenXML', () => {
+describe('ConfigWriter.writeLaunchScreenXML', () => {
   beforeEach(() => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    writeLaunchScreenXML('/files');
+    ConfigWriter.writeLaunchScreenXML('/files');
     expect(fs.readdirSync('/files/layout').length).toEqual(1);
   });
 
   it('created file name should be launch_screen.xml', () => {
-    writeLaunchScreenXML('/files');
+    ConfigWriter.writeLaunchScreenXML('/files');
     expect(fs.existsSync('/files/layout/launch_screen.xml')).toBeTruthy();
   });
 });
-describe('writeContentsJsonWithData', () => {
+describe('ConfigWriter.writeContentsJsonWithData', () => {
   beforeEach(() => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
     expect(fs.readdirSync('/files').length).toEqual(1);
   });
 
   it('created file name should be Contents.json', () => {
-    writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
     expect(fs.existsSync('/files/Contents.json')).toBeTruthy();
   });
 });
 
-describe('writeWebosAppinfoJson', () => {
+describe('ConfigWriter.writeWebosAppinfoJson', () => {
   beforeEach(() => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    writeWebosAppinfoJson('/files');
+    ConfigWriter.writeWebosAppinfoJson('/files');
     expect(fs.readdirSync('/files').length).toEqual(1);
   });
   it('created file name should be appinfo.json', () => {
-    writeWebosAppinfoJson('/files');
+    ConfigWriter.writeWebosAppinfoJson('/files');
     expect(fs.existsSync('/files/appinfo.json')).toBeTruthy();
   });
 });
-describe('writeFaviconLinks', () => {
+describe('ConfigWriter.writeFaviconLinks', () => {
   beforeEach(() => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    writeFaviconLinks('/files');
+    ConfigWriter.writeFaviconLinks('/files');
     expect(fs.readdirSync('/files').length).toEqual(1);
   });
   it('created file name should be links.txt', () => {
-    writeFaviconLinks('/files');
+    ConfigWriter.writeFaviconLinks('/files');
     expect(fs.existsSync('/files/links.txt')).toBeTruthy();
   });
 });

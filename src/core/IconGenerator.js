@@ -21,13 +21,7 @@ const {
 } = require('../generables');
 
 const { platforms, shapes, assetTypes } = require('../constants');
-const {
-  writeToFile,
-  resize,
-  addText,
-  tint,
-  writeContentsJson,
-} = require('./ConfigWriter');
+const ConfigWriter = require('./ConfigWriter');
 
 const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
   data.forEach((icon) => {
@@ -60,7 +54,7 @@ const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, out
   });
   // generate contents JSON
   if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
-    writeContentsJson(data, outputDir, 'clown', 'images');
+    ConfigWriter.writeContentsJson(data, outputDir, 'clown', 'images');
   }
 };
 

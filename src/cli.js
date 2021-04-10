@@ -10,7 +10,7 @@ const { generateNotificationIcon } = require('./core/NotificationGenerator');
 const { generateAllAssets } = require('./core/AssetsGenerator');
 const { description, version } = require('../package.json');
 const { assetTypes, platforms } = require('./constants');
-const { resize, writeToFile } = require('./core/ConfigWriter');
+const ConfigWriter = require('./core/ConfigWriter');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
 

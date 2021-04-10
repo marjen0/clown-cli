@@ -7,7 +7,7 @@ const FileUtils = require('../utils/FileUtils');
 const { parseDimensions } = require('../helpers');
 const { favicons } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
-const { writeFaviconLinks } = require('./ConfigWriter');
+const ConfigWriter = require('./ConfigWriter');
 
 const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
   const image = sharp(imageSource).toFormat('png');
@@ -20,7 +20,7 @@ const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
       `GENERATED FAVICON FOR ${favicon.device || `${favicon.platform.name} ${favicon.dimensions}`}.`
     );
   });
-  writeFaviconLinks(outputDir);
+  ConfigWriter.writeFaviconLinks(outputDir);
 };
 
 const generateFavicons = async (options) => {
