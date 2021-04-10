@@ -5,56 +5,6 @@ const Jimp = require('jimp');
 const FileUtils = require('../utils/FileUtils');
 const LogUtils = require('../utils/LogUtils');
 
-const extractCornerColor = (jimpImage) => {
-  const hex = jimpImage.getPixelColor(0, 0);
-  const { r, g, b } = Jimp.intToRGBA(hex);
-  return { r, g, b };
-};
-
-const resize = (sharpImage, jimpImage, width, height, round = false) => {
-  const { r, g, b } = extractCornerColor(jimpImage);
-  let img;
-  img = sharpImage.resize(width, height, {
-    fit: 'contain',
-    background: { r, g, b },
-  });
-  if (round) {
-    const rect = Buffer.from(
-      `<svg><rect x="0" y="0" width="${width}" height="${height}" rx="${width / 2}" ry="${
-        height / 2
-      }"/></svg>`
-    );
-    img = sharpImage.composite([{ input: rect, blend: 'dest-in' }]);
-  }
-  return img;
-};
-
-const negate = (sharpImage) => {
-  sharpImage.negate();
-};
-
-const tint = (sharpImage) => {
-  sharpImage.tint();
-};
-
-const addText = (sharpImage, text, fontSize, fontColor, width, height) => {
-  const textedSVG = Buffer.from(`
-    <svg height="${height}" width="${width}">
-      <text x="0" y="${fontSize}" font-size="${fontSize}" fill="${fontColor}">
-        ${text}
-      </text>
-    </svg>`);
-  sharpImage.composite([{ input: Buffer.from(textedSVG), top: 0, left: 0 }]);
-};
-
-const writeToFile = (image, outputDir, filename) => {
-  image.toFile(`${outputDir}/${filename}.png`, (err) => {
-    if (err) {
-      LogUtils.error(err);
-    }
-  });
-};
-
 const writeContentsJson = (generables, directory, author, type) => {
   const contentsPath = path.resolve(directory, 'Contents.json');
   let contentsData = null;
@@ -153,15 +103,9 @@ const writeFaviconLinks = (directory) => {
   );
 };
 
-exports.resize = resize;
-exports.negate = negate;
-exports.tint = tint;
-exports.addText = addText;
-exports.writeToFile = writeToFile;
 
 exports.writeContentsJson = writeContentsJson;
 exports.writeContentsJsonWithData = writeContentsJsonWithData;
-exports.extractCornerColor = extractCornerColor;
 exports.writeLaunchScreenXML = writeLaunchScreenXML;
 exports.writeWebosAppinfoJson = writeWebosAppinfoJson;
 exports.writeFaviconLinks = writeFaviconLinks;

@@ -6,11 +6,11 @@ const Jimp = require('jimp');
 const FileUtils = require('../utils/FileUtils');
 const LogUtils = require('../utils/LogUtils');
 
-const { resizeGenericSplashScreens } = require('./splash');
-const { resizeGenericLaunchIcons } = require('./icon');
-const { resizeFavicons } = require('./favicon');
+const { resizeGenericSplashScreens } = require('./SplashGenerator');
+const { resizeGenericLaunchIcons } = require('./IconGenerator');
+const { resizeFavicons } = require('./FaviconGenerator');
 const { platforms, assetTypes } = require('../constants');
-const { writeContentsJson, writeContentsJsonWithData, writeWebosAppinfoJson } = require('./shared');
+const { writeContentsJson, writeContentsJsonWithData, writeWebosAppinfoJson } = require('./ConfigWriter');
 const {
   iosLaunchIcons,
   iosSplashScreens,

@@ -18,7 +18,7 @@ const {
   androidTvSplashScreens,
 } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
-const { writeContentsJson, writeLaunchScreenXML } = require('./shared');
+const { writeContentsJson, writeLaunchScreenXML } = require('./ConfigWriter');
 
 const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, outputDir, data) => {
   try {

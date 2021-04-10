@@ -40,7 +40,7 @@ class FileUtils {
     }
   }
 
-  static FileUtils.createOutputDirs(outputDir, platform, assetsType) {
+  static createOutputDirs(outputDir, platform, assetsType) {
     // resolves to output/LaunchScreen
     const assetTypeOutputDir = path.resolve(outputDir, assetsType);
     // resolves to output/LaunchScreen/ios

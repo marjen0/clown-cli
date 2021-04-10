@@ -3,15 +3,14 @@ const { PathPrompt } = require('inquirer-path');
 const program = require('commander');
 const Jimp = require('jimp');
 const sharp = require('sharp');
-const chalk = require('chalk');
-const { generateFavicons } = require('./core/favicon');
-const { generateSplashScreens } = require('./core/splash');
-const { generateLaunchIcons } = require('./core/icon');
-const { generateNotificationIcon } = require('./core/notification');
-const { generateAllAssets } = require('./core/all');
+const { generateFavicons } = require('./core/FaviconGenerator');
+const { generateSplashScreens } = require('./core/SplashGenerator');
+const { generateLaunchIcons } = require('./core/IconGenerator');
+const { generateNotificationIcon } = require('./core/NotificationGenerator');
+const { generateAllAssets } = require('./core/AssetsGenerator');
 const { description, version } = require('../package.json');
 const { assetTypes, platforms } = require('./constants');
-const { resize, writeToFile } = require('./core/shared');
+const { resize, writeToFile } = require('./core/ConfigWriter');
 
 inquirer.prompt.registerPrompt('path', PathPrompt);
 
@@ -98,6 +97,7 @@ const promptForPlatforms = async (assetType, options) => {
           { name: FIRETV.name, checked: true, value: FIRETV },
         ],
       });
+      break;
     default:
       break;
   }

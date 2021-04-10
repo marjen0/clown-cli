@@ -17,7 +17,7 @@ const {
   writeContentsJson,
   writeWebosAppinfoJson,
   writeFaviconLinks,
-} = require('../../src/core/shared');
+} = require('../../src/core/ConfigWriter');
 
 jest.mock('sharp');
 jest.mock('jimp');

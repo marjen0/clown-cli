@@ -7,7 +7,7 @@ const FileUtils = require('../utils/FileUtils');
 const { parseDimensions } = require('../helpers');
 const { favicons } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
-const { writeFaviconLinks } = require('./shared');
+const { writeFaviconLinks } = require('./ConfigWriter');
 
 const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
   const image = sharp(imageSource).toFormat('png');

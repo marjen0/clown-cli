@@ -27,7 +27,7 @@ const {
   addText,
   tint,
   writeContentsJson,
-} = require('./shared');
+} = require('./ConfigWriter');
 
 const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
   data.forEach((icon) => {

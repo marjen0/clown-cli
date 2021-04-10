@@ -1,9 +1,9 @@
 const { platforms, assetTypes, orientations, shapes } = require('./src/constants');
-const { generateFavicons } = require('./src/core/favicon');
-const { generateLaunchIcons } = require('./src/core/icon');
-const { generateSplashScreens } = require('./src/core/splash');
-const { generateNotificationIcon } = require('./src/core/notification');
-const { generateAllAssets } = require('./src/core/all');
+const { generateFavicons } = require('./src/core/FaviconGenerator');
+const { generateLaunchIcons } = require('./src/core/IconGenerator');
+const { generateSplashScreens } = require('./src/core/SplashGenerator');
+const { generateNotificationIcon } = require('./src/core/NotificationGenerator');
+const { generateAllAssets } = require('./src/core/AssetsGenerator');
 
 exports.platforms = platforms;
 exports.assetTypes = assetTypes;
