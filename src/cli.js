@@ -6,7 +6,7 @@ const sharp = require('sharp');
 const { generateFavicons } = require('./core/FaviconGenerator');
 const SplashGenerator = require('./core/SplashGenerator');
 const { generateLaunchIcons } = require('./core/IconGenerator');
-const { generateNotificationIcon } = require('./core/NotificationGenerator');
+const NotificationGenerator = require('./core/NotificationGenerator');
 const { generateAllAssets } = require('./core/AssetsGenerator');
 const { description, version } = require('../package.json');
 const { assetTypes, platforms } = require('./constants');
@@ -175,7 +175,8 @@ const cli = async (args) => {
         console.log(chalk.red('No platforms selected. Will do nothing'));
         return;
       }*/
-      await generateNotificationIcon(promptedOptions);
+      const notificationGenerator = new NotificationGenerator(promptedOptions);
+      await notificationGenerator.generateNotificationIcon();
     });
 
   program
