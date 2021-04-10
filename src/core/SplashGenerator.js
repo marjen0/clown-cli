@@ -75,7 +75,7 @@ class SplashGenerator {
     }
   }
 
-  async generateSplashScreensasync() {
+  async generateSplashScreensAsync() {
     try {
       const { platforms: optPlatforms, output, source } = this.options;
       const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, FIRETV } = platforms;
@@ -87,7 +87,7 @@ class SplashGenerator {
           platforms.IOS.name,
           assetTypes.SPLASHSCREEN.name
         );
-        _resizeGenericSplashScreens(
+        this._resizeGenericSplashScreens(
           source,
           jimpImage,
           platforms.IOS.name,
@@ -101,7 +101,7 @@ class SplashGenerator {
           platforms.TVOS.name,
           assetTypes.SPLASHSCREEN.name
         );
-        resizeGenericSplashScreens(
+        this._resizeGenericSplashScreens(
           this.options.source,
           jimpImage,
           platforms.TVOS.name,
@@ -115,7 +115,7 @@ class SplashGenerator {
           platforms.ANDROID.name,
           assetTypes.SPLASHSCREEN.name
         );
-        resizeGenericSplashScreens(
+        this._resizeGenericSplashScreens(
           this.options.source,
           jimpImage,
           platforms.ANDROID.name,
@@ -129,7 +129,7 @@ class SplashGenerator {
           platforms.ANDROIDTV.name,
           assetTypes.SPLASHSCREEN.name
         );
-        resizeGenericSplashScreens(
+        this._resizeGenericSplashScreens(
           this.options.source,
           jimpImage,
           platforms.ANDROIDTV.name,
@@ -143,7 +143,7 @@ class SplashGenerator {
           platforms.WEBOS.name,
           assetTypes.SPLASHSCREEN.name
         );
-        resizeGenericSplashScreens(
+        this._resizeGenericSplashScreens(
           this.options.source,
           jimpImage,
           platforms.WEBOS.name,
@@ -157,7 +157,7 @@ class SplashGenerator {
           platforms.FIRETV.name,
           assetTypes.SPLASHSCREEN.name
         );
-        resizeGenericSplashScreens(
+        this._resizeGenericSplashScreens(
           this.options.source,
           jimpImage,
           platforms.FIRETV.name,

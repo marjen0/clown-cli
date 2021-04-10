@@ -4,7 +4,7 @@ const program = require('commander');
 const Jimp = require('jimp');
 const sharp = require('sharp');
 const { generateFavicons } = require('./core/FaviconGenerator');
-const { generateSplashScreens } = require('./core/SplashGenerator');
+const SplashGenerator = require('./core/SplashGenerator');
 const { generateLaunchIcons } = require('./core/IconGenerator');
 const { generateNotificationIcon } = require('./core/NotificationGenerator');
 const { generateAllAssets } = require('./core/AssetsGenerator');
@@ -130,7 +130,8 @@ const cli = async (args) => {
         console.log(chalk.red('No platforms selected. Will do nothing'));
         return;
       }*/
-      await generateSplashScreens(promptedOptions);
+      const splashGenerator = new SplashGenerator(promptedOptions);
+      await splashGenerator.generateSplashScreensAsync();
     });
 
   program
