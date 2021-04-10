@@ -23,164 +23,135 @@ const {
 const { platforms, shapes, assetTypes } = require('../constants');
 const ConfigWriter = require('./ConfigWriter');
 
-const resizeGenericLaunchIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
-  data.forEach((icon) => {
-    const sharpImage = sharp(imageSource).toFormat('png');
-    const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
-    let dir = outputDir;
-    const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
-    if (icon.dirName) {
-      dir = path.resolve(outputDir, icon.dirName);
-      FileUtils.createIfNotExists(dir);
-    }
-    const { width, height } = parseDimensions(icon.dimensions);
-    imageProcessor.resize(width, height, isRound);
-
-    if (options.tint) {
-      imageProcessor.tint();
-    }
-
-    if (options.text) {
-      const { text } = options;
-      const fontSize = options.fontSize || 48;
-      const fontColor = options.fontColor || '#FFF';
-      imageProcessor.addText(text, fontSize, fontColor, width, height);
-    }
-
-    imageProcessor.writeToFile(dir, icon.name);
-    LogUtils.info(
-      `GENERATED LAUNCH ICON FOR ${icon.device || `${icon.platform.name} ${icon.dimensions}`}.`
-    );
-  });
-  // generate contents JSON
-  if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
-    ConfigWriter.writeContentsJson(data, outputDir, 'clown', 'images');
+class IconGenerator {
+  constructor(options) {
+    this.options = options;
   }
-};
 
-const generateLaunchIcons = async (options) => {
-  try {
-    const { platforms: optPlatforms } = options;
-    const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
-    const jimpImage = await Jimp.read(options.source);
-    if (optPlatforms.some((p) => p.name === IOS.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.IOS.name,
-        assetTypes.LAUNCHICON.name
+  resizeGenericLaunchIcons(jimpImage, platform, outputDir, data) {
+    data.forEach((icon) => {
+      const sharpImage = sharp(this.options.source).toFormat('png');
+      const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+      let dir = outputDir;
+      const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
+      if (icon.dirName) {
+        dir = path.resolve(outputDir, icon.dirName);
+        FileUtils.createIfNotExists(dir);
+      }
+      const { width, height } = parseDimensions(icon.dimensions);
+      imageProcessor.resize(width, height, isRound);
+
+      if (this.options.tint) {
+        imageProcessor.tint();
+      }
+
+      if (this.options.text) {
+        const { text } = this.options;
+        const fontSize = this.options.fontSize || 48;
+        const fontColor = this.options.fontColor || '#FFF';
+        imageProcessor.addText(text, fontSize, fontColor, width, height);
+      }
+
+      imageProcessor.writeToFile(dir, icon.name);
+      LogUtils.info(
+        `GENERATED LAUNCH ICON FOR ${icon.device || `${icon.platform.name} ${icon.dimensions}`}.`
       );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.IOS.name,
-        outputDir,
-        iosLaunchIcons
-      );
+    });
+    // generate contents JSON
+    if (platform === platforms.IOS.name || platform === platforms.TVOS.name) {
+      ConfigWriter.writeContentsJson(data, outputDir, 'clown', 'images');
     }
-    if (optPlatforms.some((p) => p.name === TVOS.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.TVOS.name,
-        assetTypes.LAUNCHICON.name
-      );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.TVOS.name,
-        outputDir,
-        tvosLaunchIcons
-      );
-    }
-    if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.ANDROID.name,
-        assetTypes.LAUNCHICON.name
-      );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.ANDROID.name,
-        outputDir,
-        androidLaunchIcons
-      );
-    }
-    if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.ANDROIDTV.name,
-        assetTypes.LAUNCHICON.name
-      );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.ANDROIDTV.name,
-        outputDir,
-        androidTvLaunchIcons
-      );
-    }
-    if (optPlatforms.some((p) => p.name === WEBOS.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.WEBOS.name,
-        assetTypes.LAUNCHICON.name
-      );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.WEBOS.name,
-        outputDir,
-        webosLaunchIcons
-      );
-    }
-    if (optPlatforms.some((p) => p.name === MACOS.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.MACOS.name,
-        assetTypes.LAUNCHICON.name
-      );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.MACOS.name,
-        outputDir,
-        macosLaunchIcons
-      );
-    }
-    if (optPlatforms.some((p) => p.name === FIRETV.name)) {
-      const outputDir = FileUtils.createOutputDirs(
-        options.output,
-        platforms.FIRETV.name,
-        assetTypes.LAUNCHICON.name
-      );
-      resizeGenericLaunchIcons(
-        options.source,
-        jimpImage,
-        options,
-        platforms.FIRETV.name,
-        outputDir,
-        fireTvLaunchIcons
-      );
-    }
-  } catch (error) {
-    switch (error.code) {
-      case 'EISDIR':
-        LogUtils.error(
-          'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
+  }
+
+  async generateLaunchIconsAsync() {
+    try {
+      const { platforms: optPlatforms } = this.options;
+      const { IOS, TVOS, ANDROID, ANDROIDTV, WEBOS, MACOS, FIRETV } = platforms;
+      const jimpImage = await Jimp.read(this.options.source);
+      if (optPlatforms.some((p) => p.name === IOS.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.IOS.name,
+          assetTypes.LAUNCHICON.name
         );
-        break;
-      default:
-        LogUtils.error('Unexpected error has occurred', error);
-        break;
+        this.resizeGenericLaunchIcons(jimpImage, platforms.IOS.name, outputDir, iosLaunchIcons);
+      }
+      if (optPlatforms.some((p) => p.name === TVOS.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.TVOS.name,
+          assetTypes.LAUNCHICON.name
+        );
+        this.resizeGenericLaunchIcons(jimpImage, platforms.TVOS.name, outputDir, tvosLaunchIcons);
+      }
+      if (optPlatforms.some((p) => p.name === ANDROID.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.ANDROID.name,
+          assetTypes.LAUNCHICON.name
+        );
+        this.resizeGenericLaunchIcons(
+          jimpImage,
+          platforms.ANDROID.name,
+          outputDir,
+          androidLaunchIcons
+        );
+      }
+      if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.ANDROIDTV.name,
+          assetTypes.LAUNCHICON.name
+        );
+        this.resizeGenericLaunchIcons(
+          jimpImage,
+          platforms.ANDROIDTV.name,
+          outputDir,
+          androidTvLaunchIcons
+        );
+      }
+      if (optPlatforms.some((p) => p.name === WEBOS.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.WEBOS.name,
+          assetTypes.LAUNCHICON.name
+        );
+        this.resizeGenericLaunchIcons(jimpImage, platforms.WEBOS.name, outputDir, webosLaunchIcons);
+      }
+      if (optPlatforms.some((p) => p.name === MACOS.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.MACOS.name,
+          assetTypes.LAUNCHICON.name
+        );
+        this.resizeGenericLaunchIcons(jimpImage, platforms.MACOS.name, outputDir, macosLaunchIcons);
+      }
+      if (optPlatforms.some((p) => p.name === FIRETV.name)) {
+        const outputDir = FileUtils.createOutputDirs(
+          this.options.output,
+          platforms.FIRETV.name,
+          assetTypes.LAUNCHICON.name
+        );
+        this.resizeGenericLaunchIcons(
+          jimpImage,
+          platforms.FIRETV.name,
+          outputDir,
+          fireTvLaunchIcons
+        );
+      }
+    } catch (error) {
+      switch (error.code) {
+        case 'EISDIR':
+          LogUtils.error(
+            'Expected a path to file but received directory. Please enter a valid path to file e.g. ./my/directory/image.png'
+          );
+          break;
+        default:
+          LogUtils.error('Unexpected error has occurred', error);
+          break;
+      }
     }
   }
-};
+}
 
-exports.resizeGenericLaunchIcons = resizeGenericLaunchIcons;
-exports.generateLaunchIcons = generateLaunchIcons;
+module.exports = IconGenerator;

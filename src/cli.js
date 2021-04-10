@@ -5,7 +5,7 @@ const Jimp = require('jimp');
 const sharp = require('sharp');
 const { generateFavicons } = require('./core/FaviconGenerator');
 const SplashGenerator = require('./core/SplashGenerator');
-const { generateLaunchIcons } = require('./core/IconGenerator');
+const IconGenerator = require('./core/IconGenerator');
 const NotificationGenerator = require('./core/NotificationGenerator');
 const { generateAllAssets } = require('./core/AssetsGenerator');
 const { description, version } = require('../package.json');
@@ -153,7 +153,8 @@ const cli = async (args) => {
         console.log(chalk.red('No platforms selected. Will do nothing'));
         return;
       }*/
-      await generateLaunchIcons(promptedOptions);
+      const iconGenerator = new IconGenerator(promptedOptions)
+      await iconGenerator.generateLaunchIconsAsync();
     });
 
   program
