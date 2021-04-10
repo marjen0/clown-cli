@@ -4,41 +4,37 @@ const sharp = require('sharp');
 const Jimp = require('jimp');
 const FileUtils = require('../utils/FileUtils');
 const LogUtils = require('../utils/LogUtils');
+const ImageProcessor = require('./ImageProcessor');
 const { parseDimensions } = require('../helpers');
 const { androidNotificationIcons, androidTvNotificationIcons } = require('../generables');
 const { platforms, assetTypes, shapes } = require('../constants');
-const {
- createOutputDirs, writeToFile, resize, addText, tint 
-} = require('./shared');
 
 const resizeNotificationIcons = (imageSource, jimpImage, options, platform, outputDir, data) => {
   data.forEach((icon) => {
     const sharpImage = sharp(imageSource).toFormat('png');
+    const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
     let dir = outputDir;
     const isRound = icon.shape ? icon.shape === shapes.ROUND : false;
     if (icon.dirName) {
       dir = path.resolve(outputDir, icon.dirName);
-      /*if (!fs.existsSync(dir)) {
-        FileUtils.createDir(dir);
-      }*/
       FileUtils.createIfNotExists(dir);
     }
     const { width, height } = parseDimensions(icon.dimensions);
 
-    resize(sharpImage, jimpImage, width, height, isRound);
+    imageProcessor.resize(width, height, isRound);
 
     if (options.tint) {
-      tint(sharpImage);
+      imageProcessor.tint();
     }
 
     if (options.text) {
       const { text } = options;
       const fontSize = options.fontSize || 48;
       const fontColor = options.fontColor || '#FFF';
-      addText(sharpImage, text, fontSize, fontColor, width, height);
+      imageProcessor.addText(text, fontSize, fontColor, width, height);
     }
 
-    writeToFile(sharpImage, dir, icon.name);
+    imageProcessor.writeToFile(dir, icon.name);
     LogUtils.info(
       `GENERATED NOTIFICATION ICON FOR ${
         icon.device || `${icon.platform.name} ${icon.dimensions}`
@@ -53,7 +49,7 @@ const generateNotificationIcon = async (options) => {
     const { ANDROID, ANDROIDTV } = platforms;
     const jimpImage = await Jimp.read(options.source);
     if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-      const outputDir = createOutputDirs(
+      const outputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.ANDROID.name,
         assetTypes.NOTIFICATIONICON.name,
@@ -68,7 +64,7 @@ const generateNotificationIcon = async (options) => {
       );
     }
     if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-      const outputDir = createOutputDirs(
+      const outputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.ANDROIDTV.name,
         assetTypes.NOTIFICATIONICON.name,

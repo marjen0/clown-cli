@@ -10,16 +10,7 @@ const { resizeGenericSplashScreens } = require('./splash');
 const { resizeGenericLaunchIcons } = require('./icon');
 const { resizeFavicons } = require('./favicon');
 const { platforms, assetTypes } = require('../constants');
-const {
-  resize,
-  writeToFile,
-  createOutputDirs,
-  tint,
-  addText,
-  writeContentsJson,
-  writeContentsJsonWithData,
-  writeWebosAppinfoJson,
-} = require('./shared');
+const { writeContentsJson, writeContentsJsonWithData, writeWebosAppinfoJson } = require('./shared');
 const {
   iosLaunchIcons,
   iosSplashScreens,
@@ -204,9 +195,6 @@ const generateAllAssets = async (options) => {
     const allDir = path.resolve(options.output, assetTypes.ALL.name);
     const assetsDir = path.resolve(allDir, 'assets');
 
-    /*if (fs.existsSync(allDir)) {
-      fs.rmSync(allDir, { recursive: true });
-    }*/
     FileUtils.removeIfExists(allDir);
     FileUtils.createDir(allDir);
     FileUtils.createDir(assetsDir);

@@ -2,17 +2,20 @@
 const sharp = require('sharp');
 const Jimp = require('jimp');
 const LogUtils = require('../utils/LogUtils');
+const ImageProcessor = require('./ImageProcessor');
+const FileUtils = require('../utils/FileUtils');
 const { parseDimensions } = require('../helpers');
 const { favicons } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
-const { createOutputDirs, writeToFile, resize, writeFaviconLinks } = require('./shared');
+const { writeFaviconLinks } = require('./shared');
 
 const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
   const image = sharp(imageSource).toFormat('png');
+  const imageProcessor = new ImageProcessor(image, jimpImage);
   data.forEach((favicon) => {
     const { width, height } = parseDimensions(favicon.dimensions);
-    resize(image, jimpImage, width, height);
-    writeToFile(image, outputDir, favicon.name);
+    imageProcessor.resize(width, height);
+    imageProcessor.writeToFile(outputDir, favicon.name);
     LogUtils.info(
       `GENERATED FAVICON FOR ${favicon.device || `${favicon.platform.name} ${favicon.dimensions}`}.`
     );
@@ -23,7 +26,11 @@ const resizeFavicons = (imageSource, jimpImage, outputDir, data) => {
 const generateFavicons = async (options) => {
   try {
     const jimpImage = await Jimp.read(options.source);
-    const outputDir = createOutputDirs(options.output, platforms.WEB.name, assetTypes.FAVICON.name);
+    const outputDir = FileUtils.createOutputDirs(
+      options.output,
+      platforms.WEB.name,
+      assetTypes.FAVICON.name,
+    );
     resizeFavicons(options.source, jimpImage, outputDir, favicons);
   } catch (error) {
     switch (error.code) {

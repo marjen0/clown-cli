@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 const Jimp = require('jimp');
 
 const FileUtils = require('../utils/FileUtils');
@@ -56,35 +55,6 @@ const writeToFile = (image, outputDir, filename) => {
   });
 };
 
-const createOutputDirs = (outputDir, platform, assetsType) => {
-  // resolves to output/LaunchScreen
-  const assetTypeOutputDir = path.resolve(outputDir, assetsType);
-  // resolves to output/LaunchScreen/ios
-  const platformOutputDir = path.resolve(outputDir, assetTypeOutputDir, platform);
-  if (!fs.existsSync(assetTypeOutputDir)) {
-    FileUtils.createDir(assetTypeOutputDir);
-  }
-  if (fs.existsSync(platformOutputDir)) {
-    LogUtils.warn(
-      `Found output directory for ${platform} platform at ${platformOutputDir} ${chalk
-        .hex('#000')
-        .bgYellow('WILL DELETE IT.')}`,
-    );
-    //fs.rmSync(platformOutputDir, { recursive: true, force: true });
-    FileUtils.remove(platformOutputDir);
-    FileUtils.createDir(platformOutputDir);
-    LogUtils.warn(`created new output directory for ${platform} platform at ${platformOutputDir}`);
-  } else {
-    LogUtils.warn(
-      `could not find output directory for ${platform} platform at ${platformOutputDir} ${chalk
-        .hex('#000')
-        .bgYellow('WILL CREATE IT.')}`
-    );
-    FileUtils.createDir(platformOutputDir);
-  }
-  return platformOutputDir;
-};
-
 const writeContentsJson = (generables, directory, author, type) => {
   const contentsPath = path.resolve(directory, 'Contents.json');
   let contentsData = null;
@@ -113,9 +83,7 @@ const writeContentsJsonWithData = (directory, data) => {
 
 const writeLaunchScreenXML = (directory) => {
   const layoutPath = path.resolve(directory, 'layout');
-  /*if (!fs.existsSync(layoutPath)) {
-    FileUtils.createDir(layoutPath);
-  }*/
+
   FileUtils.createIfNotExists(layoutPath);
   const filePath = path.resolve(layoutPath, 'launch_screen.xml');
   const content = `<?xml version="1.0" encoding="utf-8"?>
@@ -190,7 +158,7 @@ exports.negate = negate;
 exports.tint = tint;
 exports.addText = addText;
 exports.writeToFile = writeToFile;
-exports.createOutputDirs = createOutputDirs;
+
 exports.writeContentsJson = writeContentsJson;
 exports.writeContentsJsonWithData = writeContentsJsonWithData;
 exports.extractCornerColor = extractCornerColor;

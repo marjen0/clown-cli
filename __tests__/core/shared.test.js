@@ -11,7 +11,7 @@ const {
   resize,
   addText,
   writeToFile,
-  createOutputDirs,
+  FileUtils.createOutputDirs,
   extractCornerColor,
   writeLaunchScreenXML,
   writeContentsJson,
@@ -135,14 +135,14 @@ describe('writeToFile', () => {
   });
 });
 
-describe('createOutputDirs', () => {
+describe('FileUtils.createOutputDirs', () => {
   it('should create output directory based on platform and asset type if not exist', () => {
     const MOCK_FILE_INFO = {
       '/path/to/file1.txt': 'console.log("file1 contents");',
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
 
-    createOutputDirs('/files', platforms.MACOS.name, assetTypes.SPLASHSCREEN.name);
+    FileUtils.createOutputDirs('/files', platforms.MACOS.name, assetTypes.SPLASHSCREEN.name);
     expect(fs.existsSync('/files/SplashScreen/macos')).toBeTruthy();
   });
 
@@ -153,7 +153,7 @@ describe('createOutputDirs', () => {
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
 
-    createOutputDirs('/files', platforms.ANDROID.name, assetTypes.LAUNCHICON.name);
+    FileUtils.createOutputDirs('/files', platforms.ANDROID.name, assetTypes.LAUNCHICON.name);
     expect(fs.existsSync('/files/LaunchIcon/android')).toBeTruthy();
     expect(fs.readdirSync().length).toEqual(0);
   });

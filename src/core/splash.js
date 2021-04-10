@@ -1,13 +1,12 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-console */
-const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 const sharp = require('sharp');
 const Jimp = require('jimp');
 
 const FileUtils = require('../utils/FileUtils');
 const LogUtils = require('../utils/LogUtils');
+const ImageProcessor = require('./ImageProcessor');
 
 const { parseDimensions } = require('../helpers');
 const {
@@ -19,43 +18,32 @@ const {
   androidTvSplashScreens,
 } = require('../generables');
 const { platforms, assetTypes } = require('../constants');
-const {
-  resize,
-  writeToFile,
-  createOutputDirs,
-  tint,
-  addText,
-  writeContentsJson,
-  writeLaunchScreenXML,
-} = require('./shared');
+const { writeContentsJson, writeLaunchScreenXML } = require('./shared');
 
 const resizeGenericSplashScreens = (imageSource, jimpImage, options, platform, outputDir, data) => {
   try {
     const sharpImage = sharp(imageSource).toFormat('png');
-
+    const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
     data.forEach((splash) => {
       let dir = outputDir;
       if (splash.dirName) {
         dir = path.resolve(outputDir, splash.dirName);
-        /* if (!fs.existsSync(dir)) {
-          FileUtils.createDir(dir);
-        } */
         FileUtils.createIfNotExists(dir);
       }
       const { width, height } = parseDimensions(splash.dimensions);
-      resize(sharpImage, jimpImage, width, height);
+      imageProcessor.resize(width, height);
 
       if (options.tint) {
-        tint(sharpImage);
+        imageProcessor.tint();
       }
       if (options.text) {
         const { text } = options;
         const fontSize = options.fontSize || 48;
         const fontColor = options.fontColor || '#FFF';
-        addText(sharpImage, text, fontSize, fontColor, width, height);
+        imageProcessor.addText(text, fontSize, fontColor, width, height);
       }
 
-      writeToFile(sharpImage, dir, splash.name);
+      imageProcessor.writeToFile(dir, splash.name);
 
       LogUtils.info(
         `GENERATED SPLASHSCREEN FOR ${
@@ -92,7 +80,7 @@ const generateSplashScreens = async (options) => {
     const jimpImage = await Jimp.read(options.source);
 
     if (optPlatforms.some((p) => p.name === IOS.name)) {
-      const iosOutputDir = createOutputDirs(
+      const iosOutputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.IOS.name,
         assetTypes.SPLASHSCREEN.name
@@ -107,7 +95,7 @@ const generateSplashScreens = async (options) => {
       );
     }
     if (optPlatforms.some((p) => p.name === TVOS.name)) {
-      const tvosOutputDir = createOutputDirs(
+      const tvosOutputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.TVOS.name,
         assetTypes.SPLASHSCREEN.name
@@ -122,7 +110,7 @@ const generateSplashScreens = async (options) => {
       );
     }
     if (optPlatforms.some((p) => p.name === ANDROID.name)) {
-      const androidOutputDir = createOutputDirs(
+      const androidOutputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.ANDROID.name,
         assetTypes.SPLASHSCREEN.name
@@ -137,7 +125,7 @@ const generateSplashScreens = async (options) => {
       );
     }
     if (optPlatforms.some((p) => p.name === ANDROIDTV.name)) {
-      const androidtvOutputDir = createOutputDirs(
+      const androidtvOutputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.ANDROIDTV.name,
         assetTypes.SPLASHSCREEN.name
@@ -152,7 +140,7 @@ const generateSplashScreens = async (options) => {
       );
     }
     if (optPlatforms.some((p) => p.name === WEBOS.name)) {
-      const webosOutputDir = createOutputDirs(
+      const webosOutputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.WEBOS.name,
         assetTypes.SPLASHSCREEN.name
@@ -167,7 +155,7 @@ const generateSplashScreens = async (options) => {
       );
     }
     if (optPlatforms.some((p) => p.name === FIRETV.name)) {
-      const firetvOutputDir = createOutputDirs(
+      const firetvOutputDir = FileUtils.createOutputDirs(
         options.output,
         platforms.FIRETV.name,
         assetTypes.SPLASHSCREEN.name
