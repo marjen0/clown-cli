@@ -13,12 +13,12 @@ describe('writeContentsJson', () => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJson(iosSplashScreens, '/files', 'clown', 'images');
     expect(fs.readdirSync('/files').length).toEqual(1);
   });
 
   it('created file name should be Contents.json', () => {
-    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJson(iosSplashScreens, '/files', 'clown', 'images');
     expect(fs.existsSync('/files/Contents.json')).toBeTruthy();
   });
 });
@@ -41,12 +41,12 @@ describe('writeContentsJsonWithData', () => {
     fs.__setMockFiles({});
   });
   it('should create a file', () => {
-    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJsonWithData('/files', iosSplashScreens);
     expect(fs.readdirSync('/files').length).toEqual(1);
   });
 
   it('created file name should be Contents.json', () => {
-    ConfigWriter.writeContentsJson(iosSplashScreens, '/files');
+    ConfigWriter.writeContentsJsonWithData('/files', iosSplashScreens);
     expect(fs.existsSync('/files/Contents.json')).toBeTruthy();
   });
 });

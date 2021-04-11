@@ -94,45 +94,42 @@ describe('createIfNotExists', () => {
 });
 
 describe('createResDir', () => {
-  it('should create "res" directory at given path', () => {
-    const path = '/base/path';
-    const platform = 'android';
+  beforeEach(() => {
     const MOCK_FILE_INFO = {
       '/path/to/file1.txt': 'console.log("file1 contents");',
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
+  });
+
+  it('should create "res" directory at given path', () => {
+    const path = '/base/path';
+    const platform = 'android';
     FileManager.createResDir(path, platform);
     expect(fs.existsSync(`${path}/${platform}/res`)).toBeTruthy();
   });
   it('should return path to androidtv res directory', () => {
     const path = '/base/path';
     const platform = 'androidtv';
-    const MOCK_FILE_INFO = {
-      '/path/to/file1.txt': 'console.log("file1 contents");',
-    };
-    fs.__setMockFiles(MOCK_FILE_INFO);
     const { androidtvDir } = FileManager.createResDir(path, platform);
     expect(androidtvDir).toMatch(`${path}/${platform}/res`);
   });
   it('should return path to android res directory', () => {
     const path = '/base/path';
     const platform = 'android';
-    const MOCK_FILE_INFO = {
-      '/path/to/file1.txt': 'console.log("file1 contents");',
-    };
-    fs.__setMockFiles(MOCK_FILE_INFO);
     const { androidDir } = FileManager.createResDir(path, platform);
     expect(androidDir).toMatch(`${path}/${platform}/res`);
   });
 });
 
 describe('createIosDir', () => {
-  it('should create 4 directories', () => {
-    const path = '/base/path';
+  beforeEach(() => {
     const MOCK_FILE_INFO = {
       '/path/to/file1.txt': 'console.log("file1 contents");',
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
+  });
+  it('should create 4 directories', () => {
+    const path = '/base/path';
     const {
  appIconDir, iosDir, iosXcassetsDir, launchImageDir 
 } = FileManager.createIosDir(path);
@@ -143,10 +140,6 @@ describe('createIosDir', () => {
   });
   it('created directories should have correct names', () => {
     const path = '/base/path';
-    const MOCK_FILE_INFO = {
-      '/path/to/file1.txt': 'console.log("file1 contents");',
-    };
-    fs.__setMockFiles(MOCK_FILE_INFO);
     const {
  appIconDir, iosDir, iosXcassetsDir, launchImageDir 
 } = FileManager.createIosDir(path);
@@ -158,24 +151,44 @@ describe('createIosDir', () => {
 });
 
 describe('createWebDir', () => {
-  it('it should create "web" directory at given path', () => {
-    const path = '/base/path';
+  beforeEach(() => {
     const MOCK_FILE_INFO = {
       '/path/to/file1.txt': 'console.log("file1 contents");',
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
+  });
+
+  it('it should create "web" directory at given path', () => {
+    const path = '/base/path';
     FileManager.createWebDir(path);
     expect(fs.existsSync(`${path}/web`)).toBeTruthy();
   });
 });
 
-describe('createTvosDir', () => {
-  it('should create 16 directories', () => {
-    const path = '/base/path';
+describe('createWebosDir', () => {
+  beforeEach(() => {
     const MOCK_FILE_INFO = {
       '/path/to/file1.txt': 'console.log("file1 contents");',
     };
     fs.__setMockFiles(MOCK_FILE_INFO);
+  });
+
+  it('it should create "webos" directory at given path', () => {
+    const path = '/base/path';
+    FileManager.createWebosDir(path);
+    expect(fs.existsSync(`${path}/webos`)).toBeTruthy();
+  });
+});
+
+describe('createTvosDir', () => {
+  beforeEach(() => {
+    const MOCK_FILE_INFO = {
+      '/path/to/file1.txt': 'console.log("file1 contents");',
+    };
+    fs.__setMockFiles(MOCK_FILE_INFO);
+  });
+  it('should create 16 directories', () => {
+    const path = '/base/path';
     const {
       appIconAppStoreImagestack,
       appIconImagestack,
@@ -214,10 +227,6 @@ describe('createTvosDir', () => {
 
   it('created directories should have correct names', () => {
     const path = '/base/path';
-    const MOCK_FILE_INFO = {
-      '/path/to/file1.txt': 'console.log("file1 contents");',
-    };
-    fs.__setMockFiles(MOCK_FILE_INFO);
     const {
       appIconAppStoreImagestack,
       appIconImagestack,
