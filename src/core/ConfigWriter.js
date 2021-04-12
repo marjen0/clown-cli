@@ -9,13 +9,15 @@ class ConfigWriter {
     if (generables) {
       contentsData = generables.map((item) => ({
         ...(item.idiom && { idiom: item.idiom }),
-        ...(item.dimensions && { size: item.dimensions }),
+        ...(item.size && { size: item.size }),
+        ...(item.subtype && { subtype: item.subtype }),
         ...(item.scale && { scale: item.scale }),
         ...(item.orientation && { orientation: item.orientation }),
         ...(item.name && {
           filename: type === 'images' ? `${item.name}.png` : item.name,
         }),
         ...(item.role && { role: item.role }),
+        extent: 'full-screen',
       }));
     }
     const data = contentsData

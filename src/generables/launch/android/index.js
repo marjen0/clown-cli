@@ -6,7 +6,7 @@ const { LAUNCHICON } = assetTypes;
 
 const launchIcons = [
   {
-    name: 'appicon-square',
+    name: 'ic_launcher',
     dirName: 'mipmap-ldpi',
     dimensions: '36x36',
     density: 'ldpi',
@@ -15,7 +15,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-round',
+    name: 'ic_launcher_round',
     dirName: 'mipmap-ldpi',
     dimensions: '36x36',
     density: 'ldpi',
@@ -24,7 +24,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-square',
+    name: 'ic_launcher',
     dirName: 'mipmap-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
@@ -33,7 +33,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-round',
+    name: 'ic_launcher_round',
     dirName: 'mipmap-mdpi',
     dimensions: '48x48',
     density: 'mdpi',
@@ -42,7 +42,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-square',
+    name: 'ic_launcher',
     dirName: 'mipmap-hdpi',
     dimensions: '72x72',
     density: 'hdpi',
@@ -51,7 +51,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-round',
+    name: 'ic_launcher_round',
     dirName: 'mipmap-hdpi',
     dimensions: '72x72',
     density: 'hdpi',
@@ -60,7 +60,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-square',
+    name: 'ic_launcher',
     dirName: 'mipmap-xhdpi',
     dimensions: '96x96',
     density: 'xhdpi',
@@ -69,7 +69,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-round',
+    name: 'ic_launcher_round',
     dirName: 'mipmap-xhdpi',
     dimensions: '96x96',
     density: 'xhdpi',
@@ -78,7 +78,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-square',
+    name: 'ic_launcher',
     dirName: 'mipmap-xxhdpi',
     dimensions: '144x144',
     density: 'xxhdpi',
@@ -87,7 +87,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-round',
+    name: 'ic_launcher_round',
     dirName: 'mipmap-xxhdpi',
     dimensions: '144x144',
     density: 'xxhdpi',
@@ -96,7 +96,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-square',
+    name: 'ic_launcher',
     dirName: 'mipmap-xxxhdpi',
     dimensions: '192x192',
     density: 'xxxhdpi',
@@ -105,7 +105,7 @@ const launchIcons = [
     type: LAUNCHICON,
   },
   {
-    name: 'appicon-round',
+    name: 'ic_launcher_round',
     dirName: 'mipmap-xxxhdpi',
     dimensions: '192x192',
     density: 'xxxhdpi',
