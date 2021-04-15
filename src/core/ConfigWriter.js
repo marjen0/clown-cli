@@ -17,7 +17,8 @@ class ConfigWriter {
           filename: type === 'images' ? `${item.name}.png` : item.name,
         }),
         ...(item.role && { role: item.role }),
-        extent: 'full-screen',
+        ...(item.extent && { extent: item.extent }),
+        ...(item.minimumSystemVersion && { 'minimum-system-version': item.minimumSystemVersion }),
       }));
     }
     const data = contentsData
