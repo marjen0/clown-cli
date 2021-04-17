@@ -120,7 +120,7 @@ const cli = async (args) => {
       'output directory. Will use current working directory if not provided',
     )
     .option('-tint, --tint', 'tint the image')
-    .option('-t, --text <text>', 'Text to add on image')
+    .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
@@ -143,7 +143,7 @@ const cli = async (args) => {
       'generated files output directory. Will use current working directory if not provided',
     )
     .option('-tint, --tint', 'tint the image')
-    .option('-t, --text <text>', 'Text to add on image')
+    .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
@@ -166,7 +166,7 @@ const cli = async (args) => {
       'generated files output directory. Will use current working directory if not provided',
     )
     .option('-tint, --tint', 'tint the image')
-    .option('-t, --text <text>', 'Text to add on image')
+    .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
@@ -186,7 +186,7 @@ const cli = async (args) => {
     .option('-s, --source <source>', 'path to favicon')
     .option(
       '-o, --output <output>',
-      'output directory. Will use current working directory if not provided',
+      'output directory (current working directory will be used if not provided)',
     )
     .option('-t, --tint', 'tint the image')
     .action(async (options) => {
@@ -209,9 +209,12 @@ const cli = async (args) => {
     .action(async (options) => {
       const jimpImage = await Jimp.read(options.source);
       const sharpImage = sharp(options.source);
+      const width = +options.width;
+      const height = +options.height;
+      const filename = `resized${width}x${height}`;
       const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
-      imageProcessor.resize(+options.width, +options.height);
-      imageProcessor.writeToFile(options.output, 'resized');
+      imageProcessor.resize(width, height);
+      imageProcessor.writeToFile(options.output, filename);
     });
 
   program
@@ -219,6 +222,10 @@ const cli = async (args) => {
     .description('generate all types of assets')
     .option('-s, --source <source>', 'path to image')
     .option('-o, --output <output>', 'output directory')
+    .option('-tint, --tint', 'tint the image')
+    .option('-t, --text <text>', 'text to add on image')
+    .option('-f, --fontSize <number>', 'size of text')
+    .option('-c, --fontColor <color hex>', 'text color')
     .action(async (options) => {
       let promptedOptions = await promptForMissingOptions(options);
       promptedOptions = await promptForPlatforms(assetTypes.ALL.name, promptedOptions);
