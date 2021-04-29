@@ -107,6 +107,70 @@ const promptForPlatforms = async (assetType, options) => {
     platforms: answers.platforms,
   };
 };
+const splashScreen = async (options) => {
+  let promptedOptions = await promptForMissingOptions(options);
+  promptedOptions = await promptForPlatforms(assetTypes.SPLASHSCREEN.name, promptedOptions);
+  /* if (promptedOptions.platforms.length === 0) {
+    console.log(chalk.red('No platforms selected. Will do nothing'));
+    return;
+  } */
+  const splashGenerator = new SplashGenerator(promptedOptions);
+  await splashGenerator.generateSplashScreensAsync();
+}
+
+const icon = async (options) => {
+  let promptedOptions = await promptForMissingOptions(options);
+  promptedOptions = await promptForPlatforms(assetTypes.LAUNCHICON.name, promptedOptions);
+  /* if (promptedOptions.platforms.length === 0) {
+    console.log(chalk.red('No platforms selected. Will do nothing'));
+    return;
+  } */
+  const iconGenerator = new IconGenerator(promptedOptions);
+  await iconGenerator.generateLaunchIconsAsync();
+}
+
+const notification = async (options) => {
+  let promptedOptions = await promptForMissingOptions(options);
+  promptedOptions = await promptForPlatforms(assetTypes.NOTIFICATIONICON.name, promptedOptions);
+  /* if (promptedOptions.platforms.length === 0) {
+    console.log(chalk.red('No platforms selected. Will do nothing'));
+    return;
+  } */
+  const notificationGenerator = new NotificationGenerator(promptedOptions);
+  await notificationGenerator.generateNotificationIcon();
+}
+
+const favicon = async (options) => {
+  const promptedOptions = await promptForMissingOptions(options);
+  /* if (promptedOptions.platforms.length === 0) {
+    console.log(chalk.red('No platforms selected. Will do nothing'));
+    return;
+  } */
+  const faviconGenerator = new FaviconGenerator(options);
+  await faviconGenerator.generateFaviconsAsync(promptedOptions);
+}
+
+const allAssets = async (options) => {
+  let promptedOptions = await promptForMissingOptions(options);
+  promptedOptions = await promptForPlatforms(assetTypes.ALL.name, promptedOptions);
+  /* if (promptedOptions.platforms.length === 0) {
+    console.log(chalk.red('No platforms selected. Will do nothing'));
+    return;
+  } */
+  const assetsGenerator = new AssetsGenerator(promptedOptions);
+  await assetsGenerator.generateAllAssetsAsync();
+}
+
+const resize = async (options) => {
+  const jimpImage = await Jimp.read(options.source);
+  const sharpImage = sharp(options.source);
+  const width = +options.width;
+  const height = +options.height;
+  const filename = `resized${width}x${height}`;
+  const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
+  imageProcessor.resize(width, height);
+  imageProcessor.writeToFile(options.output, filename);
+}
 
 const cli = async (args) => {
   program.version(version).description(description);
@@ -123,16 +187,7 @@ const cli = async (args) => {
     .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
-    .action(async (options) => {
-      let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(assetTypes.SPLASHSCREEN.name, promptedOptions);
-      /* if (promptedOptions.platforms.length === 0) {
-        console.log(chalk.red('No platforms selected. Will do nothing'));
-        return;
-      } */
-      const splashGenerator = new SplashGenerator(promptedOptions);
-      await splashGenerator.generateSplashScreensAsync();
-    });
+    .action(splashScreen);
 
   program
     .command('icon')
@@ -146,16 +201,7 @@ const cli = async (args) => {
     .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
-    .action(async (options) => {
-      let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(assetTypes.LAUNCHICON.name, promptedOptions);
-      /* if (promptedOptions.platforms.length === 0) {
-        console.log(chalk.red('No platforms selected. Will do nothing'));
-        return;
-      } */
-      const iconGenerator = new IconGenerator(promptedOptions);
-      await iconGenerator.generateLaunchIconsAsync();
-    });
+    .action(icon);
 
   program
     .command('notification')
@@ -169,16 +215,7 @@ const cli = async (args) => {
     .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
-    .action(async (options) => {
-      let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(assetTypes.NOTIFICATIONICON.name, promptedOptions);
-      /* if (promptedOptions.platforms.length === 0) {
-        console.log(chalk.red('No platforms selected. Will do nothing'));
-        return;
-      } */
-      const notificationGenerator = new NotificationGenerator(promptedOptions);
-      await notificationGenerator.generateNotificationIcon();
-    });
+    .action(notification);
 
   program
     .command('favicon')
@@ -189,15 +226,7 @@ const cli = async (args) => {
       'output directory (current working directory will be used if not provided)',
     )
     .option('-t, --tint', 'tint the image')
-    .action(async (options) => {
-      const promptedOptions = await promptForMissingOptions(options);
-      /* if (promptedOptions.platforms.length === 0) {
-        console.log(chalk.red('No platforms selected. Will do nothing'));
-        return;
-      } */
-      const faviconGenerator = new FaviconGenerator(options);
-      await faviconGenerator.generateFaviconsAsync(promptedOptions);
-    });
+    .action(favicon);
 
   program
     .command('resize')
@@ -206,16 +235,7 @@ const cli = async (args) => {
     .option('-o, --output <output>', 'output directory')
     .option('-w, --width <width>', 'width to resize')
     .option('-h, --height <height>', 'height to resize')
-    .action(async (options) => {
-      const jimpImage = await Jimp.read(options.source);
-      const sharpImage = sharp(options.source);
-      const width = +options.width;
-      const height = +options.height;
-      const filename = `resized${width}x${height}`;
-      const imageProcessor = new ImageProcessor(sharpImage, jimpImage);
-      imageProcessor.resize(width, height);
-      imageProcessor.writeToFile(options.output, filename);
-    });
+    .action(resize);
 
   program
     .command('generate')
@@ -226,16 +246,7 @@ const cli = async (args) => {
     .option('-t, --text <text>', 'text to add on image')
     .option('-f, --fontSize <number>', 'size of text')
     .option('-c, --fontColor <color hex>', 'text color')
-    .action(async (options) => {
-      let promptedOptions = await promptForMissingOptions(options);
-      promptedOptions = await promptForPlatforms(assetTypes.ALL.name, promptedOptions);
-      /* if (promptedOptions.platforms.length === 0) {
-        console.log(chalk.red('No platforms selected. Will do nothing'));
-        return;
-      } */
-      const assetsGenerator = new AssetsGenerator(promptedOptions);
-      await assetsGenerator.generateAllAssetsAsync();
-    });
+    .action(allAssets);
 
   program.parse(args);
 };
